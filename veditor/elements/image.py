@@ -19,7 +19,7 @@ class ImageElement(BaseElement):
         self,
         path: str,
         pos_frames: Tuple[int, int],
-        margin: Optional[Union[Number, List[Number]]] = None,
+        margin: Union[Number, List[Number]] = 0,
         dsize: Optional[Tuple[int, int]] = None,
         width: Optional[int] = None,
         height: Optional[int] = None,
@@ -31,24 +31,31 @@ class ImageElement(BaseElement):
         super().__init__()
         self.set_image_attribute(path, margin=margin)
         self.resize(dsize=dsize, width=width, height=height)
-        self.set_positios(top=top, right=right, left=left, bottom=bottom)
+        self.set_locations(top=top, right=right, left=left, bottom=bottom)
 
     @property
-    def bottom(self):
+    def bottom(self) -> int:
         return self.top + self.height
 
     @property
-    def right(self):
+    def right(self) -> int:
         return self.left + self.width
 
-    def set_positios(
+    @property
+    def locations(self) -> Tuple[int, int, int, int]:
+        return (self.top, self.right, self.bottom, self.left)
+
+    def trbl(self):
+        return self.locations
+
+    def set_locations(
         self,
         top: Optional[Union[BaseElement, int]] = None,
         right: Optional[Union[BaseElement, int]] = None,
         left: Optional[Union[BaseElement, int]] = None,
         bottom: Optional[Union[BaseElement, int]] = None,
     ) -> None:
-        """Automatically calculate and find the optimal positons for both ``left`` and ``top``
+        """Automatically calculate and find the optimal locations for both ``left`` and ``top``
 
         Args:
             top (Optional[Union[BaseElement, int]], optional)    : Reference element or absolute value at the top. Defaults to ``None``.
@@ -56,21 +63,21 @@ class ImageElement(BaseElement):
             left (Optional[Union[BaseElement, int]], optional)   : Reference element or absolute value at the left. Defaults to ``None``.
             bottom (Optional[Union[BaseElement, int]], optional) : Reference element or absolute value at the bottom. Defaults to ``None``.
         """
-        self.set_position(lb=top, ub=bottom, direction="vertical")
-        self.set_position(lb=left, ub=right, direction="horizontal")
+        self.set_location(lb=top, ub=bottom, direction="vertical")
+        self.set_location(lb=left, ub=right, direction="horizontal")
 
-    def set_position(
+    def set_location(
         self,
         lb: Optional[Union[BaseElement, int]] = None,
         ub: Optional[Union[BaseElement, int]] = None,
         direction: str = "vertical",
         ratio: Tuple[Number, Number] = (1, 1),
     ) -> None:
-        """Automatically calculate and find the optimal positon (``left`` or ``top``)
+        """Automatically calculate and find the optimal location (``left`` or ``top``)
 
         Args:
-            lb (Optional[Union[BaseElement, int]], optional) : Lower bound of position. Defaults to ``None``.
-            ub (Optional[Union[BaseElement, int]], optional) : Upper bound of position. Defaults to ``None``.
+            lb (Optional[Union[BaseElement, int]], optional) : Lower bound of location. Defaults to ``None``.
+            ub (Optional[Union[BaseElement, int]], optional) : Upper bound of location. Defaults to ``None``.
             direction (str, optional)                        : Direction of ``lb`` and ``ub`` line up. Please choose from ``"vertical"`` or ``"horizontal"``. Defaults to ``"vertical"``.
             ratio (Tuple[Number,Number], optional)           : If ``lb`` and ``ub`` are both instances of :class:`BaseElement <veditor.elements.base.BaseElement>`, at what ratio do you split between the 2 elements? Defaults to ``(1, 1)``.
         """
@@ -86,13 +93,22 @@ class ImageElement(BaseElement):
                 lb: int = 0 + getattr(self, f"margin_{lb_name}")
             else:
                 if isinstance(ub, BaseElement):
-                    ub: int = ub.lb - ub.margin_lb - getattr(self, f"margin_{ub_name}")
+                    ub: int = (
+                        getattr(ub, lb_name)
+                        - getattr(ub, f"margin_{lb_name}")
+                        - getattr(self, f"margin_{ub_name}")
+                    )
                 lb: int = ub - getattr(self, size_name)
         else:
             if isinstance(lb, BaseElement):
-                lb: int = lb.ub + lb.margin_ub + getattr(self, f"margin_{lb_name}")
-            if isinstance(ub, BaseElement):
-                ub: int = ub.lb - ub.margin_lb - getattr(self, f"margin_{ub_name}")
+                lb: int = (
+                    getattr(lb, ub_name)
+                    + getattr(lb, f"margin_{ub_name}")
+                    + getattr(self, f"margin_{lb_name}")
+                )
+            if ub is not None:
+                if isinstance(ub, BaseElement):
+                    ub: int = ub.lb - ub.margin_lb - getattr(self, f"margin_{ub_name}")
                 lb = lb + int(
                     (ub - lb - getattr(self, size_name)) / sum(ratio) * ratio[0]
                 )
@@ -174,7 +190,7 @@ class ImageElement(BaseElement):
 
         for v, n in zip(
             *assign_trbl(
-                data={"margin": margin},
+                data=dict(margin=margin),
                 name="margin",
                 default=margin_default,
                 ret_name=True,

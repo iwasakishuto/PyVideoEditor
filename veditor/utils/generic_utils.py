@@ -193,7 +193,7 @@ _trbl: List[str] = ["top", "right", "bottom", "left"]
 def assign_trbl(
     data: Dict[str, Any],
     name: str,
-    default: Optional[Union[Number, List[Number]]] = None,
+    default: Union[Number, List[Number]] = 0,
     ret_name: bool = False,
 ) -> Union[
     Tuple[Tuple[Number, Number, Number, Number], Tuple[str, str, str, str]],
@@ -202,10 +202,10 @@ def assign_trbl(
     """Return the ``name`` 's values of [``Top``, ``Right``, ``Bottom``, ``Left``] from ``data``. Determine the each position as well as css.
 
     Args:
-        data (Dict[str,Any])                                     : A dictionary which stores data.
-        name (str)                                               : The name of the value you want to assign..
-        default (Optional[Union[Number,List[Number]]], optional) : Default Value.. Defaults to ``None``.
-        ret_name (bool, optional)                                : Whether to return names or not. Defaults to ``False``.
+        data (Dict[str,Any])                           : A dictionary which stores data.
+        name (str)                                     : The name of the value you want to assign..
+        default (Union[Number,List[Number]], optional) : Default Value. Defaults to ``0``.
+        ret_name (bool, optional)                      : Whether to return names or not. Defaults to ``False``.
 
     Returns:
         Union[Tuple[Tuple[Number, Number, Number, Number], Tuple[str,str,str,str]], Tuple[Number, Number, Number, Number]]: Values of ``Top``, ``Right``, ``Bottom``, ``Left``. If ``ret_name`` is ``True``, add names.

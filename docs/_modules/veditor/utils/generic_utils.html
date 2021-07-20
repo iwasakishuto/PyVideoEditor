@@ -247,7 +247,7 @@
 <div class="viewcode-block" id="assign_trbl"><a class="viewcode-back" href="../../../veditor.utils.generic_utils.html#veditor.utils.generic_utils.assign_trbl">[docs]</a><span class="k">def</span> <span class="nf">assign_trbl</span><span class="p">(</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Number</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Number</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">ret_name</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span>
     <span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">Number</span><span class="p">,</span> <span class="n">Number</span><span class="p">,</span> <span class="n">Number</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span>
@@ -256,10 +256,10 @@
     <span class="sd">&quot;&quot;&quot;Return the ``name`` &#39;s values of [``Top``, ``Right``, ``Bottom``, ``Left``] from ``data``. Determine the each position as well as css.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        data (Dict[str,Any])                                     : A dictionary which stores data.</span>
-<span class="sd">        name (str)                                               : The name of the value you want to assign..</span>
-<span class="sd">        default (Optional[Union[Number,List[Number]]], optional) : Default Value.. Defaults to ``None``.</span>
-<span class="sd">        ret_name (bool, optional)                                : Whether to return names or not. Defaults to ``False``.</span>
+<span class="sd">        data (Dict[str,Any])                           : A dictionary which stores data.</span>
+<span class="sd">        name (str)                                     : The name of the value you want to assign..</span>
+<span class="sd">        default (Union[Number,List[Number]], optional) : Default Value. Defaults to ``0``.</span>
+<span class="sd">        ret_name (bool, optional)                      : Whether to return names or not. Defaults to ``False``.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Union[Tuple[Tuple[Number, Number, Number, Number], Tuple[str,str,str,str]], Tuple[Number, Number, Number, Number]]: Values of ``Top``, ``Right``, ``Bottom``, ``Left``. If ``ret_name`` is ``True``, add names.</span>
