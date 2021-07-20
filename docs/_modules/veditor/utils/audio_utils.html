@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>veditor.utils.audio_utils &mdash; PyVideoEditor  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/togglebutton.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script src="../../../_static/custom.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyVideoEditor
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../veditor.html">veditor package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyVideoEditor</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>veditor.utils.audio_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for veditor.utils.audio_utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">pydub</span> <span class="kn">import</span> <span class="n">AudioSegment</span>
+
+<span class="kn">from</span> <span class="nn">._colorings</span> <span class="kn">import</span> <span class="n">toBLUE</span>
+
+
+<div class="viewcode-block" id="synthesize_audio"><a class="viewcode-back" href="../../../veditor.utils.audio_utils.html#veditor.utils.audio_utils.synthesize_audio">[docs]</a><span class="k">def</span> <span class="nf">synthesize_audio</span><span class="p">(</span>
+    <span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">audio_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">out_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">end</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">volume</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">offset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;00:00:00&quot;</span><span class="p">,</span>
+    <span class="nb">open</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">delete_intermidiates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Use ``ffmpeg`` directly or ``moviepy`` to synthesize audio (@ ``audio_path``) to video (@ ``video_path``)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        video_path (str)                   : The path to video fiile.</span>
+<span class="sd">        audio_path (str)                   : The path to audio (video) fiile.</span>
+<span class="sd">        out_path (Optional[str], optional) : The path to the created video (with audio) file. Defaults to ``None``.</span>
+<span class="sd">        offset (str, optional)             : Offset until the voice starts. Defaults to ``&quot;00:00:00&quot;``.</span>
+<span class="sd">        open (bool, optional)              : Whether to open the created video or not. Defaults to ``True``.</span>
+<span class="sd">        delete_silence (bool, optional)    : Whether to delete the silence video (``video_path``) or not. Defaults to ``False``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The path to the created video (with audio) file.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import synthesize_audio</span>
+<span class="sd">        &gt;&gt;&gt; # Prepare Audio file (.mp3)</span>
+<span class="sd">        &gt;&gt;&gt; synthesize_audio(audio_path=&quot;sound.mp3&quot;, video_path=&quot;no_sound.mp4&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; # Prepare Video with Audio file (.mp4)</span>
+<span class="sd">        &gt;&gt;&gt; synthesize_audio(audio_path=&quot;sound.mp4&quot;, video_path=&quot;no_sound.mp4&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">root</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">audio_path</span><span class="p">)</span>
+    <span class="n">intermediate_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.mp3&quot;</span><span class="p">,</span> <span class="s2">&quot;.wav&quot;</span><span class="p">]:</span>
+        <span class="n">audio</span> <span class="o">=</span> <span class="n">AudioSegment</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">audio_path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="s2">&quot;.mp3&quot;</span>
+        <span class="n">audio_path</span> <span class="o">=</span> <span class="n">root</span> <span class="o">+</span> <span class="n">ext</span>
+        <span class="n">audio</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">out_f</span><span class="o">=</span><span class="n">root</span> <span class="o">+</span> <span class="n">ext</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="n">intermediate_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">audio_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">start</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">end</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">audio</span> <span class="o">=</span> <span class="n">AudioSegment</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">audio_path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="n">audio_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">root</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">start</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">end</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">volume</span><span class="si">}{</span><span class="n">ext</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">(</span><span class="n">audio</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span> <span class="o">+</span> <span class="n">volume</span><span class="p">)</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">out_f</span><span class="o">=</span><span class="n">audio_path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;mp3&quot;</span><span class="p">)</span>
+        <span class="n">intermediate_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">audio_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">out_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">out_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_synthesized&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">video_path</span><span class="p">))</span>
+    <span class="c1"># Append Audio.</span>
+    <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ffmpeg -y -itsoffset </span><span class="si">{</span><span class="n">offset</span><span class="si">}</span><span class="s2"> -i </span><span class="si">{</span><span class="n">video_path</span><span class="si">}</span><span class="s2"> -i </span><span class="si">{</span><span class="n">audio_path</span><span class="si">}</span><span class="s2"> -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 </span><span class="si">{</span><span class="n">out_path</span><span class="si">}</span><span class="s2"> -async 1 -strict -2&quot;</span>
+    <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Run the following command:</span><span class="se">\n</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Open the created video.</span>
+    <span class="k">if</span> <span class="nb">open</span><span class="p">:</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;open </span><span class="si">{</span><span class="n">out_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Delete the silence video.</span>
+    <span class="k">if</span> <span class="n">delete_intermidiates</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="n">intermediate_files</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out_path</span></div>
+
+
+<div class="viewcode-block" id="overlay_audio"><a class="viewcode-back" href="../../../veditor.utils.audio_utils.html#veditor.utils.audio_utils.overlay_audio">[docs]</a><span class="k">def</span> <span class="nf">overlay_audio</span><span class="p">(</span>
+    <span class="n">base_media_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">overlay_media_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">out_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Overlay audio at ``overlay_media_path`` on audio at ``base_media_path``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        base_media_path (str)              : The path to media file (contains audio) to be overlayed.</span>
+<span class="sd">        overlay_media_path (str)           : The path to media file (contains audio) to overlay.</span>
+<span class="sd">        out_path (Optional[str], optional) : Path to the created audio file. Defaults to ``None``.</span>
+<span class="sd">        position (int, optional)           : The position (``[ms]``) to start overlaying the provided segment in to this one. Defaults to ``0``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Path to the created audio file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">root</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">base_media_path</span><span class="p">)</span>
+    <span class="n">base_audio</span> <span class="o">=</span> <span class="n">AudioSegment</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">base_media_path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">ext</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">overlay_audio</span> <span class="o">=</span> <span class="n">AudioSegment</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">overlay_media_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">out_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">out_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">root</span><span class="si">}</span><span class="s2">_overlayed.mp3&quot;</span>
+    <span class="n">base_audio</span><span class="o">.</span><span class="n">overlay</span><span class="p">(</span><span class="n">overlay_audio</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">position</span><span class="p">))</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out_path</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, iwasakishuto.
+
+    </p>
+  </div> 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,3 +1,15 @@
+# <--- Added by iwasakishuto ---
+*.DS_Store
+*.ipynb
+!examples/*.ipynb
+Icon?
+.vscode
+# For Documentation
+code-format.sh
+docs-generate.sh
+src
+# --- Added by iwasakishuto ---
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

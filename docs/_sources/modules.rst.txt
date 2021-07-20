@@ -1,0 +1,7 @@
+veditor
+=======
+
+.. toctree::
+   :maxdepth: 4
+
+   veditor

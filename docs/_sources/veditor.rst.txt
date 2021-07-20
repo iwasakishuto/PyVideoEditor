@@ -1,0 +1,19 @@
+veditor package
+===============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   veditor.cli
+   veditor.utils
+
+Module contents
+---------------
+
+.. automodule:: veditor
+   :members:
+   :undoc-members:
+   :show-inheritance:

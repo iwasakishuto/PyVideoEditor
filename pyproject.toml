@@ -1,0 +1,59 @@
+[tool.poetry]
+name = "PyVideoEditor"
+version = "0.1.0"
+description = "A collection of useful program codes for video editing."
+authors = ["iwasakishuto <cabernet.rock@gmail.com>"]
+license = "MIT"
+repository = "https://github.com/iwasakishuto/PyVideoEditor"
+homepage = "https://iwasakishuto.github.io/PyVideoEditor/"
+readme = "README.md"
+classifiers=[
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Environment :: Console",
+    "Environment :: MacOS X",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+packages = [
+    {include = "veditor"}
+]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/iwasakishuto/PyVideoEditor/issues"
+"Source Code" = "https://github.com/iwasakishuto/PyVideoEditor"
+"Say Thanks!" = "https://twitter.com/cabernet_rock"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+opencv-python = "^4.5.3"
+numpy = "^1.21.1"
+matplotlib = "^3.4.2"
+Pillow = "^8.3.1"
+tqdm = "^4.61.2"
+pydub = "^0.25.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.4"
+flake8 = "^3.9.2"
+isort = "^5.8.0"
+mypy = "^0.812"
+black = "^21.5b1"
+pylint = "^2.8.2"
+ipykernel = "^6.0.1"
+Sphinx = "^4.0.2"
+sphinxemoji = "^0.1.8"
+sphinx-togglebutton = "^0.2.3"
+sphinxext-opengraph = "^0.4.2"
+sphinx_fontawesome = "^0.0.6"
+sphinx-rtd-theme = "^0.5.2"
+sphinx-notfound-page = "^0.7.1"
+
+[tool.poetry.scripts]
+command-name = "veditor.cli.main:func"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

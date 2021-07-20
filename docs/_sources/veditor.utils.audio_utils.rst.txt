@@ -1,0 +1,7 @@
+veditor.utils.audio\_utils module
+=================================
+
+.. automodule:: veditor.utils.audio_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

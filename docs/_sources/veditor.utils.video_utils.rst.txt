@@ -1,0 +1,7 @@
+veditor.utils.video\_utils module
+=================================
+
+.. automodule:: veditor.utils.video_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

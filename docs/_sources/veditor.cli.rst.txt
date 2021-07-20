@@ -1,0 +1,18 @@
+veditor.cli package
+===================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   veditor.cli.main
+
+Module contents
+---------------
+
+.. automodule:: veditor.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:

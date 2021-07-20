@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>veditor.utils.image_utils &mdash; PyVideoEditor  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/togglebutton.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script src="../../../_static/custom.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyVideoEditor
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../veditor.html">veditor package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyVideoEditor</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>veditor.utils.image_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for veditor.utils.image_utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">textwrap</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.axes</span> <span class="kn">import</span> <span class="n">Axes</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span><span class="p">,</span> <span class="n">ImageFont</span>
+
+<span class="kn">from</span> <span class="nn">.generic_utils</span> <span class="kn">import</span> <span class="n">flatten_dual</span><span class="p">,</span> <span class="n">handleKeyError</span>
+
+
+<div class="viewcode-block" id="arr2pil"><a class="viewcode-back" href="../../../veditor.utils.image_utils.html#veditor.utils.image_utils.arr2pil">[docs]</a><span class="k">def</span> <span class="nf">arr2pil</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Convert from ``frame`` (BGR ``npt.NDArray``) to ``image`` (RGB ``Image.Image``)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        frame (npt.NDArray[np.uint8]) : A BGR ``npt.NDArray``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Image.Image: A RGB ``Image.Image``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="pil2arr"><a class="viewcode-back" href="../../../veditor.utils.image_utils.html#veditor.utils.image_utils.pil2arr">[docs]</a><span class="k">def</span> <span class="nf">pil2arr</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Convert from ``image`` (RGB ``Image.Image``) to ``frame`` (BGR ``npt.NDArray``).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        image (Image.Image) : A RGB ``Image.Image``</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        npt.NDArray[np.uint8] : A BGR ``npt.NDArray``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cv2plot"><a class="viewcode-back" href="../../../veditor.utils.image_utils.html#veditor.utils.image_utils.cv2plot">[docs]</a><span class="k">def</span> <span class="nf">cv2plot</span><span class="p">(</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="n">ax</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Axes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">isBGR</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Axes</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Plot a image.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        frame (npt.NDArray[np.uint8]) : Input image.</span>
+<span class="sd">        ax ([type], optional)         : An ``Axes`` instance. Defaults to ``None``.</span>
+<span class="sd">        isBGR (bool, optional)        : Whether ``frame`` is BGR (OpenCV format) or not. Defaults to ``True``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Axes:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">isBGR</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">frame</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ax</span></div>
+
+
+<div class="viewcode-block" id="draw_text_in_pil"><a class="viewcode-back" href="../../../veditor.utils.image_utils.html#veditor.utils.image_utils.draw_text_in_pil">[docs]</a><span class="k">def</span> <span class="nf">draw_text_in_pil</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">ttfontname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">img</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">xy</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">img_size</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">640</span><span class="p">,</span> <span class="mi">360</span><span class="p">),</span>
+    <span class="n">img_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;RGB&quot;</span><span class="p">,</span>
+    <span class="n">bgRGB</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span>
+    <span class="n">textRGB</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
+    <span class="n">fontwidth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fontheight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">line_height</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">anchor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">spacing</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="n">align</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span>
+    <span class="n">direction</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ltr&quot;</span><span class="p">,</span>
+    <span class="n">features</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">language</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">stroke_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">stroke_fill</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">embedded_color</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">text_width</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">wrap_text</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">drop_whitespace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">ret_position</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;word&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Draw text in pillow image (``Image.Image``).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        text (str)                                          : Text to be drawn to ``img``.</span>
+<span class="sd">        ttfontname (str)                                    : A filename or file-like object containing a TrueType font.</span>
+<span class="sd">        img (Optional[Image.Image], optional)               : The image to draw in. If this argment is ``None``, img will be created using ``img_size`` and ``bgRGB`` arguments. Defaults to ``None``.</span>
+<span class="sd">        xy (Tuple, optional)                                : Where to write the ``text``. This value means the coordinates of (``x``, ``y``). Defaults to ``(0, 0)``.</span>
+<span class="sd">        img_size (Tuple, optional)                          : The image size. Defaults to ``(640, 360)``.</span>
+<span class="sd">        img_mode (str, optional)                            : Optional mode to use for color values. Defaults to ``&quot;RGB&quot;``.</span>
+<span class="sd">        bgRGB (Union[str, Tuple], optional)                 : The color of background image. Defaults to ``&quot;white&quot;``.</span>
+<span class="sd">        textRGB (Union[str, Tuple], optional)               : The color of text. Defaults to ``&quot;black&quot;``.</span>
+<span class="sd">        fontsize (int, optional)                            : The font size. Defaults to ``16``.</span>
+<span class="sd">        fontwidth (Optional[int], optional)                 : The font width. (If not given, automatically calculated.) Defaults to ``None``.</span>
+<span class="sd">        fontheight (Optional[int], optional)                : The font height. (If not given, automatically calculated.) Defaults to ``None``.</span>
+<span class="sd">        line_height (Optional[int], optional)               : The line height. (If not given, automatically calculated.) Defaults to ``None``.</span>
+<span class="sd">        anchor (Optional[str], optional)                    : The text anchor alignment. Defaults to ``None``.</span>
+<span class="sd">        spacing (int, optional)                             : The number of pixels between lines. Defaults to ``4``.</span>
+<span class="sd">        align (str, optional)                               : Determines the relative alignment of lines. Defaults to ``&quot;left&quot;``.</span>
+<span class="sd">        direction (str, optional)                           : Direction of the text. Defaults to ``&quot;ltr&quot;``.</span>
+<span class="sd">        features (Optional[str], optional)                  : A list of OpenType font features to be used during text layout. Defaults to ``None``.</span>
+<span class="sd">        language (Optional[str], optional)                  : Language of the text. Defaults to ``None``.</span>
+<span class="sd">        stroke_width (int, optional)                        : The width of the text stroke. Defaults to ``0``.</span>
+<span class="sd">        stroke_fill (Optional[Union[str, Tuple]], optional) : Color to use for the text stroke. If not given, will default to the ``textRGB`` parameter. Defaults to ``None``.</span>
+<span class="sd">        embedded_color (bool, optional)                     : Whether to use font embedded color glyphs (COLR, CBDT, SBIX). Defaults to ``False``.</span>
+<span class="sd">        text_width (Optional[int], optional)                : The length of characters in one line. Defaults to ``None``.</span>
+<span class="sd">        wrap_text (bool, optional)                          : Whether to wrap ``text`` for multilines or not. Defaults to ``False``.</span>
+<span class="sd">        drop_whitespace (bool, optional)                    : If ``True``, whitespace at the beginning and ending of every line. Defaults to ``False``.</span>
+<span class="sd">        ret_position (str, optional)                        : Type of the position of next text to be returned. Please choose from ``[&quot;line&quot;, &quot;word&quot;]``. Defaults to ``&quot;word&quot;``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Image.Image: ``img`` with ``text`` drawn.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">handleKeyError</span><span class="p">(</span><span class="n">lst</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="s2">&quot;line&quot;</span><span class="p">],</span> <span class="n">ret_position</span><span class="o">=</span><span class="n">ret_position</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">img_mode</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">img_size</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">bgRGB</span><span class="p">)</span>
+    <span class="n">iw</span><span class="p">,</span> <span class="n">ih</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="n">ttfontname</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">fontsize</span><span class="p">))</span>
+
+    <span class="n">letters</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">ascii_letters</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span>
+    <span class="n">fw</span><span class="p">,</span> <span class="n">fh</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">letters</span><span class="p">)</span>
+    <span class="n">fw</span> <span class="o">=</span> <span class="n">fontwidth</span> <span class="ow">or</span> <span class="n">fw</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="n">letters</span><span class="p">)</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="n">fontheight</span> <span class="ow">or</span> <span class="n">line_height</span> <span class="ow">or</span> <span class="n">fh</span>
+
+    <span class="n">x</span><span class="p">,</span> <span class="n">mt</span> <span class="o">=</span> <span class="n">xy</span>
+    <span class="k">if</span> <span class="n">wrap_text</span><span class="p">:</span>
+        <span class="n">text_width</span> <span class="o">=</span> <span class="n">text_width</span> <span class="ow">or</span> <span class="n">iw</span> <span class="o">//</span> <span class="n">fw</span>
+        <span class="n">wrapped_lines</span> <span class="o">=</span> <span class="n">flatten_dual</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">textwrap</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">text_width</span><span class="p">,</span> <span class="n">drop_whitespace</span><span class="o">=</span><span class="n">drop_whitespace</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">wrapped_lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">text</span><span class="p">]</span>
+
+    <span class="n">alpha_composite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">textRGB</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span> <span class="ow">and</span> <span class="n">img_mode</span> <span class="o">==</span> <span class="s2">&quot;RGBA&quot;</span><span class="p">:</span>
+        <span class="n">text_canvas</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">img_mode</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">im</span><span class="o">=</span><span class="n">text_canvas</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">img_mode</span><span class="p">)</span>
+        <span class="n">alpha_composition</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">im</span><span class="o">=</span><span class="n">img</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">img_mode</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wrapped_lines</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">wrapped_lines</span><span class="p">):</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">fh</span> <span class="o">+</span> <span class="n">mt</span>
+            <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span>
+                <span class="n">text</span><span class="o">=</span><span class="n">line</span><span class="p">,</span>
+                <span class="n">fill</span><span class="o">=</span><span class="n">textRGB</span><span class="p">,</span>
+                <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
+                <span class="n">anchor</span><span class="o">=</span><span class="n">anchor</span><span class="p">,</span>
+                <span class="n">spacing</span><span class="o">=</span><span class="n">spacing</span><span class="p">,</span>
+                <span class="n">align</span><span class="o">=</span><span class="n">align</span><span class="p">,</span>
+                <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
+                <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span>
+                <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">,</span>
+                <span class="n">stroke_width</span><span class="o">=</span><span class="n">stroke_width</span><span class="p">,</span>
+                <span class="n">stroke_fill</span><span class="o">=</span><span class="n">stroke_fill</span><span class="p">,</span>
+                <span class="n">embedded_color</span><span class="o">=</span><span class="n">embedded_color</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ret_position</span> <span class="o">==</span> <span class="s2">&quot;line&quot;</span><span class="p">:</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">fh</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">ret_position</span> <span class="o">==</span> <span class="s2">&quot;word&quot;</span><span class="p">:</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">fw</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">),</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">alpha_composite</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">alpha_composite</span><span class="p">(</span><span class="n">im1</span><span class="o">=</span><span class="n">img</span><span class="p">,</span> <span class="n">im2</span><span class="o">=</span><span class="n">text_canvas</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">img_mode</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">xy</span><span class="p">)</span></div>
+
+
+<span class="n">SUPPORTED_CONVERSION_METHODS</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;nega&quot;</span><span class="p">,</span> <span class="s2">&quot;bgr2rgb&quot;</span><span class="p">,</span> <span class="s2">&quot;gray&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="image_conversion"><a class="viewcode-back" href="../../../veditor.utils.image_utils.html#veditor.utils.image_utils.image_conversion">[docs]</a><span class="k">def</span> <span class="nf">image_conversion</span><span class="p">(</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Convert image by ``method`` method</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        frame (npt.NDArray[np.uint8]) : Input image (BGR).</span>
+<span class="sd">        method (str)                  : How to convert an image.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        npt.NDArray[np.uint8]: Converted image.</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :class: popup-img</span>
+
+<span class="sd">        &gt;&gt;&gt; import cv2</span>
+<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import (</span>
+<span class="sd">        ...     SUPPORTED_CONVERSION_METHODS,</span>
+<span class="sd">        ...     cv2plot,</span>
+<span class="sd">        ...     image_conversion,</span>
+<span class="sd">        &gt;&gt;&gt; )</span>
+<span class="sd">        &gt;&gt;&gt; frame = cv2.imread()</span>
+<span class="sd">        &gt;&gt;&gt; num_methods = len(SUPPORTED_CONVERSION_METHODS)</span>
+<span class="sd">        &gt;&gt;&gt; fig, axes = plt.subplots(ncols=num_methods, nrows=1, figsize=(6 * num_methods, 4))</span>
+<span class="sd">        &gt;&gt;&gt; for ax, method in zip(axes, SUPPORTED_CONVERSION_METHODS):</span>
+<span class="sd">        ...     ax = cv2plot(image_conversion(frame, method=method), ax=ax)</span>
+<span class="sd">        ...     ax.set_title(method)</span>
+<span class="sd">        &gt;&gt;&gt; fig.show()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">handleKeyError</span><span class="p">(</span><span class="n">lst</span><span class="o">=</span><span class="n">SUPPORTED_CONVERSION_METHODS</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;nega&quot;</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">nega_conversion</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;bgr2rgb&quot;</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;gray&quot;</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">reps</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">frame</span></div>
+
+
+<div class="viewcode-block" id="nega_conversion"><a class="viewcode-back" href="../../../veditor.utils.image_utils.html#veditor.utils.image_utils.nega_conversion">[docs]</a><span class="k">def</span> <span class="nf">nega_conversion</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Convert images to negative and positive.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        frame (npt.NDArray[np.uint8]) : Input image (BGR).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        npt.NDArray[np.uint8]: [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">cv2</span><span class="o">.</span><span class="n">bitwise_not</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="alpha_composite"><a class="viewcode-back" href="../../../veditor.utils.image_utils.html#veditor.utils.image_utils.alpha_composite">[docs]</a><span class="k">def</span> <span class="nf">alpha_composite</span><span class="p">(</span>
+    <span class="n">bg</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="n">paste</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="n">box</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Paste the ``paste`` image to ``bg`` with considering alpha channel.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        bg (Image.Image)               : Background Image.</span>
+<span class="sd">        paste (Image.Image)            : Image to paste.</span>
+<span class="sd">        box (Tuple[int,int], optional) : Where to paste the ``paste`` image on ``bg`` image. Defaults to ``(0,0)``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Image.Image: The alpha-composited image.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">bg</span> <span class="o">=</span> <span class="n">bg</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGBA&quot;</span><span class="p">)</span>
+    <span class="n">paste</span> <span class="o">=</span> <span class="n">paste</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGBA&quot;</span><span class="p">)</span>
+    <span class="n">img_clear</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;RGBA&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">bg</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">img_clear</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">paste</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="p">)</span>
+    <span class="n">bg</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">alpha_composite</span><span class="p">(</span><span class="n">im1</span><span class="o">=</span><span class="n">bg</span><span class="p">,</span> <span class="n">im2</span><span class="o">=</span><span class="n">img_clear</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">bg</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, iwasakishuto.
+
+    </p>
+  </div> 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

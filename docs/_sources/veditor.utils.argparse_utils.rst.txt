@@ -1,0 +1,7 @@
+veditor.utils.argparse\_utils module
+====================================
+
+.. automodule:: veditor.utils.argparse_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

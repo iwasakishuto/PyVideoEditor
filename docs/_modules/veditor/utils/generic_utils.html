@@ -1,0 +1,357 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>veditor.utils.generic_utils &mdash; PyVideoEditor  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/togglebutton.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script src="../../../_static/custom.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyVideoEditor
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../veditor.html">veditor package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyVideoEditor</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>veditor.utils.generic_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for veditor.utils.generic_utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">._colorings</span> <span class="kn">import</span> <span class="n">toBLUE</span><span class="p">,</span> <span class="n">toGREEN</span><span class="p">,</span> <span class="n">toRED</span>
+<span class="kn">from</span> <span class="nn">._exceptions</span> <span class="kn">import</span> <span class="ne">KeyError</span>
+
+<span class="n">NoneType</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="handleKeyError"><a class="viewcode-back" href="../../../veditor.utils.generic_utils.html#veditor.utils.generic_utils.handleKeyError">[docs]</a><span class="k">def</span> <span class="nf">handleKeyError</span><span class="p">(</span><span class="n">lst</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check whether all ``kwargs.values()`` in the ``lst``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        lst (List[Any])   : candidates.</span>
+<span class="sd">        kwargs (dict)     : ``key`` is the varname that is easy to understand when an error occurs</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import handleKeyError</span>
+<span class="sd">        &gt;&gt;&gt; handleKeyError(lst=range(3), val=1)</span>
+<span class="sd">        &gt;&gt;&gt; handleKeyError(lst=range(3), val=100)</span>
+<span class="sd">        KeyError: Please choose the argment val from [&#39;0&#39;, &#39;1&#39;, &#39;2&#39;]. you chose 100</span>
+<span class="sd">        &gt;&gt;&gt; handleKeyError(lst=range(3), val1=1, val2=2)</span>
+<span class="sd">        &gt;&gt;&gt; handleKeyError(lst=range(3), val1=1, val2=100)</span>
+<span class="sd">        KeyError: Please choose the argment val2 from [&#39;0&#39;, &#39;1&#39;, &#39;2&#39;]. you chose 100</span>
+
+<span class="sd">    Raise:</span>
+<span class="sd">        KeyError: If ``kwargs.values()`` not in the ``lst``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+            <span class="n">lst</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39;&quot;</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">])</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Please choose the argment </span><span class="si">{</span><span class="n">toBLUE</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="si">}</span><span class="s2"> from [</span><span class="si">{</span><span class="n">lst</span><span class="si">}</span><span class="s2">]. you chose </span><span class="si">{</span><span class="n">toRED</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="class2str"><a class="viewcode-back" href="../../../veditor.utils.generic_utils.html#veditor.utils.generic_utils.class2str">[docs]</a><span class="k">def</span> <span class="nf">class2str</span><span class="p">(</span><span class="n">class_</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Convert class to str.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        class_ (object): class object</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str : Class name.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import class2str</span>
+<span class="sd">        &gt;&gt;&gt; class2str(str)</span>
+<span class="sd">        &#39;str&#39;</span>
+<span class="sd">        &gt;&gt;&gt; class2str(tuple)</span>
+<span class="sd">        &#39;tuple&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;class &#39;(.*?)&#39;&gt;&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\1&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">class_</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="handleTypeError"><a class="viewcode-back" href="../../../veditor.utils.generic_utils.html#veditor.utils.generic_utils.handleTypeError">[docs]</a><span class="k">def</span> <span class="nf">handleTypeError</span><span class="p">(</span><span class="n">types</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check whether all types of ``kwargs.values()`` match any of ``types``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        types (List[Any]) : Candidate types.</span>
+<span class="sd">        kwargs (dict)     : ``key`` is the varname that is easy to understand when an error occurs</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import handleTypeError</span>
+<span class="sd">        &gt;&gt;&gt; handleTypeError(types=[str], val=&quot;foo&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; handleTypeError(types=[str, int], val=1)</span>
+<span class="sd">        &gt;&gt;&gt; handleTypeError(types=[str, int], val=1.)</span>
+<span class="sd">        TypeError: val must be one of [&#39;str&#39;, &#39;int&#39;], not float</span>
+<span class="sd">        &gt;&gt;&gt; handleTypeError(types=[str], val1=&quot;foo&quot;, val2=&quot;bar&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; handleTypeError(types=[str, int], val1=&quot;foo&quot;, val2=1.)</span>
+<span class="sd">        TypeError: val2 must be one of [&#39;str&#39;, &#39;int&#39;], not float</span>
+
+<span class="sd">    Raise:</span>
+<span class="sd">        TypeError: If the types of ``kwargs.values()`` are none of the ``types``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">types</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">NoneType</span> <span class="k">if</span> <span class="n">e</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">types</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">types</span><span class="p">):</span>
+            <span class="n">str_true_types</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">class2str</span><span class="p">(</span><span class="n">t</span><span class="p">))</span><span class="si">}</span><span class="s2">&#39;&quot;</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">types</span><span class="p">])</span>
+            <span class="n">srt_false_type</span> <span class="o">=</span> <span class="n">class2str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">types</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">err_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;must be </span><span class="si">{</span><span class="n">str_true_types</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">err_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;must be one of [</span><span class="si">{</span><span class="n">str_true_types</span><span class="si">}</span><span class="s2">]&quot;</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">toBLUE</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">err_msg</span><span class="si">}</span><span class="s2">, not </span><span class="si">{</span><span class="n">toRED</span><span class="p">(</span><span class="n">srt_false_type</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="str_strip"><a class="viewcode-back" href="../../../veditor.utils.generic_utils.html#veditor.utils.generic_utils.str_strip">[docs]</a><span class="k">def</span> <span class="nf">str_strip</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Convert all consecutive whitespace  characters to `&#39; &#39;` (half-width whitespace), then return a copy of the string with leading and trailing whitespace removed.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        string (str) : string</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str : A copy of the string with leading and trailing whitespace removed</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import str_strip</span>
+<span class="sd">        &gt;&gt;&gt; str_strip(&quot; hoge   &quot;)</span>
+<span class="sd">        &#39;hoge&#39;</span>
+<span class="sd">        &gt;&gt;&gt; str_strip(&quot; ho    ge   &quot;)</span>
+<span class="sd">        &#39;ho ge&#39;</span>
+<span class="sd">        &gt;&gt;&gt; str_strip(&quot;  ho    g　e&quot;)</span>
+<span class="sd">        &#39;ho g e&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;[\s 　]+&quot;</span><span class="p">,</span> <span class="n">repl</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">string</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="now_str"><a class="viewcode-back" href="../../../veditor.utils.generic_utils.html#veditor.utils.generic_utils.now_str">[docs]</a><span class="k">def</span> <span class="nf">now_str</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">@%H.%M.%S&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns new datetime string representing current time local to ``tz`` under the control of an explicit format string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tz (datetime.timezone) : Timezone object. If no ``tz`` is specified, uses local timezone.</span>
+<span class="sd">        fmt (str)              : format string. See `Python Documentation &lt;https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes&gt;`_</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str : A datetime string.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import now_str</span>
+<span class="sd">        &gt;&gt;&gt; now_str()</span>
+<span class="sd">        &#39;2020-09-14@22.31.17&#39;</span>
+<span class="sd">        &gt;&gt;&gt;now_str(fmt=&quot;%A, %d. %B %Y %I:%M%p&quot;)</span>
+<span class="sd">        Monday, 14. September 2020 10:31PM&#39;</span>
+<span class="sd">        &gt;&gt;&gt; now_str(tz=datetime.timezone.utc)</span>
+<span class="sd">        &#39;2020-09-14@13.31.17&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">tz</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="flatten_dual"><a class="viewcode-back" href="../../../veditor.utils.generic_utils.html#veditor.utils.generic_utils.flatten_dual">[docs]</a><span class="k">def</span> <span class="nf">flatten_dual</span><span class="p">(</span><span class="n">lst</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Flatten double list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        lst (List[List[Any]]): Dual list.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[Any] : Flattened single list.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from pycharmers.utils import flatten_dual</span>
+<span class="sd">        &gt;&gt;&gt; flatten_dual([[1,2,3],[4,5,6]])</span>
+<span class="sd">        [1, 2, 3, 4, 5, 6]</span>
+<span class="sd">        &gt;&gt;&gt; flatten_dual([[[1,2,3]],[4,5,6]])</span>
+<span class="sd">        [[1, 2, 3], 4, 5, 6]</span>
+<span class="sd">        &gt;&gt;&gt; flatten_dual(flatten_dual([[[1,2,3]],[4,5,6]]))</span>
+<span class="sd">        TypeError: &#39;int&#39; object is not iterable</span>
+
+<span class="sd">    Raise:</span>
+<span class="sd">        TypeError: If list is not a dual list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">element</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, iwasakishuto.
+
+    </p>
+  </div> 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

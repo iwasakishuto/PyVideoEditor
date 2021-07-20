@@ -1,0 +1,7 @@
+veditor.cli.main module
+=======================
+
+.. automodule:: veditor.cli.main
+   :members:
+   :undoc-members:
+   :show-inheritance:

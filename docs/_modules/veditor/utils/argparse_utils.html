@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>veditor.utils.argparse_utils &mdash; PyVideoEditor  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/togglebutton.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script src="../../../_static/custom.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyVideoEditor
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../veditor.html">veditor package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyVideoEditor</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>veditor.utils.argparse_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for veditor.utils.argparse_utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">.generic_utils</span> <span class="kn">import</span> <span class="n">str_strip</span>
+
+
+<div class="viewcode-block" id="ListParamProcessorCreate"><a class="viewcode-back" href="../../../veditor.utils.argparse_utils.html#veditor.utils.argparse_utils.ListParamProcessorCreate">[docs]</a><span class="k">def</span> <span class="nf">ListParamProcessorCreate</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a ListParamProcessor</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        type (type) : type of each element in list.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ListParamProcessor (argparse.Action) : Processor which receives list arguments.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import argparse</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import ListParamProcessorCreate</span>
+<span class="sd">        &gt;&gt;&gt; parser = argparse.ArgumentParser()</span>
+<span class="sd">        &gt;&gt;&gt; parser.add_argument(&quot;--list_params&quot;, action=ListParamProcessorCreate())</span>
+<span class="sd">        &gt;&gt;&gt; args = parser.parse_args(args=[&quot;--list_params&quot;, &quot;[あ, い, う]&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; args.list_params</span>
+<span class="sd">        [&#39;あ&#39;, &#39;い&#39;, &#39;う&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">class</span> <span class="nc">ListParamProcessor</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Action</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Receive List arguments.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; import argparse</span>
+<span class="sd">            &gt;&gt;&gt; from veditor.utils import ListParamProcessor</span>
+<span class="sd">            &gt;&gt;&gt; parser = argparse.ArgumentParser()</span>
+<span class="sd">            &gt;&gt;&gt; parser.add_argument(&quot;--list_params&quot;, action=ListParamProcessor)</span>
+<span class="sd">            &gt;&gt;&gt; args = parser.parse_args(args=[&quot;--list_params&quot;, &quot;[あ, い, う]&quot;])</span>
+<span class="sd">            &gt;&gt;&gt; args.list_params</span>
+<span class="sd">            [&#39;あ&#39;, &#39;い&#39;, &#39;う&#39;]</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            If you run from the command line, execute as follows::</span>
+
+<span class="sd">            $ python app.py --list_params &quot;[あ, い, う]&quot;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">option_strings</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;(?:\[|\()(.+)(?:\]|\))&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">values</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">str_strip</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">values</span><span class="p">)]</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ListParamProcessor</span></div>
+
+
+<div class="viewcode-block" id="DictParamProcessor"><a class="viewcode-back" href="../../../veditor.utils.argparse_utils.html#veditor.utils.argparse_utils.DictParamProcessor">[docs]</a><span class="k">class</span> <span class="nc">DictParamProcessor</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Action</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Receive an argument as a dictionary.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: You must give one argument for each one keyword.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import argparse</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import DictParamProcessor</span>
+<span class="sd">        &gt;&gt;&gt; parser = argparse.ArgumentParser()</span>
+<span class="sd">        &gt;&gt;&gt; parser.add_argument(&quot;--dict_params&quot;, action=DictParamProcessor)</span>
+<span class="sd">        &gt;&gt;&gt; args = parser.parse_args(args=[&quot;--dict_params&quot;, &quot;foo = [a, b, c]&quot;, &quot;--dict_params&quot;, &quot;bar=d&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; args.dict_params</span>
+<span class="sd">        {&#39;foo&#39;: [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;], &#39;bar&#39;: &#39;d&#39;}</span>
+<span class="sd">        &gt;&gt;&gt; args = parser.parse_args(args=[&quot;--dict_params&quot;, &quot;foo=a, bar=b&quot;])</span>
+<span class="sd">        ValueError: too many values to unpack (expected 2)</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        If you run from the command line, execute as follows::</span>
+
+<span class="sd">        $ python app.py --dict_params &quot;foo = [a, b, c]&quot; --dict_params bar=c</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">option_strings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">param_dict</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;\[(.+)\]&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">str_strip</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="n">str_strip</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">str_strip</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">param_dict</span><span class="p">[</span><span class="n">str_strip</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="n">param_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KwargsParamProcessor"><a class="viewcode-back" href="../../../veditor.utils.argparse_utils.html#veditor.utils.argparse_utils.KwargsParamProcessor">[docs]</a><span class="k">class</span> <span class="nc">KwargsParamProcessor</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Action</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set a new argument.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import argparse</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import KwargsParamProcessor</span>
+<span class="sd">        &gt;&gt;&gt; parser = argparse.ArgumentParser()</span>
+<span class="sd">        &gt;&gt;&gt; parser.add_argument(&quot;--kwargs&quot;, action=KwargsParamProcessor)</span>
+<span class="sd">        &gt;&gt;&gt; args = parser.parse_args(args=[&quot;--kwargs&quot;, &quot;foo=a&quot;, &quot;--kwargs&quot;, &quot;bar=b&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; (args.kwargs, args.foo, args.bar)</span>
+<span class="sd">        (None, &#39;a&#39;, &#39;b&#39;)</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        If you run from the command line, execute as follows::</span>
+
+<span class="sd">        $ python app.py --kwargs foo=a --kwargs bar=b</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">option_strings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, iwasakishuto.
+
+    </p>
+  </div> 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

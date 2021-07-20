@@ -1,0 +1,22 @@
+veditor.utils package
+=====================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   veditor.utils.argparse_utils
+   veditor.utils.audio_utils
+   veditor.utils.generic_utils
+   veditor.utils.image_utils
+   veditor.utils.video_utils
+
+Module contents
+---------------
+
+.. automodule:: veditor.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

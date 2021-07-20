@@ -1,0 +1,7 @@
+veditor.utils.generic\_utils module
+===================================
+
+.. automodule:: veditor.utils.generic_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
