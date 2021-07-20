@@ -6,3 +6,158 @@
  * Github : https://github.com/iwasakishuto
  *
 */
+
+
+.bodywrapper {
+  background: url("../_images/background.png");
+  background-repeat: repeat-y;
+  background-size: contain;
+}
+
+img.full-width {
+  width: 100%;
+}
+dl.field-list {
+  background-color: white;
+  padding: 5px 10px;
+}
+dl.py.class > dt {
+  background-color: #fff8cd;
+  padding: 0.5em;
+  border-radius: 0.5em;
+}
+dl.py.function > dt {
+  background-color: #f7c2c2;
+  border-radius: 0.5em;
+  padding: 0.5em;
+}
+ul.simple li strong {
+  font-family: monaco, monospace;
+  font-size: .9em;
+  color: #d14;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  white-space: nowrap;
+  padding: 3px 4px;
+}
+
+/* <--- ToC Tree --- */
+div.toctree-wrapper.compound {
+  color: white!important;
+  background-color: #343131;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+div.toctree-wrapper.compound ul {
+  margin: 0!important;
+}
+/* div.toctree-wrapper.compound span:before{
+  content: "";
+  font-family: 'FontAwesome';
+  margin-right: 0;
+} */
+div.toctree-wrapper.compound span.package-name {
+  color:#ffd43b;
+}
+/* div.toctree-wrapper.compound span.package-name:before{
+  content: "\f115";
+  color:#ffd43b;
+  margin-right: 5px;
+} */
+div.toctree-wrapper.compound span.program-name {
+  color: #a8d8ff;
+}
+/* div.toctree-wrapper.compound span.program-name:before{
+  content: "\f1c9";
+  color: #a8d8ff;
+  margin-right: 5px;
+} */
+div.toctree-wrapper.compound span.module-contents {
+  color: #f2f4c3;
+}
+/* div.toctree-wrapper.compound span.module-contents:before{
+  content: "\f03a";
+  color: #f2f4c3;
+  margin-right: 5px;
+} */
+div.toctree-wrapper.compound span.package-subtitle {
+  color:white;
+  text-decoration: underline;
+}
+div.toctree-wrapper.compound a:hover span{
+  color: pink;
+}
+/* div.toctree-wrapper.compound a.chapter:hover:after {
+  color: pink;
+  content: "¶";
+  padding-left: 5px;
+} */
+/* --- ToC Tree ---> */
+
+/* <--- Social Contents --- */
+ul.social {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  font-size: 1.6em;
+  text-align: center;
+}
+ul.social li {
+  display: inline;
+}
+ul.social a {
+  display: inline-block;
+  width: 45px;
+  height: 45px;
+  border-radius: 100%;
+  text-align: center;
+  font-size: 1em;
+  line-height: 45px;
+  transition: 0.5s;
+}
+ul.social a:hover {
+  -moz-transform: scale(1.5, 1.5);
+  -webkit-transform: scale(1.5, 1.5);
+  -o-transform: scale(1.5, 1.5);
+  -ms-transform: scale(1.5, 1.5);
+}
+ul.social a.sc-github, ul.social a.sc-github-alt {
+  background-color: #111010;
+  color: white;
+}
+ul.social a.sc-twitter {
+  color: white;
+  background-color: #4da7de;
+}
+/* --- Social Contents ---> */
+
+/* <--- Hide Typing Info --- */
+em.sig-param {
+  position: relative;
+  cursor: pointer;
+}
+em.sig-param > span.n:hover,
+em.sig-param > span.pre:hover {
+  color: red;
+}
+em.sig-param > span.n:hover:before,
+em.sig-param > span.pre:hover:before{
+/* ,em.sig-param:hover span.n[aria-label] span:before { */
+  opacity: 1;
+  z-index: 2;
+}
+em.sig-param > span.n:before,
+em.sig-param > span.pre:before {
+  content: attr(aria-label);
+  opacity: 0;
+  position: absolute;
+  top: -40px;
+  font-size: 14px;
+  padding: 10px;
+  color: black;
+  background-color: #FFD523;
+  border-radius: 3px;
+  pointer-events: none;
+}
+/* --- Hide Typing Info ---> */
