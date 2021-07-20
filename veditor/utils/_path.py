@@ -35,3 +35,7 @@ VEDITOR_DIR = os.path.join(
 if os.path.exists(VEDITOR_DIR) and (not os.access(VEDITOR_DIR, os.W_OK)):
     VEDITOR_DIR = os.path.join("/tmp", ".veditor")
 _makedirs(name=VEDITOR_DIR)
+
+SAMPLE_IMAGE_PATH = os.path.join(VEDITOR_DIR, "file_example_MP4_1280_10MG.mp4")
+SAMPLE_VIDEO_PATH = os.path.join(VEDITOR_DIR, "file_example_PNG_500kB.png")
+SAMPLE_FONT_PATH = os.path.join(VEDITOR_DIR, "file_example_MP4_1280_10MG.mp4")

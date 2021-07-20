@@ -166,7 +166,8 @@
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Number</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span> <span class="nn">._colorings</span> <span class="kn">import</span> <span class="n">toBLUE</span><span class="p">,</span> <span class="n">toGREEN</span><span class="p">,</span> <span class="n">toRED</span>
 <span class="kn">from</span> <span class="nn">._exceptions</span> <span class="kn">import</span> <span class="ne">KeyError</span>
@@ -293,6 +294,37 @@
 <span class="sd">        &#39;2020-09-14@13.31.17&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">tz</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="readable_bytes"><a class="viewcode-back" href="../../../veditor.utils.generic_utils.html#veditor.utils.generic_utils.readable_bytes">[docs]</a><span class="k">def</span> <span class="nf">readable_bytes</span><span class="p">(</span><span class="n">byte</span><span class="p">:</span> <span class="n">Number</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Unit conversion for readability.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        byte (Number): File byte [B].</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import readable_bytes</span>
+<span class="sd">        &gt;&gt;&gt; for i in range(1,30,3):</span>
+<span class="sd">        ...     byte = pow(10,i)</span>
+<span class="sd">        ...     size, unit = readable_bytes(pow(10,i))</span>
+<span class="sd">        ...     print(f&quot;{byte:.1g}[B] = {size:.2f}[{unit}]&quot;)</span>
+<span class="sd">        1e+01[B] = 10.00[B]</span>
+<span class="sd">        1e+04[B] = 9.77[KB]</span>
+<span class="sd">        1e+07[B] = 9.54[MB]</span>
+<span class="sd">        1e+10[B] = 9.31[GB]</span>
+<span class="sd">        1e+13[B] = 9.09[TB]</span>
+<span class="sd">        1e+16[B] = 8.88[PB]</span>
+<span class="sd">        1e+19[B] = 8.67[EB]</span>
+<span class="sd">        1e+22[B] = 8.47[ZB]</span>
+<span class="sd">        1e+25[B] = 8.27[YB]</span>
+<span class="sd">        1e+28[B] = 8271.81[YB]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;Z&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">units</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1024.0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">unit</span> <span class="o">==</span> <span class="n">units</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="k">break</span>
+        <span class="n">byte</span> <span class="o">/=</span> <span class="mf">1024.0</span>  <span class="c1"># size &gt;&gt; 10</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">byte</span><span class="p">,</span> <span class="n">unit</span> <span class="o">+</span> <span class="s2">&quot;B&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="flatten_dual"><a class="viewcode-back" href="../../../veditor.utils.generic_utils.html#veditor.utils.generic_utils.flatten_dual">[docs]</a><span class="k">def</span> <span class="nf">flatten_dual</span><span class="p">(</span><span class="n">lst</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>

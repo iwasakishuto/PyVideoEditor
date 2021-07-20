@@ -9,6 +9,7 @@ Submodules
 
    veditor.utils.argparse_utils
    veditor.utils.audio_utils
+   veditor.utils.download_utils
    veditor.utils.generic_utils
    veditor.utils.image_utils
    veditor.utils.video_utils
