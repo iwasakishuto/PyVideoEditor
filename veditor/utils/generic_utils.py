@@ -3,7 +3,7 @@ import argparse
 import datetime
 import re
 from numbers import Number
-from typing import Any, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from ._colorings import toBLUE, toGREEN, toRED
 from ._exceptions import KeyError
@@ -185,3 +185,69 @@ def flatten_dual(lst: List[List[Any]]) -> List[Any]:
         TypeError: If list is not a dual list.
     """
     return [element for sublist in lst for element in sublist]
+
+
+_trbl: List[str] = ["top", "right", "bottom", "left"]
+
+
+def assign_trbl(
+    data: Dict[str, Any],
+    name: str,
+    default: Optional[Union[Number, List[Number]]] = None,
+    ret_name: bool = False,
+) -> Union[
+    Tuple[Tuple[Number, Number, Number, Number], Tuple[str, str, str, str]],
+    Tuple[Number, Number, Number, Number],
+]:
+    """Return the ``name`` 's values of [``Top``, ``Right``, ``Bottom``, ``Left``] from ``data``. Determine the each position as well as css.
+
+    Args:
+        data (Dict[str,Any])                                     : A dictionary which stores data.
+        name (str)                                               : The name of the value you want to assign..
+        default (Optional[Union[Number,List[Number]]], optional) : Default Value.. Defaults to ``None``.
+        ret_name (bool, optional)                                : Whether to return names or not. Defaults to ``False``.
+
+    Returns:
+        Union[Tuple[Tuple[Number, Number, Number, Number], Tuple[str,str,str,str]], Tuple[Number, Number, Number, Number]]: Values of ``Top``, ``Right``, ``Bottom``, ``Left``. If ``ret_name`` is ``True``, add names.
+
+    Examples:
+        >>> from veditor.utils import assign_trbl
+        >>> assign_trbl(data={"margin": [1,2,3,4]}, name="margin")
+        (1, 2, 3, 4)
+        >>> assign_trbl(data={"margin": [1,2,3]}, name="margin")
+        (1, 2, 3, 2)
+        >>> assign_trbl(data={"margin": [1,2]}, name="margin")
+        (1, 2, 1, 2)
+        >>> assign_trbl(data={"margin": 1}, name="margin")
+        (1, 1, 1, 1)
+        >>> assign_trbl(data={"margin": 1}, name="padding", default=5)
+        (5, 5, 5, 5)
+    """
+    vals = data.get(name, default)
+    if isinstance(vals, (Number, NoneType)):
+        vals = [vals]
+
+    if len(vals) == 0:
+        t = r = b = l = None
+    elif len(vals) == 1:
+        t = r = b = l = vals[0]
+    elif len(vals) == 2:
+        t = b = vals[0]
+        l = r = vals[1]
+    elif len(vals) == 3:
+        t, r, b = vals
+        l = r
+    elif len(vals) >= 4:
+        t, r, b, l = vals[:4]
+
+    ret: List[Number] = []
+    names: List[str] = []
+    for s, v in zip(_trbl, [t, r, b, l]):
+        _name = f"{name}_{s}"
+        ret.append(data.get(_name.replace("_", "-"), data.get(_name, v)))
+        names.append(_name)
+
+    if ret_name:
+        return (tuple(ret), tuple(names))
+
+    return tuple(ret)

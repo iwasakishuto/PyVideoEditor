@@ -8,6 +8,7 @@ Subpackages
    :maxdepth: 4
 
    veditor.cli
+   veditor.elements
    veditor.utils
 
 Module contents

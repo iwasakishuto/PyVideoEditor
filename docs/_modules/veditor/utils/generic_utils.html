@@ -57,7 +57,7 @@
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Number</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">._colorings</span> <span class="kn">import</span> <span class="n">toBLUE</span><span class="p">,</span> <span class="n">toGREEN</span><span class="p">,</span> <span class="n">toRED</span>
 <span class="kn">from</span> <span class="nn">._exceptions</span> <span class="kn">import</span> <span class="ne">KeyError</span>
@@ -239,6 +239,72 @@
 <span class="sd">        TypeError: If list is not a dual list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">element</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span></div>
+
+
+<span class="n">_trbl</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="assign_trbl"><a class="viewcode-back" href="../../../veditor.utils.generic_utils.html#veditor.utils.generic_utils.assign_trbl">[docs]</a><span class="k">def</span> <span class="nf">assign_trbl</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Number</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">ret_name</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span>
+    <span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">Number</span><span class="p">,</span> <span class="n">Number</span><span class="p">,</span> <span class="n">Number</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span>
+    <span class="n">Tuple</span><span class="p">[</span><span class="n">Number</span><span class="p">,</span> <span class="n">Number</span><span class="p">,</span> <span class="n">Number</span><span class="p">,</span> <span class="n">Number</span><span class="p">],</span>
+<span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Return the ``name`` &#39;s values of [``Top``, ``Right``, ``Bottom``, ``Left``] from ``data``. Determine the each position as well as css.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (Dict[str,Any])                                     : A dictionary which stores data.</span>
+<span class="sd">        name (str)                                               : The name of the value you want to assign..</span>
+<span class="sd">        default (Optional[Union[Number,List[Number]]], optional) : Default Value.. Defaults to ``None``.</span>
+<span class="sd">        ret_name (bool, optional)                                : Whether to return names or not. Defaults to ``False``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Union[Tuple[Tuple[Number, Number, Number, Number], Tuple[str,str,str,str]], Tuple[Number, Number, Number, Number]]: Values of ``Top``, ``Right``, ``Bottom``, ``Left``. If ``ret_name`` is ``True``, add names.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import assign_trbl</span>
+<span class="sd">        &gt;&gt;&gt; assign_trbl(data={&quot;margin&quot;: [1,2,3,4]}, name=&quot;margin&quot;)</span>
+<span class="sd">        (1, 2, 3, 4)</span>
+<span class="sd">        &gt;&gt;&gt; assign_trbl(data={&quot;margin&quot;: [1,2,3]}, name=&quot;margin&quot;)</span>
+<span class="sd">        (1, 2, 3, 2)</span>
+<span class="sd">        &gt;&gt;&gt; assign_trbl(data={&quot;margin&quot;: [1,2]}, name=&quot;margin&quot;)</span>
+<span class="sd">        (1, 2, 1, 2)</span>
+<span class="sd">        &gt;&gt;&gt; assign_trbl(data={&quot;margin&quot;: 1}, name=&quot;margin&quot;)</span>
+<span class="sd">        (1, 1, 1, 1)</span>
+<span class="sd">        &gt;&gt;&gt; assign_trbl(data={&quot;margin&quot;: 1}, name=&quot;padding&quot;, default=5)</span>
+<span class="sd">        (5, 5, 5, 5)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">vals</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="p">(</span><span class="n">Number</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">)):</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">vals</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">r</span> <span class="o">=</span> <span class="n">b</span> <span class="o">=</span> <span class="n">l</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">r</span> <span class="o">=</span> <span class="n">b</span> <span class="o">=</span> <span class="n">l</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">b</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="n">r</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">t</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">vals</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="n">r</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="n">t</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+
+    <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Number</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">_trbl</span><span class="p">,</span> <span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l</span><span class="p">]):</span>
+        <span class="n">_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">),</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_name</span><span class="p">,</span> <span class="n">v</span><span class="p">)))</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ret_name</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">ret</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">names</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span></div>
 </pre></div>
 
             <div class="clearer"></div>

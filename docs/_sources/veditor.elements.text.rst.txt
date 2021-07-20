@@ -1,0 +1,7 @@
+veditor.elements.text module
+============================
+
+.. automodule:: veditor.elements.text
+   :members:
+   :undoc-members:
+   :show-inheritance:

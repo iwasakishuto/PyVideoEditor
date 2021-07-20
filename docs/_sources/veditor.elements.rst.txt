@@ -1,0 +1,20 @@
+veditor.elements package
+========================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   veditor.elements.base
+   veditor.elements.image
+   veditor.elements.text
+
+Module contents
+---------------
+
+.. automodule:: veditor.elements
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+veditor.elements.image module
+=============================
+
+.. automodule:: veditor.elements.image
+   :members:
+   :undoc-members:
+   :show-inheritance:

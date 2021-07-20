@@ -22,6 +22,7 @@ from .argparse_utils import (
 from .audio_utils import overlay_audio, synthesize_audio
 from .download_utils import download_file, progress_reporthook_create
 from .generic_utils import (
+    assign_trbl,
     class2str,
     handleKeyError,
     handleTypeError,

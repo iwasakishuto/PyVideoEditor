@@ -5,17 +5,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta property="og:title" content="veditor.utils package" />
+  <meta property="og:title" content="veditor.elements.base module" />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://github.com/iwasakishuto/PyVideoEditor/veditor.utils.html" />
-  <meta property="og:description" content="Submodules: veditor.utils.argparse_utils module, veditor.utils.audio_utils module, veditor.utils.download_utils module, veditor.utils.generic_utils module, veditor.utils.image_utils module, veditor..." />
+  <meta property="og:url" content="https://github.com/iwasakishuto/PyVideoEditor/veditor.elements.base.html" />
   <meta property="og:image" content="https://iwasakishuto.github.io/PyVideoEditor/_images/header.png" />
-  <meta property="og:image:alt" content="veditor.utils package" />
+  <meta property="og:image:alt" content="veditor.elements.base module" />
   <meta property="og:site_name" content="PyVideoEditor" />
 <meta name="twitter:site" content="@cabernet_rock" />
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image:src" content="https://iwasakishuto.github.io/PyVideoEditor/_images/header.png">
-    <title>veditor.utils package &#8212; PyVideoEditor  documentation</title>
+    <title>veditor.elements.base module &#8212; PyVideoEditor  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -37,8 +36,8 @@
     <link rel="shortcut icon" href="_static/favicon.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="veditor.utils.argparse_utils module" href="veditor.utils.argparse_utils.html" />
-    <link rel="prev" title="veditor.elements.text module" href="veditor.elements.text.html" /> 
+    <link rel="next" title="veditor.elements.image module" href="veditor.elements.image.html" />
+    <link rel="prev" title="veditor.elements package" href="veditor.elements.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -50,17 +49,18 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="veditor.utils.argparse_utils.html" title="veditor.utils.argparse_utils module"
+          <a href="veditor.elements.image.html" title="veditor.elements.image module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="veditor.elements.text.html" title="veditor.elements.text module"
+          <a href="veditor.elements.html" title="veditor.elements package"
              accesskey="P">previous</a> |</li>
     <li><i class="fas fa-home"></i><a href="https://iwasakishuto.github.io">Portfolio Top</a> &raquo;</li>
     
         <li class="nav-item nav-item-0"><a href="index.html">PyVideoEditor  documentation</a> &#187;</li>
 
-          <li class="nav-item nav-item-1"><a href="veditor.html" accesskey="U">veditor package</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">veditor.utils package</a></li> 
+          <li class="nav-item nav-item-1"><a href="veditor.html" >veditor package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="veditor.elements.html" accesskey="U">veditor.elements package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">veditor.elements.base module</a></li> 
       </ul>
     </div>  
 
@@ -69,24 +69,49 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="veditor-utils-package">
-<h1>veditor.utils package<a class="headerlink" href="#veditor-utils-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="veditor.utils.argparse_utils.html">veditor.utils.argparse_utils module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="veditor.utils.audio_utils.html">veditor.utils.audio_utils module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="veditor.utils.download_utils.html">veditor.utils.download_utils module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="veditor.utils.generic_utils.html">veditor.utils.generic_utils module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="veditor.utils.image_utils.html">veditor.utils.image_utils module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="veditor.utils.video_utils.html">veditor.utils.video_utils module</a></li>
+  <div class="section" id="module-veditor.elements.base">
+<span id="veditor-elements-base-module"></span><h1>veditor.elements.base module<a class="headerlink" href="#module-veditor.elements.base" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="veditor.elements.base.BaseElement">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">veditor.elements.base.</span></span><span class="sig-name descname"><span class="pre">BaseElement</span></span><a class="reference internal" href="_modules/veditor/elements/base.html#BaseElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.base.BaseElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="veditor.elements.base.BaseElement.ELEMENT_IDX">
+<span class="sig-name descname"><span class="pre">ELEMENT_IDX</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#veditor.elements.base.BaseElement.ELEMENT_IDX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="veditor.elements.base.BaseElement.element_name">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">element_name</span></span><a class="headerlink" href="#veditor.elements.base.BaseElement.element_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.base.BaseElement.set_attribute">
+<span class="sig-name descname"><span class="pre">set_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/veditor/elements/base.html#BaseElement.set_attribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.base.BaseElement.set_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set attribute to this class with logs using <code class="docutils literal notranslate"><span class="pre">setattr</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – An attribute name.</p></li>
+<li><p><strong>value</strong> (<em>str</em>) – An attribute value.</p></li>
+<li><p><strong>msg</strong> (<em>str</em><em>, </em><em>optional</em>) – Additional log message. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>.</p></li>
 </ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">veditor.chaptors</span> <span class="kn">import</span> <span class="n">MarqueeEditor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">editor</span> <span class="o">=</span> <span class="n">MarqueeEditor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">editor</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;hoge&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">editor</span><span class="p">,</span> <span class="s2">&quot;hoge&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">editor</span><span class="o">.</span><span class="n">hoge</span>
+<span class="go">1</span>
+</pre></div>
 </div>
-</div>
-<div class="section" id="module-veditor.utils">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-veditor.utils" title="Permalink to this headline">¶</a></h2>
-</div>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -168,25 +193,16 @@
     
   </ul>
 
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">veditor.utils package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-veditor.utils">Module contents</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
-  <p class="topless"><a href="veditor.elements.text.html"
-                        title="previous chapter">veditor.elements.text module</a></p>
+  <p class="topless"><a href="veditor.elements.html"
+                        title="previous chapter">veditor.elements package</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="veditor.utils.argparse_utils.html"
-                        title="next chapter">veditor.utils.argparse_utils module</a></p>
+  <p class="topless"><a href="veditor.elements.image.html"
+                        title="next chapter">veditor.elements.image module</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/veditor.utils.rst.txt"
+      <li><a href="_sources/veditor.elements.base.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -214,17 +230,18 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="veditor.utils.argparse_utils.html" title="veditor.utils.argparse_utils module"
+          <a href="veditor.elements.image.html" title="veditor.elements.image module"
              >next</a> |</li>
         <li class="right" >
-          <a href="veditor.elements.text.html" title="veditor.elements.text module"
+          <a href="veditor.elements.html" title="veditor.elements package"
              >previous</a> |</li>
     <li><i class="fas fa-home"></i><a href="https://iwasakishuto.github.io">Portfolio Top</a> &raquo;</li>
     
         <li class="nav-item nav-item-0"><a href="index.html">PyVideoEditor  documentation</a> &#187;</li>
 
           <li class="nav-item nav-item-1"><a href="veditor.html" >veditor package</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">veditor.utils package</a></li> 
+          <li class="nav-item nav-item-2"><a href="veditor.elements.html" >veditor.elements package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">veditor.elements.base module</a></li> 
       </ul>
     </div>
 
