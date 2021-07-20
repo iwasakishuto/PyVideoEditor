@@ -108,17 +108,17 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="veditor.utils.image_utils.cv2plot">
 <span class="sig-prename descclassname"><span class="pre">veditor.utils.image_utils.</span></span><span class="sig-name descname"><span class="pre">cv2plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">matplotlib.axes._axes.Axes</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isBGR</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">matplotlib.axes._axes.Axes</span><a class="reference internal" href="_modules/veditor/utils/image_utils.html#cv2plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.utils.image_utils.cv2plot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Plot a image.</p>
+<dd><p>Plot a <code class="docutils literal notranslate"><span class="pre">frame</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>frame</strong> (<em>npt.NDArray</em><em>[</em><em>np.uint8</em><em>]</em>) – Input image.</p></li>
-<li><p><strong>ax</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – An <code class="docutils literal notranslate"><span class="pre">Axes</span></code> instance. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>ax</strong> (<em>Optional</em><em>[</em><em>Axes</em><em>]</em><em>, </em><em>optional</em>) – An <code class="docutils literal notranslate"><span class="pre">Axes</span></code> instance. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><strong>isBGR</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether <code class="docutils literal notranslate"><span class="pre">frame</span></code> is BGR (OpenCV format) or not. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p>An <code class="docutils literal notranslate"><span class="pre">Axes</span></code> instance with <code class="docutils literal notranslate"><span class="pre">frame</span></code> drawn.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Axes</p>

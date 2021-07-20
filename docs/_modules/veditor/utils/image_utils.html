@@ -96,15 +96,15 @@
 <div class="viewcode-block" id="cv2plot"><a class="viewcode-back" href="../../../veditor.utils.image_utils.html#veditor.utils.image_utils.cv2plot">[docs]</a><span class="k">def</span> <span class="nf">cv2plot</span><span class="p">(</span>
     <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="n">ax</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Axes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">isBGR</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Axes</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Plot a image.</span>
+    <span class="sd">&quot;&quot;&quot;Plot a ``frame``.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        frame (npt.NDArray[np.uint8]) : Input image.</span>
-<span class="sd">        ax ([type], optional)         : An ``Axes`` instance. Defaults to ``None``.</span>
+<span class="sd">        ax (Optional[Axes], optional) : An ``Axes`` instance. Defaults to ``None``.</span>
 <span class="sd">        isBGR (bool, optional)        : Whether ``frame`` is BGR (OpenCV format) or not. Defaults to ``True``.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        Axes:</span>
+<span class="sd">        Axes: An ``Axes`` instance with ``frame`` drawn.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>

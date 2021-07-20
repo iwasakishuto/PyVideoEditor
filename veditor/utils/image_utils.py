@@ -42,15 +42,15 @@ def pil2arr(image: Image.Image) -> npt.NDArray[np.uint8]:
 def cv2plot(
     frame: npt.NDArray[np.uint8], ax: Optional[Axes] = None, isBGR: bool = True
 ) -> Axes:
-    """Plot a image.
+    """Plot a ``frame``.
 
     Args:
         frame (npt.NDArray[np.uint8]) : Input image.
-        ax ([type], optional)         : An ``Axes`` instance. Defaults to ``None``.
+        ax (Optional[Axes], optional) : An ``Axes`` instance. Defaults to ``None``.
         isBGR (bool, optional)        : Whether ``frame`` is BGR (OpenCV format) or not. Defaults to ``True``.
 
     Returns:
-        Axes:
+        Axes: An ``Axes`` instance with ``frame`` drawn.
     """
     if ax is None:
         _, ax = plt.subplots()
