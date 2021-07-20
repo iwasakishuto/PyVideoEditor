@@ -108,6 +108,8 @@ def download_file(
         content_length = f"{content_length:.1f} [{unit}]"
         content_type = headers.get("Content-Type")
         filename = filename or url.split("/")[-1]
+        if not os.path.exists(dirname):
+            os.makedirs(name=dirname)
         path = os.path.join(dirname, filename)
         if verbose:
             print(

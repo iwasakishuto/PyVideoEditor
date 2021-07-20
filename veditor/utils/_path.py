@@ -8,6 +8,7 @@ __all__ = [
     "UTILS_DIR",
     "MODULE_DIR",
     "VEDITOR_DIR",
+    "FONT_DIR",
 ]
 
 
@@ -36,6 +37,5 @@ if os.path.exists(VEDITOR_DIR) and (not os.access(VEDITOR_DIR, os.W_OK)):
     VEDITOR_DIR = os.path.join("/tmp", ".veditor")
 _makedirs(name=VEDITOR_DIR)
 
-SAMPLE_IMAGE_PATH = os.path.join(VEDITOR_DIR, "file_example_MP4_1280_10MG.mp4")
-SAMPLE_VIDEO_PATH = os.path.join(VEDITOR_DIR, "file_example_PNG_500kB.png")
-SAMPLE_FONT_PATH = os.path.join(VEDITOR_DIR, "file_example_MP4_1280_10MG.mp4")
+FONT_DIR = os.path.join(VEDITOR_DIR, "fonts")
+_makedirs(name=FONT_DIR)

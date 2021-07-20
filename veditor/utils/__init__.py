@@ -1,8 +1,16 @@
 # coding: utf-8
-from . import argparse_utils, audio_utils, generic_utils, image_utils, video_utils
+from . import (
+    _datasets,
+    argparse_utils,
+    audio_utils,
+    download_utils,
+    generic_utils,
+    image_utils,
+    video_utils,
+)
 from ._colorings import *
+from ._datasets import SampleData
 from ._exceptions import *
-from ._fonts import *
 from ._loggers import *
 from ._path import *
 from ._warnings import *

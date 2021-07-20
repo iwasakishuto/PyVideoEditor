@@ -215,8 +215,8 @@
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cv2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">veditor.utils</span> <span class="kn">import</span> <span class="n">capture2writor</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">veditor.utils</span> <span class="kn">import</span> <span class="n">capture2writor</span><span class="p">,</span> <span class="n">SampleData</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">SampleData</span><span class="p">()</span><span class="o">.</span><span class="n">VIDEO_PATH</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">,</span> <span class="n">out_path</span> <span class="o">=</span> <span class="n">capture2writor</span><span class="p">(</span><span class="n">cap</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">)</span>
 <span class="go">True</span>
@@ -246,8 +246,8 @@
 <dd class="field-odd"><p>Figure</p>
 </dd>
 </dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">veditor.utils</span> <span class="kn">import</span> <span class="n">show_frames</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">show_frames</span><span class="p">(</span><span class="n">video</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">veditor.utils</span> <span class="kn">import</span> <span class="n">show_frames</span><span class="p">,</span> <span class="n">SampleData</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">show_frames</span><span class="p">(</span><span class="n">video</span><span class="o">=</span><span class="n">SampleData</span><span class="p">()</span><span class="o">.</span><span class="n">VIDEO_PATH</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>

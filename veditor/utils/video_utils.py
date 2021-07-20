@@ -35,8 +35,8 @@ def capture2writor(
 
     Examples:
         >>> import cv2
-        >>> from veditor.utils import capture2writor
-        >>> cap = cv2.VideoCapture()
+        >>> from veditor.utils import capture2writor, SampleData
+        >>> cap = cv2.VideoCapture(SampleData().VIDEO_PATH)
         >>> out, out_path = capture2writor(cap)
         >>> isinstance(out, cv2.VideoWriter)
         True
@@ -76,8 +76,8 @@ def show_frames(
     .. plot::
       :class: popup-img
 
-        >>> from veditor.utils import show_frames
-        >>> fig = show_frames(video, step=30, ncols=4)
+        >>> from veditor.utils import show_frames, SampleData
+        >>> fig = show_frames(video=SampleData().VIDEO_PATH, step=30, ncols=4)
         >>> fig.show()
     """
     if isinstance(video, cv2.VideoCapture):
