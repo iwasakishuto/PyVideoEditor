@@ -73,7 +73,7 @@
 <span id="veditor-elements-base-module"></span><h1>veditor.elements.base module<a class="headerlink" href="#module-veditor.elements.base" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="veditor.elements.base.BaseElement">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">veditor.elements.base.</span></span><span class="sig-name descname"><span class="pre">BaseElement</span></span><a class="reference internal" href="_modules/veditor/elements/base.html#BaseElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.base.BaseElement" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">veditor.elements.base.</span></span><span class="sig-name descname"><span class="pre">BaseElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos_frames</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">(0,</span> <span class="pre">None)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/veditor/elements/base.html#BaseElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.base.BaseElement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="veditor.elements.base.BaseElement.ELEMENT_IDX">
@@ -82,7 +82,27 @@
 
 <dl class="py property">
 <dt class="sig sig-object py" id="veditor.elements.base.BaseElement.element_name">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">element_name</span></span><a class="headerlink" href="#veditor.elements.base.BaseElement.element_name" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">element_name</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#veditor.elements.base.BaseElement.element_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="veditor.elements.base.BaseElement.bottom">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">bottom</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#veditor.elements.base.BaseElement.bottom" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="veditor.elements.base.BaseElement.right">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">right</span></span><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><a class="headerlink" href="#veditor.elements.base.BaseElement.right" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="veditor.elements.base.BaseElement.locations">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">locations</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[int,</span> <span class="pre">int,</span> <span class="pre">int,</span> <span class="pre">int]</span></em><a class="headerlink" href="#veditor.elements.base.BaseElement.locations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="veditor.elements.base.BaseElement.trbl">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">trbl</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple[int,</span> <span class="pre">int,</span> <span class="pre">int,</span> <span class="pre">int]</span></em><a class="headerlink" href="#veditor.elements.base.BaseElement.trbl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -108,6 +128,89 @@
 <span class="go">1</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.base.BaseElement.set_locations">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">set_locations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/veditor/elements/base.html#BaseElement.set_locations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.base.BaseElement.set_locations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.base.BaseElement.edit">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">edit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/veditor/elements/base.html#BaseElement.edit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.base.BaseElement.edit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edit a <code class="docutils literal notranslate"><span class="pre">pos</span></code>-th frame in the video <code class="docutils literal notranslate"><span class="pre">vide_path</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>npt.NDArray</em><em>[</em><em>np.uint8</em><em>]</em>) – The current frame (BGR image) in the video.</p></li>
+<li><p><strong>pos</strong> (<em>int</em>) – The current position in the video.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An editied frame.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>npt.NDArray[np.uint8]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.base.BaseElement.create_audio_for_overlay">
+<span class="sig-name descname"><span class="pre">create_audio_for_overlay</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/veditor/elements/base.html#BaseElement.create_audio_for_overlay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.base.BaseElement.create_audio_for_overlay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an audio for overlaying.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.base.BaseElement.overlayed_audio_create">
+<span class="sig-name descname"><span class="pre">overlayed_audio_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="_modules/veditor/elements/base.html#BaseElement.overlayed_audio_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.base.BaseElement.overlayed_audio_create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.base.BaseElement.check_work">
+<span class="sig-name descname"><span class="pre">check_work</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_pil</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/veditor/elements/base.html#BaseElement.check_work"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.base.BaseElement.check_work" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the editing result for <code class="docutils literal notranslate"><span class="pre">pos</span></code> frame in video at <code class="docutils literal notranslate"><span class="pre">video_path</span></code> of this editor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_path</strong> (<em>str</em>) – The path to the input video file.</p></li>
+<li><p><strong>pos</strong> (<em>int</em>) – The position in the video at <code class="docutils literal notranslate"><span class="pre">vide_path</span></code></p></li>
+<li><p><strong>as_pil</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to return object as <code class="docutils literal notranslate"><span class="pre">Image.Image</span></code> or <code class="docutils literal notranslate"><span class="pre">npt.NDArray[npt.uint8]</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An edited result for the <code class="docutils literal notranslate"><span class="pre">pos</span></code>-th frame.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Union[npt.NDArray[np.uint8], Image.Image]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.base.BaseElement.check_works">
+<span class="sig-name descname"><span class="pre">check_works</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'H264'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="_modules/veditor/elements/base.html#BaseElement.check_works"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.base.BaseElement.check_works" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the editing results of this editor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>video_path</strong> (<em>str</em>) – Path to the input video file.</p></li>
+<li><p><strong>audio_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to the audio file. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>. (Same as <code class="docutils literal notranslate"><span class="pre">video_path</span></code>.)</p></li>
+<li><p><strong>out_path</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Path to the created video. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>codec</strong> (<em>str</em><em>, </em><em>optional</em>) – Video codec for the created video. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;H264&quot;</span></code>.</p></li>
+<li><p><strong>H</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Height of the output video. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>W</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Width of the output video. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>fps</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em><em>, </em><em>optional</em>) – Frame rate of the output video. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>open</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to open output file or not. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The path to the created video.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

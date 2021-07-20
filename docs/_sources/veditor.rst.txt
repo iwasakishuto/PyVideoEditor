@@ -11,6 +11,14 @@ Subpackages
    veditor.elements
    veditor.utils
 
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   veditor.editor
+
 Module contents
 ---------------
 

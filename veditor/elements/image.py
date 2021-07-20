@@ -5,12 +5,14 @@ from numbers import Number
 from typing import List, Optional, Tuple, Union
 
 import cv2
+import numpy as np
+import numpy.typing as npt
 from matplotlib.axes import Axes
 from PIL import Image
 
 from ..utils._colorings import toBLUE, toGREEN
 from ..utils.generic_utils import assign_trbl
-from ..utils.image_utils import cv2plot
+from ..utils.image_utils import alpha_composite, arr2pil, cv2plot, pil2arr
 from .base import BaseElement
 
 
@@ -18,7 +20,7 @@ class ImageElement(BaseElement):
     def __init__(
         self,
         path: str,
-        pos_frames: Tuple[int, int],
+        pos_frames: Tuple[int, Optional[int]] = (0, None),
         margin: Union[Number, List[Number]] = 0,
         dsize: Optional[Tuple[int, int]] = None,
         width: Optional[int] = None,
@@ -28,25 +30,69 @@ class ImageElement(BaseElement):
         left: Optional[Union[BaseElement, int]] = None,
         bottom: Optional[Union[BaseElement, int]] = None,
     ):
-        super().__init__()
-        self.set_image_attribute(path, margin=margin)
+        super().__init__(pos_frames=pos_frames)
+        self.set_image_attributes(path, margin=margin)
         self.resize(dsize=dsize, width=width, height=height)
         self.set_locations(top=top, right=right, left=left, bottom=bottom)
 
-    @property
-    def bottom(self) -> int:
-        return self.top + self.height
+    def edit(self, frame: npt.NDArray[np.uint8], pos: int) -> npt.NDArray[np.uint8]:
+        """Edit a ``pos``-th frame in the video ``vide_path``.
 
-    @property
-    def right(self) -> int:
-        return self.left + self.width
+        Args:
+            frame (npt.NDArray[np.uint8]) : The current frame (BGR image) in the video.
+            pos (int)                     : The current position in the video.
 
-    @property
-    def locations(self) -> Tuple[int, int, int, int]:
-        return (self.top, self.right, self.bottom, self.left)
+        Returns:
+            npt.NDArray[np.uint8]: An editied frame.
+        """
+        if self.image_arr.ndim == 3:
+            frame[self.top : self.bottom, self.left : self.right, :] = self.image_arr[
+                :, :, :3
+            ]
+        else:
+            img = alpha_composite(
+                bg=arr2pil(frame), paste=self.image_pil, box=(self.left, self.top)
+            )
+            frame = pil2arr(img)
+        return frame
 
-    def trbl(self):
-        return self.locations
+    def set_image_attributes(
+        self,
+        path,
+        margin: Optional[Union[Number, List[Number]]] = None,
+        margin_default: Number = 0,
+    ) -> None:
+        """Set attributes for an image.
+
+        Raises:
+            FileNotFoundError: When file is not found.
+
+        Examples:
+            >>> from veditor.utils import
+            >>> from veditor. import RotatingRectangleEditor
+            >>> editor = RotatingRectangleEditor()
+            >>> editor.set_image_attributes(hoge_image=ROTATING_SQUARE_IMAGE_PATH)
+            >>> hasattr(editor, "hoge_image_arr") and hasattr(editor, "hoge_image_pil")
+            True
+        """
+        if not os.path.exists(path):
+            raise FileNotFoundError(f"{toBLUE(path)} is not found.")
+        img_pil = Image.open(path)
+        width, height = img_pil.size
+        self.set_attribute(name="pil", value=img_pil)
+        self.set_attribute(name="arr", value=cv2.imread(path))
+        self.set_attribute(name="width", value=width, msg="")
+        self.set_attribute(name="height", value=height, msg="")
+
+        for v, n in zip(
+            *assign_trbl(
+                data=dict(margin=margin),
+                name="margin",
+                default=margin_default,
+                ret_name=True,
+            )
+        ):
+            self.set_attribute(name=n, value=v, msg="")
 
     def set_locations(
         self,
@@ -159,41 +205,3 @@ class ImageElement(BaseElement):
         self.arr = cv2.resize(self.arr, dsize=(width, height))
         self.set_attribute(name="width", value=width, msg="")
         self.set_attribute(name="height", value=height, msg="")
-
-    def set_image_attribute(
-        self,
-        path,
-        margin: Optional[Union[Number, List[Number]]] = None,
-        margin_default: Number = 0,
-    ) -> None:
-        """Set attributes for an image.
-
-        Raises:
-            FileNotFoundError: When file is not found.
-
-        Examples:
-            >>> from veditor.utils import
-            >>> from veditor. import RotatingRectangleEditor
-            >>> editor = RotatingRectangleEditor()
-            >>> editor.set_image_attributes(hoge_image=ROTATING_SQUARE_IMAGE_PATH)
-            >>> hasattr(editor, "hoge_image_arr") and hasattr(editor, "hoge_image_pil")
-            True
-        """
-        if not os.path.exists(path):
-            raise FileNotFoundError(f"{toBLUE(path)} is not found.")
-        img_pil = Image.open(path)
-        width, height = img_pil.size
-        self.set_attribute(name="pil", value=img_pil)
-        self.set_attribute(name="arr", value=cv2.imread(path))
-        self.set_attribute(name="width", value=width, msg="")
-        self.set_attribute(name="height", value=height, msg="")
-
-        for v, n in zip(
-            *assign_trbl(
-                data=dict(margin=margin),
-                name="margin",
-                default=margin_default,
-                ret_name=True,
-            )
-        ):
-            self.set_attribute(name=n, value=v, msg="")

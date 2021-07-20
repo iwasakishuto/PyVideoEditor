@@ -54,23 +54,50 @@
   <h1>Source code for veditor.elements.base</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.axes</span> <span class="kn">import</span> <span class="n">Axes</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 <span class="kn">from</span> <span class="nn">..utils._colorings</span> <span class="kn">import</span> <span class="n">toBLUE</span><span class="p">,</span> <span class="n">toGREEN</span>
 <span class="kn">from</span> <span class="nn">..utils._loggers</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span> <span class="nn">..utils.audio_utils</span> <span class="kn">import</span> <span class="n">overlay_audio</span><span class="p">,</span> <span class="n">synthesize_audio</span>
+<span class="kn">from</span> <span class="nn">..utils.image_utils</span> <span class="kn">import</span> <span class="n">arr2pil</span><span class="p">,</span> <span class="n">cv2plot</span><span class="p">,</span> <span class="n">pil2arr</span>
+<span class="kn">from</span> <span class="nn">..utils.video_utils</span> <span class="kn">import</span> <span class="n">capture2writor</span>
 
 
 <div class="viewcode-block" id="BaseElement"><a class="viewcode-back" href="../../../veditor.elements.base.html#veditor.elements.base.BaseElement">[docs]</a><span class="k">class</span> <span class="nc">BaseElement</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="n">ELEMENT_IDX</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos_frames</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">element_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_pos</span> <span class="o">=</span> <span class="n">pos_frames</span>
         <span class="n">BaseElement</span><span class="o">.</span><span class="n">ELEMENT_IDX</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">element_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">element_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">BaseElement</span><span class="o">.</span><span class="n">ELEMENT_IDX</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">locations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">trbl</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">locations</span>
 
 <div class="viewcode-block" id="BaseElement.set_attribute"><a class="viewcode-back" href="../../../veditor.elements.base.html#veditor.elements.base.BaseElement.set_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">set_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Set attribute to this class with logs using ``setattr``.</span>
@@ -97,7 +124,127 @@
                 <span class="n">msg</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">msg</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Set attribute </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div></div>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseElement.set_locations"><a class="viewcode-back" href="../../../veditor.elements.base.html#veditor.elements.base.BaseElement.set_locations">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">set_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set locations.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseElement.edit"><a class="viewcode-back" href="../../../veditor.elements.base.html#veditor.elements.base.BaseElement.edit">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">edit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="n">pos</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Edit a ``pos``-th frame in the video ``vide_path``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            frame (npt.NDArray[np.uint8]) : The current frame (BGR image) in the video.</span>
+<span class="sd">            pos (int)                     : The current position in the video.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            npt.NDArray[np.uint8]: An editied frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_pos</span> <span class="o">&lt;=</span> <span class="n">pos</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_pos</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">pos</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_pos</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">frame</span></div>
+
+<div class="viewcode-block" id="BaseElement.create_audio_for_overlay"><a class="viewcode-back" href="../../../veditor.elements.base.html#veditor.elements.base.BaseElement.create_audio_for_overlay">[docs]</a>    <span class="k">def</span> <span class="nf">create_audio_for_overlay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Create an audio for overlaying.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseElement.overlayed_audio_create"><a class="viewcode-back" href="../../../veditor.elements.base.html#veditor.elements.base.BaseElement.overlayed_audio_create">[docs]</a>    <span class="k">def</span> <span class="nf">overlayed_audio_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fps</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">is_ok</span><span class="p">,</span> <span class="n">overlay_media_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_audio_for_overlay</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">is_ok</span><span class="p">:</span>
+            <span class="n">overlayed_audio_path</span> <span class="o">=</span> <span class="n">overlay_audio</span><span class="p">(</span>
+                <span class="n">base_media_path</span><span class="o">=</span><span class="n">video_path</span><span class="p">,</span>
+                <span class="n">overlay_media_path</span><span class="o">=</span><span class="n">overlay_media_path</span><span class="p">,</span>
+                <span class="n">position</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_pos</span> <span class="o">/</span> <span class="n">fps</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Overlayed audio file is created at </span><span class="si">{</span><span class="n">toBLUE</span><span class="p">(</span><span class="n">overlayed_audio_path</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">overlayed_audio_path</span>
+        <span class="k">return</span> <span class="n">video_path</span></div>
+
+<div class="viewcode-block" id="BaseElement.check_work"><a class="viewcode-back" href="../../../veditor.elements.base.html#veditor.elements.base.BaseElement.check_work">[docs]</a>    <span class="k">def</span> <span class="nf">check_work</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">as_pil</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Check the editing result for ``pos`` frame in video at ``video_path`` of this editor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            video_path (str)        : The path to the input video file.</span>
+<span class="sd">            pos (int)               : The position in the video at ``vide_path``</span>
+<span class="sd">            as_pil (bool, optional) : Whether to return object as ``Image.Image`` or ``npt.NDArray[npt.uint8]``. Defaults to ``True``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Union[npt.NDArray[np.uint8], Image.Image]: An edited result for the ``pos``-th frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
+        <span class="n">cap</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_POS_FRAMES</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+        <span class="n">is_ok</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">is_ok</span> <span class="ow">and</span> <span class="p">(</span><span class="n">frame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edit</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">as_pil</span><span class="p">:</span>
+                <span class="n">frame</span> <span class="o">=</span> <span class="n">arr2pil</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+        <span class="n">cap</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">frame</span></div>
+
+<div class="viewcode-block" id="BaseElement.check_works"><a class="viewcode-back" href="../../../veditor.elements.base.html#veditor.elements.base.BaseElement.check_works">[docs]</a>    <span class="k">def</span> <span class="nf">check_works</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">video_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">audio_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">out_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">codec</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;H264&quot;</span><span class="p">,</span>
+        <span class="n">H</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">W</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">fps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="nb">open</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Check the editing results of this editor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            video_path (str)                   : Path to the input video file.</span>
+<span class="sd">            audio_path (str, optional)         : Path to the audio file. Defaults to ``None``. (Same as ``video_path``.)</span>
+<span class="sd">            out_path (Optional[str], optional) : Path to the created video. Defaults to ``None``.</span>
+<span class="sd">            codec (str, optional)              : Video codec for the created video. Defaults to ``&quot;H264&quot;``.</span>
+<span class="sd">            H (Optional[int], optional)        : Height of the output video. Defaults to ``None``.</span>
+<span class="sd">            W (Optional[int], optional)        : Width of the output video. Defaults to ``None``.</span>
+<span class="sd">            fps (Optional[float], optional)    : Frame rate of the output video. Defaults to ``None``.</span>
+<span class="sd">            open (bool, optional)              : Whether to open output file or not. Defaults to ``True``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The path to the created video.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">out_path</span> <span class="o">=</span> <span class="n">capture2writor</span><span class="p">(</span>
+            <span class="n">cap</span><span class="o">=</span><span class="n">cap</span><span class="p">,</span> <span class="n">out_path</span><span class="o">=</span><span class="n">out_path</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="n">codec</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="n">W</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span>
+        <span class="p">)</span>
+        <span class="n">cap</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_POS_FRAMES</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_pos</span><span class="p">)</span>
+        <span class="n">fps</span> <span class="o">=</span> <span class="n">fps</span> <span class="ow">or</span> <span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FPS</span><span class="p">)</span>
+        <span class="n">end_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_pos</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_POS_FRAMES</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">end_pos</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">element_name</span><span class="p">):</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_POS_FRAMES</span><span class="p">)</span>
+            <span class="n">is_ok</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_ok</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edit</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="n">cap</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="c1"># Synthesize Audio.</span>
+        <span class="n">audio_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">overlayed_audio_create</span><span class="p">(</span><span class="n">video_path</span><span class="o">=</span><span class="n">video_path</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+        <span class="n">out_synthesized_path</span> <span class="o">=</span> <span class="n">synthesize_audio</span><span class="p">(</span>
+            <span class="n">video_path</span><span class="o">=</span><span class="n">out_path</span><span class="p">,</span>
+            <span class="n">audio_path</span><span class="o">=</span><span class="n">audio_path</span><span class="p">,</span>
+            <span class="n">start</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_pos</span> <span class="o">/</span> <span class="n">fps</span><span class="p">),</span>
+            <span class="n">end</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="n">end_pos</span> <span class="o">/</span> <span class="n">fps</span><span class="p">),</span>
+            <span class="nb">open</span><span class="o">=</span><span class="nb">open</span><span class="p">,</span>
+            <span class="n">delete_intermidiates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">out_synthesized_path</span></div></div>
 </pre></div>
 
             <div class="clearer"></div>

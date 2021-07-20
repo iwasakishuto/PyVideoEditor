@@ -1,0 +1,7 @@
+veditor.editor module
+=====================
+
+.. automodule:: veditor.editor
+   :members:
+   :undoc-members:
+   :show-inheritance:
