@@ -33,10 +33,12 @@ from .generic_utils import (
 from .image_utils import (
     SUPPORTED_CONVERSION_METHODS,
     alpha_composite,
+    apply_heatmap,
     arr2pil,
     cv2plot,
     draw_text_in_pil,
     image_conversion,
+    min_max_normalization,
     nega_conversion,
     pil2arr,
 )

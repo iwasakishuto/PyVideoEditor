@@ -62,6 +62,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
 <span class="kn">from</span> <span class="nn">matplotlib.axes</span> <span class="kn">import</span> <span class="n">Axes</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">Colormap</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span><span class="p">,</span> <span class="n">ImageFont</span>
 
 <span class="kn">from</span> <span class="nn">.generic_utils</span> <span class="kn">import</span> <span class="n">flatten_dual</span><span class="p">,</span> <span class="n">handleKeyError</span>
@@ -234,11 +235,20 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">xy</span><span class="p">)</span></div>
 
 
-<span class="n">SUPPORTED_CONVERSION_METHODS</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;nega&quot;</span><span class="p">,</span> <span class="s2">&quot;bgr2rgb&quot;</span><span class="p">,</span> <span class="s2">&quot;gray&quot;</span><span class="p">]</span>
+<span class="n">SUPPORTED_CONVERSION_METHODS</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nega&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;bgr2rgb&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;heatmap&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;minmax&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 
 <div class="viewcode-block" id="image_conversion"><a class="viewcode-back" href="../../../veditor.utils.image_utils.html#veditor.utils.image_utils.image_conversion">[docs]</a><span class="k">def</span> <span class="nf">image_conversion</span><span class="p">(</span>
-    <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colormap</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Pastel1&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Convert image by ``method`` method</span>
 
@@ -258,12 +268,14 @@
 <span class="sd">        ...     SUPPORTED_CONVERSION_METHODS,</span>
 <span class="sd">        ...     cv2plot,</span>
 <span class="sd">        ...     image_conversion,</span>
+<span class="sd">        ...     SampleData,</span>
 <span class="sd">        &gt;&gt;&gt; )</span>
-<span class="sd">        &gt;&gt;&gt; frame = cv2.imread()</span>
+<span class="sd">        &gt;&gt;&gt; frame = cv2.imread(SampleData().IMAGE_PATH)</span>
 <span class="sd">        &gt;&gt;&gt; num_methods = len(SUPPORTED_CONVERSION_METHODS)</span>
-<span class="sd">        &gt;&gt;&gt; fig, axes = plt.subplots(ncols=num_methods, nrows=1, figsize=(6 * num_methods, 4))</span>
-<span class="sd">        &gt;&gt;&gt; for ax, method in zip(axes, SUPPORTED_CONVERSION_METHODS):</span>
-<span class="sd">        ...     ax = cv2plot(image_conversion(frame, method=method), ax=ax)</span>
+<span class="sd">        &gt;&gt;&gt; ncols = 3; nrows = num_methods//ncols</span>
+<span class="sd">        &gt;&gt;&gt; fig, axes = plt.subplots(ncols=ncols, nrows=nrows, figsize=(6 * ncols, 4 * nrows))</span>
+<span class="sd">        &gt;&gt;&gt; for i,method in enumerate(SUPPORTED_CONVERSION_METHODS):</span>
+<span class="sd">        ...     ax = cv2plot(image_conversion(frame, method=method), ax=axes[i%2][i//2])</span>
 <span class="sd">        ...     ax.set_title(method)</span>
 <span class="sd">        &gt;&gt;&gt; fig.show()</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -274,6 +286,87 @@
         <span class="n">frame</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;gray&quot;</span><span class="p">:</span>
         <span class="n">frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">reps</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;heatmap&quot;</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">apply_heatmap</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;minmax&quot;</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">min_max_normalization</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">frame</span></div>
+
+
+<div class="viewcode-block" id="min_max_normalization"><a class="viewcode-back" href="../../../veditor.utils.image_utils.html#veditor.utils.image_utils.min_max_normalization">[docs]</a><span class="k">def</span> <span class="nf">min_max_normalization</span><span class="p">(</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="n">axis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Perform the following min-max normalization.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        x^{\prime} = \\frac{x - \min(x)}{\max(x) - \min(x)}</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        frame (npt.NDArray[np.uint8])  : Input image (BGR).</span>
+<span class="sd">        axis (Optional[int], optional) : Axis or axes along which to operate. Defaults to ``None``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        npt.NDArray[np.uint8]: Min-max normalized frame. (0 ~ 255)</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :class: popup-img</span>
+
+<span class="sd">        &gt;&gt;&gt; import cv2</span>
+<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import cv2plot, SampleData, min_max_normalization</span>
+<span class="sd">        &gt;&gt;&gt; frame = cv2.imread(SampleData().IMAGE_PATH)</span>
+<span class="sd">        &gt;&gt;&gt; fig, axes = plt.subplots(ncols=2, figsize=(6*2, 4))</span>
+<span class="sd">        &gt;&gt;&gt; ax = cv2plot(frame, ax=axes[0])</span>
+<span class="sd">        &gt;&gt;&gt; ax.set_title(&quot;Original&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; ax = cv2plot(min_max_normalization(frame=frame), ax=axes[1])</span>
+<span class="sd">        &gt;&gt;&gt; ax.set_title(&quot;min-max Normalization&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; fig.show()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">max</span> <span class="o">-</span> <span class="nb">min</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="apply_heatmap"><a class="viewcode-back" href="../../../veditor.utils.image_utils.html#veditor.utils.image_utils.apply_heatmap">[docs]</a><span class="k">def</span> <span class="nf">apply_heatmap</span><span class="p">(</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span>
+    <span class="n">cmap</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colormap</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Pastel1&quot;</span><span class="p">,</span>
+    <span class="n">normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Apply heatmap to an input BGR image.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        frame (npt.NDArray[np.uint8])         : Input image (BGR).</span>
+<span class="sd">        cmap (Union[str, Colormap], optional) : An identifier for color maps. Defaults to ``&quot;Pastel1&quot;``.</span>
+<span class="sd">        normalize (bool, optional)            : Whether to perform :func:`min-max normalization &lt;veditor.utils.image_utils.min_max_normalization&gt;`. Defaults to ``True``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        npt.NDArray[np.uint8]: [description]</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :class: popup-img</span>
+
+<span class="sd">        &gt;&gt;&gt; import cv2</span>
+<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import cv2plot, SampleData, apply_heatmap</span>
+<span class="sd">        &gt;&gt;&gt; frame = cv2.imread(SampleData().IMAGE_PATH)</span>
+<span class="sd">        &gt;&gt;&gt; colormaps = [&quot;Pastel1&quot;, &quot;Set1&quot;, &quot;tab10&quot;, &quot;hsv&quot;, &quot;bwr&quot;, &quot;Reds&quot;]</span>
+<span class="sd">        &gt;&gt;&gt; num_methods = len(colormaps)</span>
+<span class="sd">        &gt;&gt;&gt; ncols = 3; nrows = num_methods//ncols</span>
+<span class="sd">        &gt;&gt;&gt; fig, axes = plt.subplots(ncols=ncols, nrows=nrows, figsize=(6 * ncols, 4 * nrows))</span>
+<span class="sd">        &gt;&gt;&gt; for i,cmap in enumerate(colormaps):</span>
+<span class="sd">        ...     ax = cv2plot(apply_heatmap(frame, cmap=cmap), ax=axes[i%2][i//2])</span>
+<span class="sd">        ...     ax.set_title(cmap)</span>
+<span class="sd">        &gt;&gt;&gt; fig.show()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+        <span class="n">gray</span> <span class="o">=</span> <span class="n">min_max_normalization</span><span class="p">(</span><span class="n">gray</span><span class="p">)</span>
+    <span class="n">gray</span> <span class="o">=</span> <span class="n">gray</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span>
+        <span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">cmap</span><span class="p">(</span><span class="n">gray</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">frame</span></div>
 
 
@@ -284,7 +377,21 @@
 <span class="sd">        frame (npt.NDArray[np.uint8]) : Input image (BGR).</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        npt.NDArray[np.uint8]: [description]</span>
+<span class="sd">        npt.NDArray[np.uint8]: A nega-posi converted image.</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :class: popup-img</span>
+
+<span class="sd">        &gt;&gt;&gt; import cv2</span>
+<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">        &gt;&gt;&gt; from veditor.utils import cv2plot, SampleData, nega_conversion</span>
+<span class="sd">        &gt;&gt;&gt; frame = cv2.imread(SampleData().IMAGE_PATH)</span>
+<span class="sd">        &gt;&gt;&gt; fig, axes = plt.subplots(ncols=2, figsize=(6*2, 4))</span>
+<span class="sd">        &gt;&gt;&gt; ax = cv2plot(frame, ax=axes[0])</span>
+<span class="sd">        &gt;&gt;&gt; ax.set_title(&quot;Original&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; ax = cv2plot(nega_conversion(frame=frame), ax=axes[1])</span>
+<span class="sd">        &gt;&gt;&gt; ax.set_title(&quot;Nega-posi Conversion&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; fig.show()</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">cv2</span><span class="o">.</span><span class="n">bitwise_not</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span></div>
 

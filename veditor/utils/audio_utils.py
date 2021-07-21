@@ -21,7 +21,7 @@ def synthesize_audio(
     delete_intermidiates: bool = False,
     logger: Optional[logging.Logger] = None,
 ) -> str:
-    """Use ``ffmpeg`` directly or ``moviepy`` to synthesize audio (@ ``audio_path``) to video (@ ``video_path``)
+    """Use ``ffmpeg`` directly or ``moviepy`` to synthesize audio (at ``audio_path``) to video (at ``video_path``)
 
     Args:
         video_path (str)                   : The path to video fiile.

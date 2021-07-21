@@ -1,15 +1,16 @@
 # coding: utf-8
 import argparse
 import re
+from typing import Optional
 
 from .generic_utils import str_strip
 
 
-def ListParamProcessorCreate(type=str):
+def ListParamProcessorCreate(type: object = str):
     """Create a ListParamProcessor
 
     Args:
-        type (type) : type of each element in list.
+        type (object) : type of each element in list.
 
     Returns:
         ListParamProcessor (argparse.Action) : Processor which receives list arguments.
@@ -43,7 +44,22 @@ def ListParamProcessorCreate(type=str):
 
         """
 
-        def __call__(self, parser, namespace, values, option_strings=None, **kwargs):
+        def __call__(
+            self,
+            parser: argparse.ArgumentParser,
+            namespace: argparse.Namespace,
+            values: str,
+            option_strings: Optional[str] = None,
+            **kwargs
+        ):
+            """The ``__call__`` method may perform arbitrary actions, but will typically set attributes on the ``namespace`` based on ``dest`` and ``values``.
+
+            Args:
+                parser (argparse.ArgumentParser)         : The ``argparse.ArgumentParser`` object which contains this action..
+                namespace (argparse.Namespace)           : The ``argparse.Namespace`` object that will be returned by ``parse_args()``. Most actions add an attribute to this object using ``setattr()``.
+                values (str)                             : The associated command-line arguments, with any type conversions applied. Type conversions are specified with the ``type`` keyword argument to ``add_argument().``
+                option_strings (Optional[str], optional) : The option string that was used to invoke this action. Defaults to ``None``.
+            """
             match = re.match(pattern=r"(?:\[|\()(.+)(?:\]|\))", string=values)
             if match:
                 values = [type(str_strip(e)) for e in match.group(1).split(",")]
@@ -78,7 +94,21 @@ class DictParamProcessor(argparse.Action):
 
     """
 
-    def __call__(self, parser, namespace, values, option_strings=None):
+    def __call__(
+        self,
+        parser: argparse.ArgumentParser,
+        namespace: argparse.Namespace,
+        values: str,
+        option_strings: Optional[str] = None,
+    ):
+        """The ``__call__`` method may perform arbitrary actions, but will typically set attributes on the ``namespace`` based on ``dest`` and ``values``.
+
+        Args:
+            parser (argparse.ArgumentParser)         : The ``argparse.ArgumentParser`` object which contains this action..
+            namespace (argparse.Namespace)           : The ``argparse.Namespace`` object that will be returned by ``parse_args()``. Most actions add an attribute to this object using ``setattr()``.
+            values (str)                             : The associated command-line arguments, with any type conversions applied. Type conversions are specified with the ``type`` keyword argument to ``add_argument().``
+            option_strings (Optional[str], optional) : The option string that was used to invoke this action. Defaults to ``None``.
+        """
         param_dict = getattr(namespace, self.dest) or {}
         k, v = values.split("=")
         match = re.match(pattern=r"\[(.+)\]", string=str_strip(v))
@@ -109,6 +139,20 @@ class KwargsParamProcessor(argparse.Action):
 
     """
 
-    def __call__(self, parser, namespace, values, option_strings=None):
+    def __call__(
+        self,
+        parser: argparse.ArgumentParser,
+        namespace: argparse.Namespace,
+        values: str,
+        option_strings: Optional[str] = None,
+    ):
+        """The ``__call__`` method may perform arbitrary actions, but will typically set attributes on the ``namespace`` based on ``dest`` and ``values``.
+
+        Args:
+            parser (argparse.ArgumentParser)         : The ``argparse.ArgumentParser`` object which contains this action..
+            namespace (argparse.Namespace)           : The ``argparse.Namespace`` object that will be returned by ``parse_args()``. Most actions add an attribute to this object using ``setattr()``.
+            values (str)                             : The associated command-line arguments, with any type conversions applied. Type conversions are specified with the ``type`` keyword argument to ``add_argument().``
+            option_strings (Optional[str], optional) : The option string that was used to invoke this action. Defaults to ``None``.
+        """
         k, v = values.split("=")
         setattr(namespace, k, v)

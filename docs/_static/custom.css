@@ -31,7 +31,10 @@ dl.py.function > dt {
   border-radius: 0.5em;
   padding: 0.5em;
 }
-ul.simple li strong {
+span.default_value {
+  color: #284E78;
+}
+ul.simple li strong, code {
   font-family: monaco, monospace;
   font-size: .9em;
   color: #d14;

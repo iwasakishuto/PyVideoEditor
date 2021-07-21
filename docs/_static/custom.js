@@ -51,6 +51,14 @@ function hide_typing_info(){
           sig_params[i-1].setAttribute("aria-label", typing)
       }
   })
+  // For args that are not kwargs, remove whitespace after argment name
+  sig_params = document.querySelectorAll("em.sig-param > span")
+  sig_params.forEach(function(e,i){
+      var nextSibling = e.nextSibling
+      if ((nextSibling!=null) && (sig_params[i+1].textContent!="=") && (e.textContent!="=")){
+        nextSibling.textContent = "";
+      }
+  })
 }
 
 addOnLoad(hide_typing_info)

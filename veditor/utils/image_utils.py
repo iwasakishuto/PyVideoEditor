@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
 from matplotlib.axes import Axes
+from matplotlib.colors import Colormap
 from PIL import Image, ImageDraw, ImageFont
 
 from .generic_utils import flatten_dual, handleKeyError
@@ -180,11 +181,20 @@ def draw_text_in_pil(
     return (img, xy)
 
 
-SUPPORTED_CONVERSION_METHODS: List[int] = ["", "nega", "bgr2rgb", "gray"]
+SUPPORTED_CONVERSION_METHODS: List[int] = [
+    "",
+    "nega",
+    "bgr2rgb",
+    "gray",
+    "heatmap",
+    "minmax",
+]
 
 
 def image_conversion(
-    frame: npt.NDArray[np.uint8], method: str
+    frame: npt.NDArray[np.uint8],
+    method: str,
+    cmap: Union[str, Colormap] = "Pastel1",
 ) -> npt.NDArray[np.uint8]:
     """Convert image by ``method`` method
 
@@ -204,12 +214,14 @@ def image_conversion(
         ...     SUPPORTED_CONVERSION_METHODS,
         ...     cv2plot,
         ...     image_conversion,
+        ...     SampleData,
         >>> )
-        >>> frame = cv2.imread()
+        >>> frame = cv2.imread(SampleData().IMAGE_PATH)
         >>> num_methods = len(SUPPORTED_CONVERSION_METHODS)
-        >>> fig, axes = plt.subplots(ncols=num_methods, nrows=1, figsize=(6 * num_methods, 4))
-        >>> for ax, method in zip(axes, SUPPORTED_CONVERSION_METHODS):
-        ...     ax = cv2plot(image_conversion(frame, method=method), ax=ax)
+        >>> ncols = 3; nrows = num_methods//ncols
+        >>> fig, axes = plt.subplots(ncols=ncols, nrows=nrows, figsize=(6 * ncols, 4 * nrows))
+        >>> for i,method in enumerate(SUPPORTED_CONVERSION_METHODS):
+        ...     ax = cv2plot(image_conversion(frame, method=method), ax=axes[i%2][i//2])
         ...     ax.set_title(method)
         >>> fig.show()
     """
@@ -220,6 +232,87 @@ def image_conversion(
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     elif method == "gray":
         frame = np.tile(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)[:, :, None], reps=3)
+    elif method == "heatmap":
+        frame = apply_heatmap(frame=frame, cmap=cmap)
+    elif method == "minmax":
+        frame = min_max_normalization(frame=frame)
+    return frame
+
+
+def min_max_normalization(
+    frame: npt.NDArray[np.uint8], axis: Optional[int] = None
+) -> npt.NDArray[np.uint8]:
+    """Perform the following min-max normalization.
+
+    .. math::
+
+        x^{\prime} = \\frac{x - \min(x)}{\max(x) - \min(x)}
+
+    Args:
+        frame (npt.NDArray[np.uint8])  : Input image (BGR).
+        axis (Optional[int], optional) : Axis or axes along which to operate. Defaults to ``None``.
+
+    Returns:
+        npt.NDArray[np.uint8]: Min-max normalized frame. (0 ~ 255)
+
+    .. plot::
+        :class: popup-img
+
+        >>> import cv2
+        >>> import matplotlib.pyplot as plt
+        >>> from veditor.utils import cv2plot, SampleData, min_max_normalization
+        >>> frame = cv2.imread(SampleData().IMAGE_PATH)
+        >>> fig, axes = plt.subplots(ncols=2, figsize=(6*2, 4))
+        >>> ax = cv2plot(frame, ax=axes[0])
+        >>> ax.set_title("Original")
+        >>> ax = cv2plot(min_max_normalization(frame=frame), ax=axes[1])
+        >>> ax.set_title("min-max Normalization")
+        >>> fig.show()
+    """
+    min = np.min(a=frame, axis=axis, keepdims=True)
+    max = np.max(a=frame, axis=axis, keepdims=True)
+    return (255 * (frame.astype(float) - min) / (max - min)).astype(np.uint8)
+
+
+def apply_heatmap(
+    frame: npt.NDArray[np.uint8],
+    cmap: Union[str, Colormap] = "Pastel1",
+    normalize: bool = True,
+) -> npt.NDArray[np.uint8]:
+    """Apply heatmap to an input BGR image.
+
+    Args:
+        frame (npt.NDArray[np.uint8])         : Input image (BGR).
+        cmap (Union[str, Colormap], optional) : An identifier for color maps. Defaults to ``"Pastel1"``.
+        normalize (bool, optional)            : Whether to perform :func:`min-max normalization <veditor.utils.image_utils.min_max_normalization>`. Defaults to ``True``.
+
+    Returns:
+        npt.NDArray[np.uint8]: [description]
+
+    .. plot::
+        :class: popup-img
+
+        >>> import cv2
+        >>> import matplotlib.pyplot as plt
+        >>> from veditor.utils import cv2plot, SampleData, apply_heatmap
+        >>> frame = cv2.imread(SampleData().IMAGE_PATH)
+        >>> colormaps = ["Pastel1", "Set1", "tab10", "hsv", "bwr", "Reds"]
+        >>> num_methods = len(colormaps)
+        >>> ncols = 3; nrows = num_methods//ncols
+        >>> fig, axes = plt.subplots(ncols=ncols, nrows=nrows, figsize=(6 * ncols, 4 * nrows))
+        >>> for i,cmap in enumerate(colormaps):
+        ...     ax = cv2plot(apply_heatmap(frame, cmap=cmap), ax=axes[i%2][i//2])
+        ...     ax.set_title(cmap)
+        >>> fig.show()
+    """
+    cmap = plt.get_cmap(cmap)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    if normalize:
+        gray = min_max_normalization(gray)
+    gray = gray.astype(float) / 255.0
+    frame = cv2.cvtColor(
+        (255 * cmap(gray)).astype(np.uint8)[:, :, :3], cv2.COLOR_RGB2BGR
+    )
     return frame
 
 
@@ -230,7 +323,21 @@ def nega_conversion(frame: npt.NDArray[np.uint8]) -> npt.NDArray[np.uint8]:
         frame (npt.NDArray[np.uint8]) : Input image (BGR).
 
     Returns:
-        npt.NDArray[np.uint8]: [description]
+        npt.NDArray[np.uint8]: A nega-posi converted image.
+
+    .. plot::
+        :class: popup-img
+
+        >>> import cv2
+        >>> import matplotlib.pyplot as plt
+        >>> from veditor.utils import cv2plot, SampleData, nega_conversion
+        >>> frame = cv2.imread(SampleData().IMAGE_PATH)
+        >>> fig, axes = plt.subplots(ncols=2, figsize=(6*2, 4))
+        >>> ax = cv2plot(frame, ax=axes[0])
+        >>> ax.set_title("Original")
+        >>> ax = cv2plot(nega_conversion(frame=frame), ax=axes[1])
+        >>> ax.set_title("Nega-posi Conversion")
+        >>> fig.show()
     """
     return cv2.bitwise_not(frame)
 
