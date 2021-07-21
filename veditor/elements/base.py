@@ -1,7 +1,8 @@
 # coding: utf-8
 import os
 from abc import ABC, abstractmethod
-from typing import Dict, Optional, Tuple, Union
+from numbers import Number
+from typing import Dict, List, Optional, Tuple, Union
 
 import cv2
 import numpy as np
@@ -13,6 +14,7 @@ from tqdm import tqdm
 from ..utils._colorings import toBLUE, toGREEN
 from ..utils._loggers import get_logger
 from ..utils.audio_utils import overlay_audio, synthesize_audio
+from ..utils.generic_utils import assign_trbl
 from ..utils.image_utils import arr2pil, cv2plot, pil2arr
 from ..utils.video_utils import capture2writor
 
@@ -63,28 +65,19 @@ class BaseElement(ABC):
             1
         """
         if msg is None:
-            msg = ""
-        else:
-            msg = str(msg)
-            if len(msg) == 0:
-                msg = str(value)
-            msg = " " + msg
-        self.logger.info(f"Set attribute {toGREEN(name)}.{msg}")
+            msg = str(value)
+        self.logger.info(f"Set attribute {toGREEN(name)}. {msg}")
         setattr(self, name, value)
-
-    @abstractmethod
-    def set_locations(self):
-        print("Set locations.")
 
     @abstractmethod
     def edit(
         self, frame: npt.NDArray[np.uint8], pos: int, **kwargs
     ) -> npt.NDArray[np.uint8]:
-        """Edit a ``pos``-th frame in the video ``vide_path``.
+        """Edit a ``pos``-th frame.
 
         Args:
-            frame (npt.NDArray[np.uint8]) : The current frame (BGR image) in the video.
-            pos (int)                     : The current position in the video.
+            frame (npt.NDArray[np.uint8]) : The current frame (BGR image) (in the video)
+            pos (int)                     : The current position (in the video)
 
         Returns:
             npt.NDArray[np.uint8]: An editied frame.
@@ -99,21 +92,30 @@ class BaseElement(ABC):
         """Create an audio for overlaying."""
         return (False, "")
 
-    def overlayed_audio_create(self, video_path: str, fps: float) -> str:
+    def overlay_audio(self, base_media_path: str, frame_rate: float) -> str:
+        """Overlay audio if this :class:`element <veditor.elements.base.BaseElement>` has its own audio.
+
+        Args:
+            base_media_path (str) : The path to media file (contains audio) to be overlayed.
+            frame_rate (float)    : The frame rate for the media at ``base_media_path``.
+
+        Returns:
+            str: The path to created audio file.
+        """
         is_ok, overlay_media_path = self.create_audio_for_overlay()
         if is_ok:
             overlayed_audio_path = overlay_audio(
-                base_media_path=video_path,
+                base_media_path=base_media_path,
                 overlay_media_path=overlay_media_path,
-                position=int(self.start_pos / fps * 1000),
+                position=int(self.start_pos / frame_rate * 1000),
             )
             self.logger.info(
                 f"Overlayed audio file is created at {toBLUE(overlayed_audio_path)}"
             )
             return overlayed_audio_path
-        return video_path
+        return base_media_path
 
-    def check_work(
+    def check_work_in_video(
         self, video_path: str, pos: int, as_pil: bool = True
     ) -> Union[npt.NDArray[np.uint8], Image.Image]:
         """Check the editing result for ``pos`` frame in video at ``video_path`` of this editor.
@@ -136,7 +138,7 @@ class BaseElement(ABC):
         cap.release()
         return frame
 
-    def check_works(
+    def check_works_in_video(
         self,
         video_path: str,
         audio_path: Optional[str] = None,
@@ -148,7 +150,7 @@ class BaseElement(ABC):
         open: bool = True,
         **kwargs,
     ) -> str:
-        """Check the editing results of this editor.
+        """Check the editing results of this editor for a video at ``video_path``.
 
         Args:
             video_path (str)                   : Path to the input video file.
@@ -180,7 +182,7 @@ class BaseElement(ABC):
         out.release()
         cap.release()
         # Synthesize Audio.
-        audio_path = self.overlayed_audio_create(video_path=video_path, fps=fps)
+        audio_path = self.overlay_audio(video_path=video_path, fps=fps)
         out_synthesized_path = synthesize_audio(
             video_path=out_path,
             audio_path=audio_path,
@@ -191,3 +193,176 @@ class BaseElement(ABC):
             logger=self.logger,
         )
         return out_synthesized_path
+
+
+class FixedElement(BaseElement):
+    def __init__(
+        self,
+        pos_frames: Tuple[int, Optional[int]] = (0, None),
+        margin: Union[int, List[int]] = 0,
+        width: Optional[int] = None,
+        height: Optional[int] = None,
+        top: Optional[Union[BaseElement, int]] = None,
+        right: Optional[Union[BaseElement, int]] = None,
+        left: Optional[Union[BaseElement, int]] = None,
+        bottom: Optional[Union[BaseElement, int]] = None,
+        **kwargs,
+    ):
+        """Elements with fixed size and location.
+
+        Args:
+            pos_frames (Tuple[int, Optional[int]], optional)     : Start and end positions. Defaults to ``(0, None)``.
+            margin (Optional[Union[int, List[int]]], optional)   : Margin. Defaults to ``None``.
+            width (Optional[int], optional)                      : The element width. Defaults to ``None``.
+            height (Optional[int], optional)                     : The element height. Defaults to ``None``.
+            top (Optional[Union[BaseElement, int]], optional)    : Reference element or absolute value at the top. Defaults to ``None``.
+            right (Optional[Union[BaseElement, int]], optional)  : Reference element or absolute value at the right. Defaults to ``None``.
+            left (Optional[Union[BaseElement, int]], optional)   : Reference element or absolute value at the left. Defaults to ``None``.
+            bottom (Optional[Union[BaseElement, int]], optional) : Reference element or absolute value at the bottom. Defaults to ``None``.
+        """
+        super().__init__(pos_frames=pos_frames)
+        self.set_margin(margin=margin, margin_default=0)
+        self.set_size(width=width, height=height, **kwargs)
+        self.set_locations(top=top, right=right, left=left, bottom=bottom)
+
+    def set_size(self, width: int, height: int, **kwargs) -> None:
+        """Set size attributes (``width`` and ``height``).
+
+        Args:
+            width (int)  : [description].
+            height (int) : [description].
+        """
+        if width is None:
+            self.logger.error(f"Please specify the {toGREEN('width')}")
+        else:
+            self.set_attribute(name="width", value=width)
+        if height is None:
+            self.logger.error(f"Please specify the {toGREEN('height')}")
+        else:
+            self.set_attribute(name="height", value=height)
+
+    def set_margin(
+        self, margin: Optional[Union[int, List[int]]] = None, margin_default: int = 0
+    ) -> None:
+        """Set an attribute for element margin.
+
+        Args:
+            margin (Optional[Union[int, List[int]]], optional) : Margin. Defaults to ``None``.
+            margin_default (int, optional)                     : Default value for margin. Defaults to ``0``.
+        """
+        for v, n in zip(
+            *assign_trbl(
+                data=dict(margin=margin),
+                name="margin",
+                default=margin_default,
+                ret_name=True,
+            )
+        ):
+            self.set_attribute(name=n, value=v)
+
+    def set_locations(
+        self,
+        top: Optional[Union[BaseElement, int]] = None,
+        right: Optional[Union[BaseElement, int]] = None,
+        left: Optional[Union[BaseElement, int]] = None,
+        bottom: Optional[Union[BaseElement, int]] = None,
+    ) -> None:
+        """Automatically calculate and find the optimal locations for both ``left`` and ``top``
+
+        Args:
+            top (Optional[Union[BaseElement, int]], optional)    : Reference element or absolute value at the top. Defaults to ``None``.
+            right (Optional[Union[BaseElement, int]], optional)  : Reference element or absolute value at the right. Defaults to ``None``.
+            left (Optional[Union[BaseElement, int]], optional)   : Reference element or absolute value at the left. Defaults to ``None``.
+            bottom (Optional[Union[BaseElement, int]], optional) : Reference element or absolute value at the bottom. Defaults to ``None``.
+        """
+        self.set_location(lb=top, ub=bottom, direction="vertical")
+        self.set_location(lb=left, ub=right, direction="horizontal")
+
+    def set_location(
+        self,
+        lb: Optional[Union[BaseElement, int]] = None,
+        ub: Optional[Union[BaseElement, int]] = None,
+        direction: str = "vertical",
+        ratio: Tuple[Number, Number] = (1, 1),
+    ) -> None:
+        """Automatically calculate and find the optimal location (``left`` or ``top``)
+
+        Args:
+            lb (Optional[Union[BaseElement, int]], optional) : Lower bound of location. Defaults to ``None``.
+            ub (Optional[Union[BaseElement, int]], optional) : Upper bound of location. Defaults to ``None``.
+            direction (str, optional)                        : Direction of ``lb`` and ``ub`` line up. Please choose from ``"vertical"`` or ``"horizontal"``. Defaults to ``"vertical"``.
+            ratio (Tuple[Number,Number], optional)           : If ``lb`` and ``ub`` are both instances of :class:`BaseElement <veditor.elements.base.BaseElement>`, at what ratio do you split between the 2 elements? Defaults to ``(1, 1)``.
+        """
+        if direction.lower().startswith("v"):
+            lb_name, ub_name, size_name = ("top", "bottom", "height")
+        else:
+            lb_name, ub_name, size_name = ("left", "right", "width")
+        if lb is None:
+            if ub is None:
+                self.logger.error(
+                    f"Couldn't find the location of {toGREEN(lb_name)} and {toGREEN(ub_name)}. Please specify either {toBLUE(lb_name)} or {toBLUE(ub_name)}."
+                )
+                lb: int = 0 + getattr(self, f"margin_{lb_name}")
+            else:
+                if isinstance(ub, BaseElement):
+                    ub: int = (
+                        getattr(ub, lb_name)
+                        - getattr(ub, f"margin_{lb_name}")
+                        - getattr(self, f"margin_{ub_name}")
+                    )
+                lb: int = ub - getattr(self, size_name)
+        else:
+            if isinstance(lb, BaseElement):
+                lb: int = (
+                    getattr(lb, ub_name)
+                    + getattr(lb, f"margin_{ub_name}")
+                    + getattr(self, f"margin_{lb_name}")
+                )
+            if ub is not None:
+                if isinstance(ub, BaseElement):
+                    ub: int = (
+                        getattr(ub, lb_name)
+                        - getattr(ub, f"margin_{lb_name}")
+                        - getattr(self, f"margin_{ub_name}")
+                    )
+                lb = lb + int(
+                    (ub - lb - getattr(self, size_name)) / sum(ratio) * ratio[0]
+                )
+        self.set_attribute(name=lb_name, value=lb)
+
+    def edit(
+        self, frame: npt.NDArray[np.uint8], pos: int, **kwargs
+    ) -> npt.NDArray[np.uint8]:
+        """Return ``frame`` as it is.
+
+        Args:
+            frame (npt.NDArray[np.uint8]) : The current frame (BGR image) (in the video)
+            pos (int)                     : The current position (in the video)
+
+        Returns:
+            npt.NDArray[np.uint8]: An editied frame.
+        """
+        return frame
+
+    def check_work(
+        self, video_path: str, pos: int, as_pil: bool = True
+    ) -> Union[npt.NDArray[np.uint8], Image.Image]:
+        """Check the editing result for ``pos`` frame in video at ``video_path`` of this editor.
+
+        Args:
+            video_path (str)        : The path to the input video file.
+            pos (int)               : The position in the video at ``vide_path``
+            as_pil (bool, optional) : Whether to return object as ``Image.Image`` or ``npt.NDArray[npt.uint8]``. Defaults to ``True``.
+
+        Returns:
+            Union[npt.NDArray[np.uint8], Image.Image]: An edited result for the ``pos``-th frame.
+        """
+        cap = cv2.VideoCapture(video_path)
+        cap.set(cv2.CAP_PROP_POS_FRAMES, pos)
+        is_ok, frame = cap.read()
+        if is_ok and (frame is not None):
+            frame = self.edit(frame=frame, pos=pos)
+            if as_pil:
+                frame = arr2pil(frame)
+        cap.release()
+        return frame
