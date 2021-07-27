@@ -7,6 +7,7 @@ from typing import List, Optional
 from pydub import AudioSegment
 
 from ._colorings import toBLUE
+from .generic_utils import openf
 
 
 def synthesize_audio(
@@ -57,13 +58,13 @@ def synthesize_audio(
     if out_path is None:
         out_path = f"_synthesized".join(os.path.splitext(video_path))
     # Append Audio.
-    command = f"ffmpeg -y -itsoffset {offset} -i {video_path} -i {audio_path} -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 {out_path} -async 1 -strict -2"
+    command = f"ffmpeg -y -itsoffset {offset} -i '{video_path}' -i '{audio_path}' -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 '{out_path}' -async 1 -strict -2"
     if logger is not None:
         logger.info(f"Run the following command:\n{command}")
     subprocess.call(command, shell=True)
     # Open the created video.
     if open:
-        subprocess.call(f"open {out_path}", shell=True)
+        openf(out_path)
     # Delete the silence video.
     if delete_intermidiates:
         for fp in intermediate_files:

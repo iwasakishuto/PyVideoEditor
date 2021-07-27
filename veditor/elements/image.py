@@ -67,7 +67,7 @@ class ImageElement(FixedElement):
             right=right,
             left=left,
             bottom=bottom,
-            **dict(dsize=dsize, x=x),
+            **dict(dsize=dsize, x=x),  # kwargs
         )
 
     def set_size(
@@ -77,7 +77,7 @@ class ImageElement(FixedElement):
         width: Optional[int] = None,
         height: Optional[int] = None,
     ) -> None:
-        """Set
+        """Set size attributes. (``width``, ``height``)
 
         Args:
             x (Union[str, npt.NDArray[np.uint8]])       : [description].
@@ -86,41 +86,10 @@ class ImageElement(FixedElement):
             height (Optional[int], optional)            : [description]. Defaults to ``None``.
         """
         self.set_image_attributes(x=x)
-        self.resize(dsize=dsize, width=width, height=height)
-
-    def resize(
-        self,
-        dsize: Optional[Tuple[int, int]] = None,
-        width: Optional[int] = None,
-        height: Optional[int] = None,
-    ) -> None:
-        """Resize the both ``image_pil`` and ``image_arr`` attributes.
-
-        If only ``width`` or ``height`` is given, resize while preserving the aspect ratio.
-
-        Args:
-            dsize (Optional[Tuple[int,int]], optional) : Desired image size. Defaults to ``None``.
-            width (Optional[int], optional)            : Desired image width. Defaults to ``None``.
-            height (Optional[int], optional)           : Desired image height. Defaults to ``None``.
-        """
-        if dsize is None:
-            if width is None:
-                if height is None:
-                    self.logger.warn(
-                        f"If you want to resize the image, please specify at least one of {toBLUE('dsize')}, {toBLUE('width')}, {toBLUE('height')}."
-                    )
-                    width = self.width
-                    height = self.height
-                else:
-                    width = int(self.width * (height / self.height))
-            elif height is None:
-                height = int(self.height * (width / self.width))
-        else:
-            width, height = dsize
+        width, height = self.calc_dsize(dsize=dsize, width=width, height=height)
         self.pil = self.pil.resize((width, height))
         self.arr = cv2.resize(self.arr, dsize=(width, height))
-        self.set_attribute(name="width", value=width)
-        self.set_attribute(name="height", value=height)
+        super().set_size(width=width, height=height)
 
     def edit(self, frame: npt.NDArray[np.uint8], pos: int) -> npt.NDArray[np.uint8]:
         """Edit a ``pos``-th frame in the video ``vide_path``.

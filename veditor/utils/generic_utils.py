@@ -2,6 +2,7 @@
 import argparse
 import datetime
 import re
+import subprocess
 from numbers import Number
 from typing import Any, Dict, List, Optional, Tuple, Union
 
@@ -251,3 +252,14 @@ def assign_trbl(
         return (tuple(ret), tuple(names))
 
     return tuple(ret)
+
+
+def openf(file_path: str, timeout: Optional[int] = None, shell: bool = True) -> None:
+    """Open a file in Finder.
+
+    Args:
+        file_path (str)                   : Path to the file to be opened.
+        timeout (Optional[int], optional) : [description]. Defaults to ``None``.
+        shell (bool, optional)            : [description]. Defaults to ``True``.
+    """
+    subprocess.call(f"open '{file_path}'", timeout=timeout, shell=shell)

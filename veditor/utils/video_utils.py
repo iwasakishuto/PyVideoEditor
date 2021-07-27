@@ -57,18 +57,18 @@ def show_frames(
     end: Optional[int] = None,
     step: int = 1,
     ncols: int = 6,
-    figsize: Tuple[int, int] = (4, 3),
+    figsize: Optional[Tuple[int, int]] = None,
     fig: Optional[Figure] = None,
 ) -> Figure:
     """Cut out frames from the video and plot them.
 
     Args:
-        video (Union[str, cv2.VideoCapture])  : Path to video or an instance of ``cv2.VideoCaputure``.
-        start (int, optional)                 : Draw subsequent frames from ``start``. Defaults to ``0``.
-        end (Optional[int], optional)         : Draw up to ``end``-th frame. If not specified, draw to the end. Defaults to ``None``.
-        ncols (int, optional)                 : Number of images lined up side by side (number of columns). Defaults to ``6``.
-        figsize (Tuple[int, int], optional)   : Size of one image. Defaults to ``(4,3)``.
-        fig (Optional[Figure], optional)      : Figure instance you want to draw in. Defaults to ``None``.
+        video (Union[str, cv2.VideoCapture])          : Path to video or an instance of ``cv2.VideoCaputure``.
+        start (int, optional)                         : Draw subsequent frames from ``start``. Defaults to ``0``.
+        end (Optional[int], optional)                 : Draw up to ``end``-th frame. If not specified, draw to the end. Defaults to ``None``.
+        ncols (int, optional)                         : Number of images lined up side by side (number of columns). Defaults to ``6``.
+        figsize (Optional[Tuple[int, int]], optional) : Size of one image. Defaults to ``None``.
+        fig (Optional[Figure], optional)              : Figure instance you want to draw in. Defaults to ``None``.
 
     Returns:
         Figure: Figure where frames from ``start`` to ``end`` are drawn.
@@ -81,6 +81,10 @@ def show_frames(
         >>> fig.show()
     """
     if isinstance(video, cv2.VideoCapture):
+        if not video.isOpened():
+            raise ValueError(
+                f"{toGREEN('video')} is not opened. Please reinitialize the {toGREEN('cv2.VideoCapture')} instance."
+            )
         cap = video
     else:
         cap = cv2.VideoCapture(video)
@@ -89,6 +93,14 @@ def show_frames(
     end = min(end or count, count)
     nfigs = math.ceil((end - start + 1) / step)
     nrows = (nfigs - 1) // ncols + 1
+    # Calculate the appropriate figure size.
+    if figsize is None:
+        w = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+        h = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        if w < h:
+            figsize = (4, 4 * (h / w))
+        else:
+            figsize = (4 * (w / h), 4)
     if fig is None:
         fig = plt.figure(figsize=(int(figsize[0] * ncols), int(figsize[1] * nrows)))
     counter = 0
@@ -103,5 +115,7 @@ def show_frames(
                 ax.axis("off")
                 ax.set_title(f"No.{i:>0{digit}}/{count}")
             counter += 1
+        elif i > end:
+            break
     cap.release()
     return fig

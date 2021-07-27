@@ -111,18 +111,18 @@
     <span class="n">end</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">ncols</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
-    <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="n">figsize</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">fig</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Figure</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Cut out frames from the video and plot them.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        video (Union[str, cv2.VideoCapture])  : Path to video or an instance of ``cv2.VideoCaputure``.</span>
-<span class="sd">        start (int, optional)                 : Draw subsequent frames from ``start``. Defaults to ``0``.</span>
-<span class="sd">        end (Optional[int], optional)         : Draw up to ``end``-th frame. If not specified, draw to the end. Defaults to ``None``.</span>
-<span class="sd">        ncols (int, optional)                 : Number of images lined up side by side (number of columns). Defaults to ``6``.</span>
-<span class="sd">        figsize (Tuple[int, int], optional)   : Size of one image. Defaults to ``(4,3)``.</span>
-<span class="sd">        fig (Optional[Figure], optional)      : Figure instance you want to draw in. Defaults to ``None``.</span>
+<span class="sd">        video (Union[str, cv2.VideoCapture])          : Path to video or an instance of ``cv2.VideoCaputure``.</span>
+<span class="sd">        start (int, optional)                         : Draw subsequent frames from ``start``. Defaults to ``0``.</span>
+<span class="sd">        end (Optional[int], optional)                 : Draw up to ``end``-th frame. If not specified, draw to the end. Defaults to ``None``.</span>
+<span class="sd">        ncols (int, optional)                         : Number of images lined up side by side (number of columns). Defaults to ``6``.</span>
+<span class="sd">        figsize (Optional[Tuple[int, int]], optional) : Size of one image. Defaults to ``None``.</span>
+<span class="sd">        fig (Optional[Figure], optional)              : Figure instance you want to draw in. Defaults to ``None``.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Figure: Figure where frames from ``start`` to ``end`` are drawn.</span>
@@ -135,6 +135,10 @@
 <span class="sd">        &gt;&gt;&gt; fig.show()</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">video</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">video</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> is not opened. Please reinitialize the </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="s1">&#39;cv2.VideoCapture&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> instance.&quot;</span>
+            <span class="p">)</span>
         <span class="n">cap</span> <span class="o">=</span> <span class="n">video</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">video</span><span class="p">)</span>
@@ -143,6 +147,14 @@
     <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">end</span> <span class="ow">or</span> <span class="n">count</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
     <span class="n">nfigs</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">step</span><span class="p">)</span>
     <span class="n">nrows</span> <span class="o">=</span> <span class="p">(</span><span class="n">nfigs</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="n">ncols</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="c1"># Calculate the appropriate figure size.</span>
+    <span class="k">if</span> <span class="n">figsize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_WIDTH</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_HEIGHT</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">w</span> <span class="o">&lt;</span> <span class="n">h</span><span class="p">:</span>
+            <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">/</span> <span class="n">w</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="n">h</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">figsize</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">ncols</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">figsize</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrows</span><span class="p">)))</span>
     <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
@@ -157,6 +169,8 @@
                 <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No.</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">&gt;0</span><span class="si">{</span><span class="n">digit</span><span class="si">}}</span><span class="s2">/</span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">end</span><span class="p">:</span>
+            <span class="k">break</span>
     <span class="n">cap</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">fig</span></div>
 </pre></div>

@@ -1,4 +1,5 @@
 # coding: utf-8
+import math
 import string
 import textwrap
 from typing import List, Optional, Tuple, Union
@@ -11,7 +12,7 @@ from matplotlib.axes import Axes
 from matplotlib.colors import Colormap
 from PIL import Image, ImageDraw, ImageFont
 
-from .generic_utils import flatten_dual, handleKeyError
+from .generic_utils import assign_trbl, flatten_dual, handleKeyError
 
 
 def arr2pil(frame: npt.NDArray[np.uint8]) -> Image.Image:
@@ -124,6 +125,8 @@ def draw_text_in_pil(
     handleKeyError(lst=["word", "line"], ret_position=ret_position)
     if img is None:
         img = Image.new(mode=img_mode, size=img_size, color=bgRGB)
+    else:
+        img_mode = img.mode
     iw, ih = img.size
     font = ImageFont.truetype(font=ttfontname, size=int(fontsize))
 
@@ -144,7 +147,7 @@ def draw_text_in_pil(
     else:
         wrapped_lines = [text]
 
-    alpha_composite: bool = False
+    alpha_composition: bool = False
     if len(textRGB) == 4 and img_mode == "RGBA":
         text_canvas = Image.new(mode=img_mode, size=img.size, color=(255, 255, 255, 0))
         draw = ImageDraw.Draw(im=text_canvas, mode=img_mode)
@@ -176,9 +179,87 @@ def draw_text_in_pil(
     elif ret_position == "word":
         xy = (x + fw * len(line), y)
 
-    if alpha_composite:
-        img = Image.alpha_composite(im1=img, im2=text_canvas).convert(img_mode)
+    if alpha_composition:
+        img = alpha_composite(bg=img, paste=text_canvas, box=(0, 0))
     return (img, xy)
+
+
+def draw_cross(
+    img: Image.Image,
+    size: Union[Tuple[int, int], int],
+    width: int = 5,
+    fill_color: Tuple[int, int, int] = (255, 0, 0, 255),
+    outline: Optional[Tuple[int, int, int]] = None,
+    color_mode: str = "RGBA",
+    margin: int = 0,
+    **kwargs
+) -> Image.Image:
+    """Draw Cross Mark.
+
+    Args:
+        img (Image.Image)                                : Pillow Image.
+        size (Union[Tuple[int,int],int])                 : Cross mark size. (width,Height.
+        width (int, optional)                            : The width of the cross mark. Defaults to ``5``.
+        fill_color (Tuple[int,int,int], optional)        : The color in the line. Defaults to ``(255,0,0,255)``.
+        outline (Optional[Tuple[int,int,int]], optional) : The color of the edge of the line. Defaults to ``None``.
+        color_mode (str, optional)                       : Color Mode (ex. ``"RGBA"`` , ``"P"`` . Defaults to ``"RGBA"``.
+        margin (int, optional)                           : Specify the position. Defaults to ``0``.
+
+    Returns:
+        Image.Image: [description]
+
+    .. plot::
+        :class: popup-img
+
+        >>> from PIL import Image
+        >>> from veditor.utils import draw_cross, SampleData, cv2plot, pil2arr
+        >>> base = Image.open(SampleData().IMAGE_PATH)
+        >>> img_square = draw_cross(img=base, size=200, width=10)
+        >>> img_rect = draw_cross(img=base, size=(100,200), width=10, outline=(0,255,0))
+        >>> fig, axes = plt.subplots(ncols=3, figsize=(18, 4))
+        >>> for ax, img in zip(axes, [base, img_square, img_rect]):
+        ...     ax = cv2plot(pil2arr(img), ax=ax)
+        >>> fig.show()
+    """
+    ori_mode = img.mode
+    img = img.convert(color_mode)
+    draw = ImageDraw.Draw(img)
+    W, H = img.size
+
+    kwargs["margin"] = margin
+    mt, mr, mb, ml = assign_trbl(data=kwargs, name="margin")
+    if hasattr(size, "__len__"):
+        sx, sy = size[:2]
+    else:
+        sx = sy = size
+    sx /= 2
+    sy /= 2
+    angle = math.atan(sy / sx)
+    cx = (W - ml - mr) // 2 + ml
+    cy = (H - mt - mb) // 2 + mt
+    dx = (width / 2) * math.sin(angle)
+    dy = (width / 2) * math.cos(angle)
+
+    for xy in [
+        (
+            (cx - sx - dx, cy - sy + dy),
+            (cx + sx - dx, cy + sy + dy),
+            (cx + sx + dx, cy + sy - dy),
+            (cx - sx + dx, cy - sy - dy),
+        ),
+        (
+            (cx + sx - dx, cy - sy - dy),
+            (cx + sx + dx, cy - sy + dy),
+            (cx - sx + dx, cy + sy + dy),
+            (cx - sx - dx, cy + sy - dy),
+        ),
+    ]:
+        draw.polygon(
+            xy=xy,
+            fill=fill_color,
+            outline=outline,
+        )
+    return img.convert(ori_mode)
 
 
 SUPPORTED_CONVERSION_METHODS: List[int] = [

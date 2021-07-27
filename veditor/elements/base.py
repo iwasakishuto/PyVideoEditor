@@ -344,6 +344,49 @@ class FixedElement(BaseElement):
         """
         return frame
 
+    def calc_dsize(
+        self,
+        dsize: Optional[Tuple[int, int]] = None,
+        width: Optional[int] = None,
+        height: Optional[int] = None,
+    ) -> Tuple[int, int]:
+        """Resize the both ``image_pil`` and ``image_arr`` attributes.
+
+        If only ``width`` or ``height`` is given, resize while preserving the aspect ratio.
+
+        Args:
+            dsize (Optional[Tuple[int,int]], optional) : Desired image size. Defaults to ``None``.
+            width (Optional[int], optional)            : Desired image width. Defaults to ``None``.
+            height (Optional[int], optional)           : Desired image height. Defaults to ``None``.
+
+        Returns:
+            Tuple[int, int] : Calculated desired size. (``width``, ``height``)
+        """
+        if dsize is None:
+            if width is None:
+                if height is None:
+                    self.logger.warn(
+                        f"If you want to resize the image, please specify at least one of {toBLUE('dsize')}, {toBLUE('width')}, {toBLUE('height')}."
+                    )
+                    width = self.width
+                    height = self.height
+                else:
+                    width = int(self.width * (height / self.height))
+            elif height is None:
+                height = int(self.height * (width / self.width))
+        else:
+            width, height = dsize
+        return (width, height)
+
+    def resize(
+        self,
+        dsize: Optional[Tuple[int, int]] = None,
+        width: Optional[int] = None,
+        height: Optional[int] = None,
+    ):
+        width, height = self.calc_dsize(dsize=dsize, width=width, height=height)
+        self.set_size(width=width, height=height)
+
     def check_work(
         self, video_path: str, pos: int, as_pil: bool = True
     ) -> Union[npt.NDArray[np.uint8], Image.Image]:

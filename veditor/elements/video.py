@@ -1,6 +1,6 @@
 # coding: utf-8
 import os
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
 
 import cv2
 import numpy as np
@@ -15,10 +15,39 @@ from .base import BaseElement
 
 
 class VideoElement(BaseElement):
-    def __init__(self, video_path: str):
+    def __init__(
+        self,
+        video_path: str,
+        start_pos: int = 0,
+        margin: Union[int, List[int]] = 0,
+        width: Optional[int] = None,
+        height: Optional[int] = None,
+        top: Optional[Union[BaseElement, int]] = 0,
+        right: Optional[Union[BaseElement, int]] = None,
+        left: Optional[Union[BaseElement, int]] = 0,
+        bottom: Optional[Union[BaseElement, int]] = None,
+    ):
         cap = cv2.VideoCapture(video_path)
         super().__init__(pos_frames=(0, int(cap.get(cv2.CAP_PROP_FRAME_COUNT))))
         self.set_video_attributes(video_path)
+
+    def set_size(
+        self,
+        x: Union[str, npt.NDArray[np.uint8]],
+        dsize: Optional[Tuple[int, int]] = None,
+        width: Optional[int] = None,
+        height: Optional[int] = None,
+    ) -> None:
+        """Set
+
+        Args:
+            x (Union[str, npt.NDArray[np.uint8]])       : [description].
+            dsize (Optional[Tuple[int, int]], optional) : [description]. Defaults to ``None``.
+            width (Optional[int], optional)             : [description]. Defaults to ``None``.
+            height (Optional[int], optional)            : [description]. Defaults to ``None``.
+        """
+        self.set_video_attributes(video_path=self.video_path)
+        self.resize(dsize=dsize, width=width, height=height)
 
     def set_video_attributes(self, video_path: str) -> None:
         cap = cv2.VideoCapture(video_path)
@@ -28,6 +57,7 @@ class VideoElement(BaseElement):
         self.set_attribute(name="width", value=int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
         self.set_attribute(name="height", value=int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
         self.set_attribute(name="fps", value=cap.get(cv2.CAP_PROP_FPS))
+        self.set_attribute(name="video_path", value=video_path)
 
     def set_fps(self, fps: float) -> None:
         self.set_attribute(name="fps", value=fps, msg=f"Changed fps to {fps}")

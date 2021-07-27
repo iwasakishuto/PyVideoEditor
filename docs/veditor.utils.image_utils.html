@@ -171,6 +171,45 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="veditor.utils.image_utils.draw_cross">
+<span class="sig-prename descclassname"><span class="pre">veditor.utils.image_utils.</span></span><span class="sig-name descname"><span class="pre">draw_cross</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">PIL.Image.Image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_color</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">(255,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">255)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'RGBA'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">PIL.Image.Image</span><a class="reference internal" href="_modules/veditor/utils/image_utils.html#draw_cross"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.utils.image_utils.draw_cross" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw Cross Mark.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> (<em>Image.Image</em>) – Pillow Image.</p></li>
+<li><p><strong>size</strong> (<em>Union</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>,</em><em>int</em><em>]</em><em>,</em><em>int</em><em>]</em>) – Cross mark size. (width,Height.</p></li>
+<li><p><strong>width</strong> (<em>int</em><em>, </em><em>optional</em>) – The width of the cross mark. Defaults to <code class="docutils literal notranslate"><span class="pre">5</span></code>.</p></li>
+<li><p><strong>fill_color</strong> (<em>Tuple</em><em>[</em><em>int</em><em>,</em><em>int</em><em>,</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – The color in the line. Defaults to <code class="docutils literal notranslate"><span class="pre">(255,0,0,255)</span></code>.</p></li>
+<li><p><strong>outline</strong> (<em>Optional</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>,</em><em>int</em><em>,</em><em>int</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – The color of the edge of the line. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>color_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – Color Mode (ex. <code class="docutils literal notranslate"><span class="pre">&quot;RGBA&quot;</span></code> , <code class="docutils literal notranslate"><span class="pre">&quot;P&quot;</span></code> . Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;RGBA&quot;</span></code>.</p></li>
+<li><p><strong>margin</strong> (<em>int</em><em>, </em><em>optional</em>) – Specify the position. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>[description]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Image.Image</p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">veditor.utils</span> <span class="kn">import</span> <span class="n">draw_cross</span><span class="p">,</span> <span class="n">SampleData</span><span class="p">,</span> <span class="n">cv2plot</span><span class="p">,</span> <span class="n">pil2arr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">base</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">SampleData</span><span class="p">()</span><span class="o">.</span><span class="n">IMAGE_PATH</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img_square</span> <span class="o">=</span> <span class="n">draw_cross</span><span class="p">(</span><span class="n">img</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img_rect</span> <span class="o">=</span> <span class="n">draw_cross</span><span class="p">(</span><span class="n">img</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">outline</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">img</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="p">[</span><span class="n">base</span><span class="p">,</span> <span class="n">img_square</span><span class="p">,</span> <span class="n">img_rect</span><span class="p">]):</span>
+<span class="gp">... </span>    <span class="n">ax</span> <span class="o">=</span> <span class="n">cv2plot</span><span class="p">(</span><span class="n">pil2arr</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-default">
+<img alt="_images/veditor-utils-image_utils-1.png" class="plot-directive popup-img" src="_images/veditor-utils-image_utils-1.png" />
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="veditor.utils.image_utils.image_conversion">
 <span class="sig-prename descclassname"><span class="pre">veditor.utils.image_utils.</span></span><span class="sig-name descname"><span class="pre">image_conversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">matplotlib.colors.Colormap</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'Pastel1'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/veditor/utils/image_utils.html#image_conversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.utils.image_utils.image_conversion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert image by <code class="docutils literal notranslate"><span class="pre">method</span></code> method</p>
@@ -207,7 +246,7 @@
 </pre></div>
 </div>
 <div class="figure align-default">
-<img alt="_images/veditor-utils-image_utils-1.png" class="plot-directive popup-img" src="_images/veditor-utils-image_utils-1.png" />
+<img alt="_images/veditor-utils-image_utils-2.png" class="plot-directive popup-img" src="_images/veditor-utils-image_utils-2.png" />
 </div>
 </dd></dl>
 
@@ -244,7 +283,7 @@
 </pre></div>
 </div>
 <div class="figure align-default">
-<img alt="_images/veditor-utils-image_utils-2.png" class="plot-directive popup-img" src="_images/veditor-utils-image_utils-2.png" />
+<img alt="_images/veditor-utils-image_utils-3.png" class="plot-directive popup-img" src="_images/veditor-utils-image_utils-3.png" />
 </div>
 </dd></dl>
 
@@ -282,7 +321,7 @@
 </pre></div>
 </div>
 <div class="figure align-default">
-<img alt="_images/veditor-utils-image_utils-3.png" class="plot-directive popup-img" src="_images/veditor-utils-image_utils-3.png" />
+<img alt="_images/veditor-utils-image_utils-4.png" class="plot-directive popup-img" src="_images/veditor-utils-image_utils-4.png" />
 </div>
 </dd></dl>
 
@@ -314,7 +353,7 @@
 </pre></div>
 </div>
 <div class="figure align-default">
-<img alt="_images/veditor-utils-image_utils-4.png" class="plot-directive popup-img" src="_images/veditor-utils-image_utils-4.png" />
+<img alt="_images/veditor-utils-image_utils-5.png" class="plot-directive popup-img" src="_images/veditor-utils-image_utils-5.png" />
 </div>
 </dd></dl>
 

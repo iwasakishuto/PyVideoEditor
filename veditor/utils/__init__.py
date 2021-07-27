@@ -27,6 +27,7 @@ from .generic_utils import (
     handleKeyError,
     handleTypeError,
     now_str,
+    openf,
     readable_bytes,
     str_strip,
 )
@@ -36,6 +37,7 @@ from .image_utils import (
     apply_heatmap,
     arr2pil,
     cv2plot,
+    draw_cross,
     draw_text_in_pil,
     image_conversion,
     min_max_normalization,
