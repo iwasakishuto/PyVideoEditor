@@ -104,16 +104,17 @@ def show_frames(
     if fig is None:
         fig = plt.figure(figsize=(int(figsize[0] * ncols), int(figsize[1] * nrows)))
     counter = 0
-    for i in tqdm(range(count), desc="show-frames"):
+    for i in tqdm(range(count), desc=f"step:{step}"):
         ret, frame = cap.read()
         if (not ret) or (frame is None):
             break
         if start <= i <= end:
             if counter % step == 0:
+                msec = cap.get(cv2.CAP_PROP_POS_MSEC)
                 ax = fig.add_subplot(nrows, ncols, (i - start) // step + 1)
                 ax.imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
                 ax.axis("off")
-                ax.set_title(f"No.{i:>0{digit}}/{count}")
+                ax.set_title(f"No.{i:>0{digit}}/{count}\n{msec/1000:.2f}[s]")
             counter += 1
         elif i > end:
             break

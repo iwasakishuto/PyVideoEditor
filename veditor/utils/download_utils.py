@@ -3,6 +3,7 @@ import os
 import sys
 import time
 import urllib
+import urllib.request
 from typing import Callable, Optional
 
 from ._colorings import toBLUE, toGREEN, toRED

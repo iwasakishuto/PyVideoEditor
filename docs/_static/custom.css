@@ -13,6 +13,23 @@
   background-repeat: repeat-y;
   background-size: contain;
 }
+div.body {
+  background-color: #eeeeee;
+}
+div.related, div.footer {
+  background-color: #306998;
+}
+/* div.document {
+  background-color: #FFD43B;
+}
+div.sphinxsidebar h3,
+div.sphinxsidebar h3 a,
+div.sphinxsidebar h4 {
+  color: black;
+}
+div.sphinxsidebar a {
+  color: #306998;
+} */
 
 img.full-width {
   width: 100%;
@@ -34,6 +51,22 @@ dl.py.function > dt {
 span.default_value {
   color: #284E78;
 }
+span.descname {
+  font: bold 1.2em monaco, monospace;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  white-space: nowrap;
+  padding: 2px 4px;
+}
+span.sig-name.descname {
+  color: #008000;
+}
+.py.method span.sig-name.descname {
+  color: #0000FF;
+}
+.py.attribute span.sig-name.descname {
+  color: red;
+}
 ul.simple li strong, code {
   font-family: monaco, monospace;
   font-size: .9em;
@@ -54,6 +87,9 @@ div.toctree-wrapper.compound {
 }
 div.toctree-wrapper.compound ul {
   margin: 0!important;
+}
+div.toctree-wrapper.compound a {
+  color: pink;
 }
 /* div.toctree-wrapper.compound span:before{
   content: "";
