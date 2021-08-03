@@ -47,6 +47,12 @@ class BaseElement(ABC):
     def trbl(self) -> Tuple[int, int, int, int]:
         return self.locations
 
+    def inCharge(self, pos: int) -> bool:
+        """Find out if this element is in charge."""
+        return (self.start_pos <= pos) and (
+            (self.end_pos is None) or (pos <= self.end_pos)
+        )
+
     def set_attribute(self, name: str, value: str, msg: Optional[str] = None) -> None:
         """Set attribute to this class with logs using ``setattr``.
 
@@ -82,9 +88,7 @@ class BaseElement(ABC):
         Returns:
             npt.NDArray[np.uint8]: An editied frame.
         """
-        if (self.start_pos <= pos) and (
-            (self.end_pos is None) or (pos <= self.end_pos)
-        ):
+        if self.inCharge(pos):
             frame = np.zeros_like(shape=frame, dtype=np.uint8)
         return frame
 
@@ -222,10 +226,18 @@ class FixedElement(BaseElement):
         """
         super().__init__(pos_frames=pos_frames)
         self.set_margin(margin=margin, margin_default=0)
-        self.set_size(width=width, height=height, **kwargs)
+        width, height = self.calc_element_size(width=width, height=height, **kwargs)
+        self.set_size(width=width, height=height)
         self.set_locations(top=top, right=right, left=left, bottom=bottom)
 
-    def set_size(self, width: int, height: int, **kwargs) -> None:
+    def calc_element_size(
+        self, width: Optional[int] = None, height: Optional[int] = None, **kwargs
+    ) -> Tuple[int, int]:
+        return (width, height)
+
+    def set_size(
+        self, width: Optional[int] = None, height: Optional[int] = None, **kwargs
+    ) -> None:
         """Set size attributes (``width`` and ``height``).
 
         Args:

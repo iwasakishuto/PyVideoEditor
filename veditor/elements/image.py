@@ -21,7 +21,6 @@ class ImageElement(FixedElement):
         x: Union[str, npt.NDArray[np.uint8]],
         pos_frames: Tuple[int, Optional[int]] = (0, None),
         margin: Union[Number, List[Number]] = 0,
-        dsize: Optional[Tuple[int, int]] = None,
         width: Optional[int] = None,
         height: Optional[int] = None,
         top: Optional[Union[BaseElement, int]] = None,
@@ -35,7 +34,6 @@ class ImageElement(FixedElement):
             x (Union[str, npt.NDArray[np.uint8]])                : An image like array or the path to the image file.
             pos_frames (Tuple[int, Optional[int]], optional)     : Start and end positions. Defaults to ``(0, None)``.
             margin (Optional[Union[int, List[int]]], optional)   : Margin. Defaults to ``None``.
-            dsize (Optional[Tuple[int, int]], optional)          : Desired size for an image. Defaults to ``None``.
             width (Optional[int], optional)                      : The element width. Defaults to ``None``.
             height (Optional[int], optional)                     : The element height. Defaults to ``None``.
             top (Optional[Union[BaseElement, int]], optional)    : Reference element or absolute value at the top. Defaults to ``None``.
@@ -67,50 +65,27 @@ class ImageElement(FixedElement):
             right=right,
             left=left,
             bottom=bottom,
-            **dict(dsize=dsize, x=x),  # kwargs
+            **dict(x=x),  # kwargs
         )
+        self.set_image_attributes(x=x)
 
-    def set_size(
+    def calc_element_size(
         self,
         x: Union[str, npt.NDArray[np.uint8]],
-        dsize: Optional[Tuple[int, int]] = None,
         width: Optional[int] = None,
         height: Optional[int] = None,
-    ) -> None:
-        """Set size attributes. (``width``, ``height``)
-
-        Args:
-            x (Union[str, npt.NDArray[np.uint8]])       : [description].
-            dsize (Optional[Tuple[int, int]], optional) : [description]. Defaults to ``None``.
-            width (Optional[int], optional)             : [description]. Defaults to ``None``.
-            height (Optional[int], optional)            : [description]. Defaults to ``None``.
-        """
-        self.set_image_attributes(x=x)
-        width, height = self.calc_dsize(dsize=dsize, width=width, height=height)
-        self.pil = self.pil.resize((width, height))
-        self.arr = cv2.resize(self.arr, dsize=(width, height))
-        super().set_size(width=width, height=height)
-
-    def edit(self, frame: npt.NDArray[np.uint8], pos: int) -> npt.NDArray[np.uint8]:
-        """Edit a ``pos``-th frame in the video ``vide_path``.
-
-        Args:
-            frame (npt.NDArray[np.uint8]) : The current frame (BGR image) in the video.
-            pos (int)                     : The current position in the video.
-
-        Returns:
-            npt.NDArray[np.uint8]: An editied frame.
-        """
-        if self.arr.ndim == 3:
-            frame[self.top : self.bottom, self.left : self.right, :] = self.arr[
-                :, :, :3
-            ]
-        else:
-            img = alpha_composite(
-                bg=arr2pil(frame), paste=self.pil, box=(self.left, self.top)
-            )
-            frame = pil2arr(img)
-        return frame
+        **kwargs,
+    ) -> Tuple[int, int]:
+        if isinstance(x, str):
+            if not os.path.exists(x):
+                raise FileNotFoundError(f"{toBLUE(x)} is not found.")
+            x = cv2.imread(x)
+        h, w = x.shape[:2]
+        if width is None:
+            width = w
+        if height is None:
+            height = h
+        return (width, height)
 
     def set_image_attributes(
         self,
@@ -140,11 +115,37 @@ class ImageElement(FixedElement):
             x = cv2.imread(x)
         else:
             img_pil = arr2pil(x)
-        width, height = img_pil.size
-        self.set_attribute(name="pil", value=img_pil, msg=f"size={img_pil.size}")
-        self.set_attribute(name="arr", value=x, msg=f"shape={x.shape}")
-        self.set_attribute(name="width", value=width)
-        self.set_attribute(name="height", value=height)
+        self.set_attribute(
+            name="pil",
+            value=img_pil.resize((self.width, self.height)),
+            msg=f"size={img_pil.size}",
+        )
+        self.set_attribute(
+            name="arr",
+            value=cv2.resize(x, dsize=(self.width, self.height)),
+            msg=f"shape={x.shape}",
+        )
+
+    def edit(self, frame: npt.NDArray[np.uint8], pos: int) -> npt.NDArray[np.uint8]:
+        """Edit a ``pos``-th frame in the video ``vide_path``.
+
+        Args:
+            frame (npt.NDArray[np.uint8]) : The current frame (BGR image) in the video.
+            pos (int)                     : The current position in the video.
+
+        Returns:
+            npt.NDArray[np.uint8]: An editied frame.
+        """
+        if self.arr.ndim == 3:
+            frame[self.top : self.bottom, self.left : self.right, :] = self.arr[
+                :, :, :3
+            ]
+        else:
+            img = alpha_composite(
+                bg=arr2pil(frame), paste=self.pil, box=(self.left, self.top)
+            )
+            frame = pil2arr(img)
+        return frame
 
     def show_image_arr(self, ax: Optional[Axes] = None) -> Axes:
         """Show ``image_arr`` using :func:`cv2plot <veditor.utils.image_utils.cv2plot>`

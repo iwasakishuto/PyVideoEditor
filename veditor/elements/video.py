@@ -8,13 +8,12 @@ import numpy.typing as npt
 from PIL import Image
 from tqdm import tqdm
 
-from ..utils._loggers import get_logger
 from ..utils.audio_utils import synthesize_audio
 from ..utils.video_utils import capture2writor
-from .base import BaseElement
+from .base import BaseElement, FixedElement
 
 
-class VideoElement(BaseElement):
+class VideoElement(FixedElement):
     def __init__(
         self,
         video_path: str,
@@ -28,34 +27,39 @@ class VideoElement(BaseElement):
         bottom: Optional[Union[BaseElement, int]] = None,
     ):
         cap = cv2.VideoCapture(video_path)
-        super().__init__(pos_frames=(0, int(cap.get(cv2.CAP_PROP_FRAME_COUNT))))
-        self.set_video_attributes(video_path)
+        super().__init__(
+            pos_frames=(start_pos, start_pos + int(cap.get(cv2.CAP_PROP_FRAME_COUNT))),
+            margin=margin,
+            width=width,
+            height=height,
+            top=top,
+            right=right,
+            left=left,
+            bottom=bottom,
+            **dict(video_path=video_path),  # kwargs
+        )
+        self.set_video_attributes(video_path=video_path)
+        self.set_attribute(name="video_start_pos", value=start_pos)
 
-    def set_size(
+    def calc_element_size(
         self,
-        x: Union[str, npt.NDArray[np.uint8]],
-        dsize: Optional[Tuple[int, int]] = None,
+        video_path: Optional[str] = None,
         width: Optional[int] = None,
         height: Optional[int] = None,
-    ) -> None:
-        """Set
-
-        Args:
-            x (Union[str, npt.NDArray[np.uint8]])       : [description].
-            dsize (Optional[Tuple[int, int]], optional) : [description]. Defaults to ``None``.
-            width (Optional[int], optional)             : [description]. Defaults to ``None``.
-            height (Optional[int], optional)            : [description]. Defaults to ``None``.
-        """
-        self.set_video_attributes(video_path=self.video_path)
-        self.resize(dsize=dsize, width=width, height=height)
+        **kwargs,
+    ) -> Tuple[int, int]:
+        cap = cv2.VideoCapture(video_path)
+        if width is None:
+            width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        if height is None:
+            height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        return (width, height)
 
     def set_video_attributes(self, video_path: str) -> None:
         cap = cv2.VideoCapture(video_path)
         self.set_attribute(
             name="frame_count", value=int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
         )
-        self.set_attribute(name="width", value=int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
-        self.set_attribute(name="height", value=int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
         self.set_attribute(name="fps", value=cap.get(cv2.CAP_PROP_FPS))
         self.set_attribute(name="video_path", value=video_path)
 
@@ -85,8 +89,12 @@ class VideoElement(BaseElement):
         Returns:
             npt.NDArray[np.uint8]: An editied frame.
         """
-        for element in self.elements:
-            frame = element.edit(frame=frame, pos=pos)
+        if self.inCharge(pos):
+            cap = cv2.VideoCapture(self.video_path)
+            cap.set(cv2.CAP_PROP_POS_FRAMES, pos - self.pos)
+            ret, video_frame = cap.read()
+            if video_frame is not None:
+                frame[self.top : self.bottom, self.left : self.right, :] = video_frame
         return frame
 
     def check_work(

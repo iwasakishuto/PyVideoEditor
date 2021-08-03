@@ -11,14 +11,21 @@ class SampleData:
         "IMAGE_PATH": {
             "path": os.path.join(VEDITOR_DIR, "file_example_PNG_500kB.png"),
             "url": "https://file-examples-com.github.io/uploads/2017/10/file_example_PNG_500kB.png",
+            # https://github.com/iwasakishuto/PyVideoEditor/blob/main/data/file_example_PNG_500kB.png?raw=true
         },
         "VIDEO_PATH": {
             "path": os.path.join(VEDITOR_DIR, "file_example_MP4_1280_10MG.mp4"),
             "url": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4",
+            # https://github.com/iwasakishuto/PyVideoEditor/blob/main/data/file_example_MP24_1280_10MG.mp4?raw=true
+        },
+        "ANIMATION_PATH": {
+            "path": os.path.join(VEDITOR_DIR, "file_example_GIF_1280_2MG.gif"),
+            "url": "https://github.com/iwasakishuto/PyVideoEditor/blob/main/data/file_example_GIF_1280_2MG.gif?raw=true",
         },
         "AUDIO_PATH": {
             "path": os.path.join(VEDITOR_DIR, "file_example_MP3_700KB.mp3"),
             "url": "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3",
+            # https://github.com/iwasakishuto/PyVideoEditor/blob/main/data/file_example_MP3_700KB.mp3?raw=true
         },
         "FONT_POKEFONT_PATH": {
             "path": os.path.join(FONT_DIR, "pokefont", "pokemon-font.ttf"),

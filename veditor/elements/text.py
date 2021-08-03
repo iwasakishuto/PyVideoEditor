@@ -42,8 +42,12 @@ class TextElement(FixedElement):
                 xy=xy,
                 textRGB=textRGB,
                 fontsize=fontsize,
+                **kwargs,
             ),  # kwargs
             **kwargs,
+        )
+        self.set_text_attributes(
+            text=text, ttfontname=ttfontname, fontsize=fontsize, **kwargs
         )
 
     def set_text_attributes(
@@ -83,51 +87,22 @@ class TextElement(FixedElement):
             msg=f"{len(kwargs)} keyword arguments ({', '.join([k for k in kwargs.keys()])}) are set.",
         )
 
-    def set_size(
+    def calc_element_size(
         self,
+        text: str,
         ttfontname: str,
-        xy: Tuple = (0, 0),
-        textRGB: Union[str, Tuple] = "black",
         fontsize: int = 16,
-        dsize: Optional[Tuple[int, int]] = None,
         width: Optional[int] = None,
         height: Optional[int] = None,
         **kwargs,
-    ) -> None:
-        """Set size attributes. (``width``, ``height``)
-
-        Args:
-            text (str)                       : [description].
-            width (Optional[int], optional)  : [description]. Defaults to ``None``.
-            height (Optional[int], optional) : [description]. Defaults to ``None``.
-        """
-        self.set_text_attributes(
-            ttfontname=ttfontname, xy=xy, textRGB=textRGB, fontsize=fontsize, **kwargs
-        )
-        width, height = self.calc_text_size()
-        super().set_size(width=width, height=height)
-
-    def calc_text_size(self, text: Optional[str] = None) -> Tuple[int, int]:
-        """Calculate the ``text`` size from attributes of this element.
-
-        Args:
-            text (Optional[str], optional) : A text string to write. Defaults to ``None``.
-
-        Returns:
-            Tuple[int, int]: A tuple for ``width`` and ``height``.
-
-        Examples:
-            >>> from veditor.utils import SampleData
-            >>> from veditor.elements import TextElement
-            >>> element = TextElement(text="PyVideoEditor", ttfontname=SampleData().FONT_POKEFONT_PATH)
-            >>> element.calc_text_size()
-            (208, 22)
-            >>> element.calc_text_size(text="veditor")
-            (112, 22)
-        """
-
-        _, (width, _) = self.draw_text(img=None, text=text, ret_position="word")
-        _, (_, height) = self.draw_text(img=None, text=text, ret_position="line")
+    ) -> Tuple[int, int]:
+        drawKwargs = dict(text=text, ttfontname=ttfontname, fontsize=fontsize, **kwargs)
+        if width is None:
+            drawKwargs.update(dict(img=None, ret_position="word"))
+            _, (width, _) = draw_text_in_pil(**drawKwargs)
+        if height is None:
+            drawKwargs.update(dict(img=None, ret_position="line"))
+            _, (_, height) = draw_text_in_pil(**drawKwargs)
         return (width, height)
 
     def draw_text(
@@ -165,7 +140,8 @@ class TextElement(FixedElement):
         Returns:
             npt.NDArray[np.uint8]: An editied frame.
         """
-        img = arr2pil(frame)
-        img, _ = self.draw_text(img)
-        frame = pil2arr(img)
+        if self.inCharge(pos):
+            img = arr2pil(frame)
+            img, _ = self.draw_text(img)
+            frame = pil2arr(img)
         return frame
