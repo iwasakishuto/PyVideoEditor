@@ -96,8 +96,12 @@
                 <span class="n">xy</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span>
                 <span class="n">textRGB</span><span class="o">=</span><span class="n">textRGB</span><span class="p">,</span>
                 <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
             <span class="p">),</span>  <span class="c1"># kwargs</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_text_attributes</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">ttfontname</span><span class="o">=</span><span class="n">ttfontname</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="TextElement.set_text_attributes"><a class="viewcode-back" href="../../../veditor.elements.text.html#veditor.elements.text.TextElement.set_text_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">set_text_attributes</span><span class="p">(</span>
@@ -137,51 +141,22 @@
             <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span><span class="si">}</span><span class="s2"> keyword arguments (</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span><span class="si">}</span><span class="s2">) are set.&quot;</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="TextElement.set_size"><a class="viewcode-back" href="../../../veditor.elements.text.html#veditor.elements.text.TextElement.set_size">[docs]</a>    <span class="k">def</span> <span class="nf">set_size</span><span class="p">(</span>
+<div class="viewcode-block" id="TextElement.calc_element_size"><a class="viewcode-back" href="../../../veditor.elements.text.html#veditor.elements.text.TextElement.calc_element_size">[docs]</a>    <span class="k">def</span> <span class="nf">calc_element_size</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">ttfontname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">xy</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-        <span class="n">textRGB</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
         <span class="n">fontsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
-        <span class="n">dsize</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">width</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">height</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Set size attributes. (``width``, ``height``)</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            text (str)                       : [description].</span>
-<span class="sd">            width (Optional[int], optional)  : [description]. Defaults to ``None``.</span>
-<span class="sd">            height (Optional[int], optional) : [description]. Defaults to ``None``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_text_attributes</span><span class="p">(</span>
-            <span class="n">ttfontname</span><span class="o">=</span><span class="n">ttfontname</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span> <span class="n">textRGB</span><span class="o">=</span><span class="n">textRGB</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>
-        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_text_size</span><span class="p">()</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="TextElement.calc_text_size"><a class="viewcode-back" href="../../../veditor.elements.text.html#veditor.elements.text.TextElement.calc_text_size">[docs]</a>    <span class="k">def</span> <span class="nf">calc_text_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Calculate the ``text`` size from attributes of this element.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            text (Optional[str], optional) : A text string to write. Defaults to ``None``.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            Tuple[int, int]: A tuple for ``width`` and ``height``.</span>
-
-<span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; from veditor.utils import SampleData</span>
-<span class="sd">            &gt;&gt;&gt; from veditor.elements import TextElement</span>
-<span class="sd">            &gt;&gt;&gt; element = TextElement(text=&quot;PyVideoEditor&quot;, ttfontname=SampleData().FONT_POKEFONT_PATH)</span>
-<span class="sd">            &gt;&gt;&gt; element.calc_text_size()</span>
-<span class="sd">            (208, 22)</span>
-<span class="sd">            &gt;&gt;&gt; element.calc_text_size(text=&quot;veditor&quot;)</span>
-<span class="sd">            (112, 22)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_text</span><span class="p">(</span><span class="n">img</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">ret_position</span><span class="o">=</span><span class="s2">&quot;word&quot;</span><span class="p">)</span>
-        <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_text</span><span class="p">(</span><span class="n">img</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">ret_position</span><span class="o">=</span><span class="s2">&quot;line&quot;</span><span class="p">)</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="n">drawKwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">ttfontname</span><span class="o">=</span><span class="n">ttfontname</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">width</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">drawKwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">img</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ret_position</span><span class="o">=</span><span class="s2">&quot;word&quot;</span><span class="p">))</span>
+            <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">draw_text_in_pil</span><span class="p">(</span><span class="o">**</span><span class="n">drawKwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">height</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">drawKwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">img</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ret_position</span><span class="o">=</span><span class="s2">&quot;line&quot;</span><span class="p">))</span>
+            <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">=</span> <span class="n">draw_text_in_pil</span><span class="p">(</span><span class="o">**</span><span class="n">drawKwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TextElement.draw_text"><a class="viewcode-back" href="../../../veditor.elements.text.html#veditor.elements.text.TextElement.draw_text">[docs]</a>    <span class="k">def</span> <span class="nf">draw_text</span><span class="p">(</span>
@@ -219,9 +194,10 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            npt.NDArray[np.uint8]: An editied frame.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">img</span> <span class="o">=</span> <span class="n">arr2pil</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
-        <span class="n">img</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_text</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-        <span class="n">frame</span> <span class="o">=</span> <span class="n">pil2arr</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inCharge</span><span class="p">(</span><span class="n">pos</span><span class="p">):</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">arr2pil</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+            <span class="n">img</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_text</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">pil2arr</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">frame</span></div></div>
 </pre></div>
 

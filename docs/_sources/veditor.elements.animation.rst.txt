@@ -1,0 +1,7 @@
+veditor.elements.animation module
+=================================
+
+.. automodule:: veditor.elements.animation
+   :members:
+   :undoc-members:
+   :show-inheritance:

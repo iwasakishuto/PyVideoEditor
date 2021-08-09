@@ -27,6 +27,9 @@ class BaseElement(ABC):
         self.start_pos, self.end_pos = pos_frames
         BaseElement.ELEMENT_IDX += 1
 
+    def __repr__(self):
+        return f"{self.element_name} {self.locations}"
+
     @property
     def element_name(self) -> str:
         return f"{BaseElement.ELEMENT_IDX}.{self.__class__.__name__}"

@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:title" content="veditor.elements.animation module" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://github.com/iwasakishuto/PyVideoEditor/veditor.elements.animation.html" />
+  <meta property="og:image" content="https://iwasakishuto.github.io/PyVideoEditor/_images/header.png" />
+  <meta property="og:image:alt" content="veditor.elements.animation module" />
+  <meta property="og:site_name" content="PyVideoEditor" />
+<meta name="twitter:site" content="@cabernet_rock" />
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image:src" content="https://iwasakishuto.github.io/PyVideoEditor/_images/header.png">
+    <title>veditor.elements.animation module &#8212; PyVideoEditor  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/popup.css" />
+    <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/fonts/font-awesome/css/fontawesome.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/custom.js"></script>
+    <script src="_static/popup.js"></script>
+    
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="veditor.elements.base module" href="veditor.elements.base.html" />
+    <link rel="prev" title="veditor.elements package" href="veditor.elements.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="veditor.elements.base.html" title="veditor.elements.base module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="veditor.elements.html" title="veditor.elements package"
+             accesskey="P">previous</a> |</li>
+    <li><i class="fas fa-home"></i><a href="https://iwasakishuto.github.io">Portfolio Top</a> &raquo;</li>
+    
+        <li class="nav-item nav-item-0"><a href="index.html">PyVideoEditor  documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="veditor.html" >veditor package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="veditor.elements.html" accesskey="U">veditor.elements package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">veditor.elements.animation module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-veditor.elements.animation">
+<span id="veditor-elements-animation-module"></span><h1>veditor.elements.animation module<a class="headerlink" href="#module-veditor.elements.animation" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="veditor.elements.animation.AnimationElement">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">veditor.elements.animation.</span></span><span class="sig-name descname"><span class="pre">AnimationElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">animation_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_frames</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">(0,</span> <span class="pre">None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="veditor.elements.base.html#veditor.elements.base.BaseElement" title="veditor.elements.base.BaseElement"><span class="pre">veditor.elements.base.BaseElement</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="veditor.elements.base.html#veditor.elements.base.BaseElement" title="veditor.elements.base.BaseElement"><span class="pre">veditor.elements.base.BaseElement</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="veditor.elements.base.html#veditor.elements.base.BaseElement" title="veditor.elements.base.BaseElement"><span class="pre">veditor.elements.base.BaseElement</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="veditor.elements.base.html#veditor.elements.base.BaseElement" title="veditor.elements.base.BaseElement"><span class="pre">veditor.elements.base.BaseElement</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/veditor/elements/animation.html#AnimationElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.animation.AnimationElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="veditor.elements.base.html#veditor.elements.base.FixedElement" title="veditor.elements.base.FixedElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">veditor.elements.base.FixedElement</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.animation.AnimationElement.calc_element_size">
+<span class="sig-name descname"><span class="pre">calc_element_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">animation_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/veditor/elements/animation.html#AnimationElement.calc_element_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.animation.AnimationElement.calc_element_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.animation.AnimationElement.set_animation_attributes">
+<span class="sig-name descname"><span class="pre">set_animation_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">animation_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/veditor/elements/animation.html#AnimationElement.set_animation_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.animation.AnimationElement.set_animation_attributes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="veditor.elements.animation.AnimationElement.arr_frame_count">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">arr_frame_count</span></span><a class="headerlink" href="#veditor.elements.animation.AnimationElement.arr_frame_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="veditor.elements.animation.AnimationElement.pil_frame_count">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pil_frame_count</span></span><a class="headerlink" href="#veditor.elements.animation.AnimationElement.pil_frame_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.animation.AnimationElement.get_all_pil">
+<span class="sig-name descname"><span class="pre">get_all_pil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">animation_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">PIL.Image.Image</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/veditor/elements/animation.html#AnimationElement.get_all_pil"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.animation.AnimationElement.get_all_pil" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.animation.AnimationElement.get_all_arr">
+<span class="sig-name descname"><span class="pre">get_all_arr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">animation_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/veditor/elements/animation.html#AnimationElement.get_all_arr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.animation.AnimationElement.get_all_arr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.animation.AnimationElement.get_pos_pil">
+<span class="sig-name descname"><span class="pre">get_pos_pil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">PIL.Image.Image</span><a class="reference internal" href="_modules/veditor/elements/animation.html#AnimationElement.get_pos_pil"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.animation.AnimationElement.get_pos_pil" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.animation.AnimationElement.get_pos_arr">
+<span class="sig-name descname"><span class="pre">get_pos_arr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/veditor/elements/animation.html#AnimationElement.get_pos_arr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.animation.AnimationElement.get_pos_arr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.animation.AnimationElement.show_all_frames">
+<span class="sig-name descname"><span class="pre">show_all_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncols</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">matplotlib.figure.Figure</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">matplotlib.figure.Figure</span><a class="reference internal" href="_modules/veditor/elements/animation.html#AnimationElement.show_all_frames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.animation.AnimationElement.show_all_frames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="veditor.elements.animation.AnimationElement.edit">
+<span class="sig-name descname"><span class="pre">edit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/veditor/elements/animation.html#AnimationElement.edit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.elements.animation.AnimationElement.edit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edit a <code class="docutils literal notranslate"><span class="pre">pos</span></code>-th frame in the video <code class="docutils literal notranslate"><span class="pre">vide_path</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>npt.NDArray</em><em>[</em><em>np.uint8</em><em>]</em>) – The current frame (BGR image) in the video.</p></li>
+<li><p><strong>pos</strong> (<em>int</em>) – The current position in the video.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An editied frame.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>npt.NDArray[np.uint8]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  
+  <h4>Other contents</h4>
+  <ul class="social">
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/Blog/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/University/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/Front-End/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/Kerasy/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/Translation-Gummy/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/Python-Charmers/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/Form-Auto-Fill-In/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/Form-Auto-Fill-In.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/TeiLab-BasicLaboratoryWork-in-LifeScienceExperiments/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/TeiLab-BasicLaboratoryWork-in-LifeScienceExperiments.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/Wed-Downtown-OP/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/Wed-Downtown-OP.png">
+      </a>
+    </li>
+    
+  </ul>
+  <h4>Social link</h4>
+  <ul class="social">
+    
+    <li><a class="sc-twitter" href="https://twitter.com/cabernet_rock">
+      <i class="fab fa-twitter" aria-hidden="true"></i>
+    </a></li>
+    
+    <li><a class="sc-github" href="https://github.com/iwasakishuto">
+      <i class="fab fa-github" aria-hidden="true"></i>
+    </a></li>
+    
+  </ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="veditor.elements.html"
+                        title="previous chapter">veditor.elements package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="veditor.elements.base.html"
+                        title="next chapter">veditor.elements.base module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/veditor.elements.animation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="veditor.elements.base.html" title="veditor.elements.base module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="veditor.elements.html" title="veditor.elements package"
+             >previous</a> |</li>
+    <li><i class="fas fa-home"></i><a href="https://iwasakishuto.github.io">Portfolio Top</a> &raquo;</li>
+    
+        <li class="nav-item nav-item-0"><a href="index.html">PyVideoEditor  documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="veditor.html" >veditor package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="veditor.elements.html" >veditor.elements package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">veditor.elements.animation module</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, iwasakishuto.
+    </div>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '');
+</script>
+
+  </body>
+</html>

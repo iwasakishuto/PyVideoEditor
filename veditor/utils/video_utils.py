@@ -57,6 +57,7 @@ def show_frames(
     end: Optional[int] = None,
     step: int = 1,
     ncols: int = 6,
+    nframes: Optional[int] = None,
     figsize: Optional[Tuple[int, int]] = None,
     fig: Optional[Figure] = None,
 ) -> Figure:
@@ -88,7 +89,7 @@ def show_frames(
         cap = video
     else:
         cap = cv2.VideoCapture(video)
-    count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    count = nframes or int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     digit = len(str(count))
     end = min(end or count, count)
     nfigs = math.ceil((end - start + 1) / step)

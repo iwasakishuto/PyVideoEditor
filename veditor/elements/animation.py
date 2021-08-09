@@ -1,4 +1,5 @@
 # coding: utf-8
+import copy
 import math
 import os
 from typing import List, Optional, Tuple, Union
@@ -6,12 +7,13 @@ from typing import List, Optional, Tuple, Union
 import cv2
 import numpy as np
 import numpy.typing as npt
+from matplotlib.figure import Figure
 from PIL import Image
 from tqdm import tqdm
 
 from ..utils.audio_utils import synthesize_audio
 from ..utils.image_utils import alpha_composite, arr2pil, pil2arr
-from ..utils.video_utils import capture2writor
+from ..utils.video_utils import capture2writor, show_frames
 from .base import BaseElement, FixedElement
 
 
@@ -60,34 +62,88 @@ class AnimationElement(FixedElement):
     def set_animation_attributes(
         self, animation_path: str, period: Optional[int] = None
     ) -> None:
-        cap = cv2.VideoCapture(animation_path)
-        img = Image.open(animation_path)
+        arr_images = self.get_all_arr(animation_path=animation_path)
+        pil_images = self.get_all_pil(animation_path=animation_path)
         self.set_attribute(
-            name="arr_frame_count", value=int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+            name="arr_images",
+            value=arr_images,
+            msg=f"{len(arr_images)} images were saved.",
         )
-        self.set_attribute(name="pil_frame_count", value=int(img.n_frames))
+        self.set_attribute(
+            name="pil_images",
+            value=pil_images,
+            msg=f"{len(pil_images)} images were saved.",
+        )
         self.set_attribute(name="animation_path", value=animation_path)
-        self.set_attribute(name="period", value=period)
-        self.set_attribute(name="mode", value=img.mode)
+        self.set_attribute(name="period", value=period or self.pil_frame_count)
+        self.set_attribute(name="mode", value=pil_images[-1].mode)
+
+    @property
+    def arr_frame_count(self):
+        return len(self.arr_images)
+
+    @property
+    def pil_frame_count(self):
+        return len(self.pil_images)
+
+    def get_all_pil(self, animation_path: str) -> List[Image.Image]:
+        img = Image.open(animation_path)
+        pil_images = [img]
+        for i in range(img.n_frames - 1):
+            try:
+                img.seek(img.tell() + 1)
+                pil_images.append(copy.deepcopy(img))
+            except EOFError:
+                break
+        return pil_images
+
+    def get_all_arr(self, animation_path: str) -> List[npt.NDArray[np.uint8]]:
+        arr_images = []
+        cap = cv2.VideoCapture(animation_path)
+        while True:
+            ret, frame = cap.read()
+            if frame is None:
+                break
+            arr_images.append(frame)
+        cap.release()
+        return arr_images
 
     def get_pos_pil(self, pos: int) -> Image.Image:
-        img = Image.open(self.animation_path)
-        img.seek(
+        return self.pil_images[
             math.floor(
-                math.modf((pos - self.start_pos) / self.period)[0] * self.frame_count
+                math.modf((pos - self.start_pos) / self.period)[0]
+                * self.pil_frame_count
             )
-        )
-        return img
+        ]
 
     def get_pos_arr(self, pos: int) -> npt.NDArray[np.uint8]:
-        cap = cv2.VideoCapture(self.animation_path)
-        cap.set(
+        return self.arr_images[
             math.floor(
-                math.modf((pos - self.start_pos) / self.period)[0] * self.frame_count
+                math.modf((pos - self.start_pos) / self.period)[0]
+                * self.pil_frame_count
             )
+        ]
+
+    def show_all_frames(
+        self,
+        start: int = 0,
+        end: Optional[int] = None,
+        step: int = 1,
+        ncols: int = 6,
+        figsize: Optional[Tuple[int, int]] = None,
+        fig: Optional[Figure] = None,
+    ) -> Figure:
+        fig = show_frames(
+            video=self.animation_path,
+            start=start,
+            end=end,
+            step=step,
+            nframes=self.arr_frame_count,
+            ncols=ncols,
+            figsize=figsize,
+            fig=fig,
         )
-        ret, frame = cap.read()
-        return frame
+        return fig
 
     def edit(self, frame: npt.NDArray[np.uint8], pos: int) -> npt.NDArray[np.uint8]:
         """Edit a ``pos``-th frame in the video ``vide_path``.
