@@ -7,7 +7,8 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   veditor.cli.main
+   veditor.cli.check_clip_locations
+   veditor.cli.cvui
 
 Module contents
 ---------------

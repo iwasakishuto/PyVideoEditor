@@ -1,0 +1,7 @@
+veditor.cli.check\_clip\_locations module
+=========================================
+
+.. automodule:: veditor.cli.check_clip_locations
+   :members:
+   :undoc-members:
+   :show-inheritance:

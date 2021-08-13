@@ -290,6 +290,15 @@
 <div class="viewcode-block" id="FixedElement.calc_element_size"><a class="viewcode-back" href="../../../veditor.elements.base.html#veditor.elements.base.FixedElement.calc_element_size">[docs]</a>    <span class="k">def</span> <span class="nf">calc_element_size</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Basic method for calculating the element size.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            width (Optional[int], optional)  : Element width. Defaults to ``None``.</span>
+<span class="sd">            height (Optional[int], optional) : Element height. Defaults to ``None``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple[int, int]: Tu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="FixedElement.set_size"><a class="viewcode-back" href="../../../veditor.elements.base.html#veditor.elements.base.FixedElement.set_size">[docs]</a>    <span class="k">def</span> <span class="nf">set_size</span><span class="p">(</span>
@@ -453,6 +462,13 @@
         <span class="n">width</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">height</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Resize the element size.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dsize (Optional[Tuple[int, int]], optional) : Desired size. Defaults to ``None``.</span>
+<span class="sd">            width (Optional[int], optional)             : Desired width. Defaults to ``None``.</span>
+<span class="sd">            height (Optional[int], optional)            : Desired height. Defaults to ``None``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_dsize</span><span class="p">(</span><span class="n">dsize</span><span class="o">=</span><span class="n">dsize</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span></div>
 

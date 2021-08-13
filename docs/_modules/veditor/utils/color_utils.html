@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>veditor.utils.color_utils &#8212; PyVideoEditor  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/popup.css" />
+    <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/fonts/font-awesome/css/fontawesome.css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../_static/custom.js"></script>
+    <script src="../../../_static/popup.js"></script>
+    
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+    <li><i class="fas fa-home"></i><a href="https://iwasakishuto.github.io">Portfolio Top</a> &raquo;</li>
+    
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PyVideoEditor  documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">veditor.utils.color_utils</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for veditor.utils.color_utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="kn">from</span> <span class="nn">.generic_utils</span> <span class="kn">import</span> <span class="n">handleTypeError</span>
+
+<span class="n">SUPPORTED_COLOR_CODES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;hex&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb&quot;</span><span class="p">,</span> <span class="s2">&quot;rgba&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="detect_color_code_type"><a class="viewcode-back" href="../../../veditor.utils.color_utils.html#veditor.utils.color_utils.detect_color_code_type">[docs]</a><span class="k">def</span> <span class="nf">detect_color_code_type</span><span class="p">(</span><span class="n">color</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Detect Color Code type</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        color (tuple / str): color code.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from pycharmers.utils import detect_color_code_type</span>
+<span class="sd">        &gt;&gt;&gt; detect_color_code_type(&quot;#FFFFFF&quot;)</span>
+<span class="sd">        &#39;hex&#39;</span>
+<span class="sd">        &gt;&gt;&gt; detect_color_code_type((255,255,255))</span>
+<span class="sd">        &#39;rgb&#39;</span>
+<span class="sd">        &gt;&gt;&gt; detect_color_code_type((0,0,0,1))</span>
+<span class="sd">        &#39;rgba&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">handleTypeError</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">color_code</span> <span class="o">=</span> <span class="s2">&quot;hex&quot;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">color_code</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="mi">3</span><span class="p">:</span> <span class="s2">&quot;rgb&quot;</span><span class="p">,</span>
+            <span class="mi">4</span><span class="p">:</span> <span class="s2">&quot;rgba&quot;</span><span class="p">,</span>
+        <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">color</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">color_code</span></div>
+
+
+<div class="viewcode-block" id="hex2rgb"><a class="viewcode-back" href="../../../veditor.utils.color_utils.html#veditor.utils.color_utils.hex2rgb">[docs]</a><span class="k">def</span> <span class="nf">hex2rgb</span><span class="p">(</span><span class="nb">hex</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert color code from ``hex`` to ``rgb``&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">hex</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:][</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span> <span class="o">/</span> <span class="mi">255</span> <span class="o">*</span> <span class="n">max_val</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="hex2rgba"><a class="viewcode-back" href="../../../veditor.utils.color_utils.html#veditor.utils.color_utils.hex2rgba">[docs]</a><span class="k">def</span> <span class="nf">hex2rgba</span><span class="p">(</span><span class="nb">hex</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert color code from ``hex`` to ``rgba``&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">rgb2rgba</span><span class="p">(</span><span class="n">rgb</span><span class="o">=</span><span class="n">hex2rgb</span><span class="p">(</span><span class="nb">hex</span><span class="o">=</span><span class="nb">hex</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:],</span> <span class="n">max_val</span><span class="o">=</span><span class="n">max_val</span><span class="p">),</span> <span class="n">max_val</span><span class="o">=</span><span class="n">max_val</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rgb2hex"><a class="viewcode-back" href="../../../veditor.utils.color_utils.html#veditor.utils.color_utils.rgb2hex">[docs]</a><span class="k">def</span> <span class="nf">rgb2hex</span><span class="p">(</span><span class="n">rgb</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert color code from ``rgb`` to ``hex``&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">/</span> <span class="n">max_val</span> <span class="o">*</span> <span class="n">e</span><span class="p">),</span> <span class="s2">&quot;02x&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">rgb</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="rgb2rgba"><a class="viewcode-back" href="../../../veditor.utils.color_utils.html#veditor.utils.color_utils.rgb2rgba">[docs]</a><span class="k">def</span> <span class="nf">rgb2rgba</span><span class="p">(</span><span class="n">rgb</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert color code from ``rgb`` to ``rgba``&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="n">rgb</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rgba2hex"><a class="viewcode-back" href="../../../veditor.utils.color_utils.html#veditor.utils.color_utils.rgba2hex">[docs]</a><span class="k">def</span> <span class="nf">rgba2hex</span><span class="p">(</span><span class="n">rgba</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert color code from ``rgba`` to ``hex``&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">rgb2hex</span><span class="p">(</span><span class="n">rgb</span><span class="o">=</span><span class="n">rgba2rgb</span><span class="p">(</span><span class="n">rgba</span><span class="o">=</span><span class="n">rgba</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="n">max_val</span><span class="p">),</span> <span class="n">max_val</span><span class="o">=</span><span class="n">max_val</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rgba2rgb"><a class="viewcode-back" href="../../../veditor.utils.color_utils.html#veditor.utils.color_utils.rgba2rgb">[docs]</a><span class="k">def</span> <span class="nf">rgba2rgb</span><span class="p">(</span><span class="n">rgba</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert color code from ``rgba`` to ``rgb``&quot;&quot;&quot;</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">rgba</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">rgb</span> <span class="o">=</span> <span class="n">rgba</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">type_</span> <span class="o">=</span> <span class="nb">int</span> <span class="k">if</span> <span class="n">max_val</span> <span class="o">==</span> <span class="mi">255</span> <span class="k">else</span> <span class="nb">float</span>
+    <span class="c1"># compute the color as alpha against white</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">type_</span><span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">e</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">max_val</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">rgb</span><span class="p">])</span></div>
+
+
+<span class="k">def</span> <span class="nf">_do_nothing</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">color</span>
+
+
+<span class="k">def</span> <span class="nf">_toColorCode_create</span><span class="p">(</span><span class="n">to_color_code</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">toColorCode</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">color_code</span> <span class="o">=</span> <span class="n">detect_color_code_type</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">color_code</span><span class="p">:</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">color_code</span><span class="si">}</span><span class="s2">2</span><span class="si">{</span><span class="n">to_color_code</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">_do_nothing</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">color_code</span> <span class="ow">in</span> <span class="n">SUPPORTED_COLOR_CODES</span>
+        <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">color_code</span><span class="p">)(</span><span class="n">color</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="n">max_val</span><span class="p">)</span>
+
+    <span class="n">toColorCode</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Convert color code to </span><span class="si">{</span><span class="n">to_color_code</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">    Args:</span>
+<span class="s2">        color (tuple / str): color code.</span>
+
+<span class="s2">    Examples:</span>
+<span class="s2">        &gt;&gt;&gt; from pycharmers.utils import to</span><span class="si">{</span><span class="n">to_color_code</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">        &gt;&gt;&gt; to</span><span class="si">{</span><span class="n">to_color_code</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">(&quot;#FFFFFF&quot;)</span>
+<span class="s2">        </span><span class="si">{</span><span class="n">toColorCode</span><span class="p">(</span><span class="s2">&quot;#FFFFFF&quot;</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">        &gt;&gt;&gt; to</span><span class="si">{</span><span class="n">to_color_code</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">((255, 255, 255), max_val=255)</span>
+<span class="s2">        </span><span class="si">{</span><span class="n">toColorCode</span><span class="p">((</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="n">max_val</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">        &gt;&gt;&gt; to</span><span class="si">{</span><span class="n">to_color_code</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">((1, 1, 1, 1), max_val=1)</span>
+<span class="s2">        </span><span class="si">{</span><span class="n">toColorCode</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">max_val</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
+
+<span class="s2">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">toColorCode</span>
+
+
+<span class="n">toHEX</span> <span class="o">=</span> <span class="n">_toColorCode_create</span><span class="p">(</span><span class="s2">&quot;hex&quot;</span><span class="p">)</span>
+<span class="n">toRGB</span> <span class="o">=</span> <span class="n">_toColorCode_create</span><span class="p">(</span><span class="s2">&quot;rgb&quot;</span><span class="p">)</span>
+<span class="n">toRGBA</span> <span class="o">=</span> <span class="n">_toColorCode_create</span><span class="p">(</span><span class="s2">&quot;rgba&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="choose_text_color"><a class="viewcode-back" href="../../../veditor.utils.color_utils.html#veditor.utils.color_utils.choose_text_color">[docs]</a><span class="k">def</span> <span class="nf">choose_text_color</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">is_bgr</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Select an easy-to-read text color from the given color.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        color (tuple / str) : color code.</span>
+<span class="sd">        max_val (int)       : Maximum value.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        `WCAG &lt;https://www.w3.org/TR/WCAG20/#relativeluminancede&gt;`_</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from pycharmers.utils import choose_text_color</span>
+<span class="sd">        &gt;&gt;&gt; from pycharmers.opencv import (cv2BLACK, cv2RED, cv2GREEN, cv2YELLOW, cv2BLUE, cv2MAGENTA, cv2CYAN, cv2WHITE)</span>
+<span class="sd">        &gt;&gt;&gt; colors = locals().copy()</span>
+<span class="sd">        &gt;&gt;&gt; for name,color in colors.items():</span>
+<span class="sd">        ...     if name.startswith(&quot;cv2&quot;) and isinstance(color, tuple):</span>
+<span class="sd">        ...         print(f&quot;{name.lstrip(&#39;cv2&#39;):&lt;7}: {str(color):&lt;15} -&gt; {choose_text_color(color=color, max_val=255, is_bgr=True)}&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">color_code</span> <span class="o">=</span> <span class="n">detect_color_code_type</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">rgb</span> <span class="o">=</span> <span class="n">toRGB</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="n">max_val</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">is_bgr</span><span class="p">:</span>
+        <span class="n">rgb</span> <span class="o">=</span> <span class="n">rgb</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">sRGB2RGB</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">e</span> <span class="o">/</span> <span class="n">max_val</span>
+        <span class="k">return</span> <span class="n">i</span> <span class="o">/</span> <span class="mf">12.92</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mf">0.03928</span> <span class="k">else</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="mf">0.055</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1.055</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">)</span>
+
+    <span class="n">R</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">B</span> <span class="o">=</span> <span class="p">[</span><span class="n">sRGB2RGB</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">rgb</span><span class="p">]</span>
+    <span class="c1"># Relative Brightness BackGround.</span>
+    <span class="n">Lbg</span> <span class="o">=</span> <span class="mf">0.2126</span> <span class="o">*</span> <span class="n">R</span> <span class="o">+</span> <span class="mf">0.7152</span> <span class="o">*</span> <span class="n">G</span> <span class="o">+</span> <span class="mf">0.0722</span> <span class="o">*</span> <span class="n">B</span>
+
+    <span class="n">Lw</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Relative Brightness of White</span>
+    <span class="n">Lb</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Relative Brightness of Black</span>
+
+    <span class="n">Cw</span> <span class="o">=</span> <span class="p">(</span><span class="n">Lw</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">Lbg</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">Cb</span> <span class="o">=</span> <span class="p">(</span><span class="n">Lbg</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">Lb</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">text_rgb</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">Cb</span> <span class="o">&gt;</span> <span class="n">Cw</span> <span class="k">else</span> <span class="p">(</span><span class="n">max_val</span><span class="p">,</span> <span class="n">max_val</span><span class="p">,</span> <span class="n">max_val</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;rgb&quot;</span><span class="p">:</span> <span class="n">_do_nothing</span><span class="p">,</span> <span class="s2">&quot;hex&quot;</span><span class="p">:</span> <span class="n">rgb2hex</span><span class="p">,</span> <span class="s2">&quot;rgba&quot;</span><span class="p">:</span> <span class="n">_do_nothing</span><span class="p">,}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="n">color_code</span>
+    <span class="p">)(</span><span class="n">text_rgb</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="n">max_val</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generate_color_series"><a class="viewcode-back" href="../../../veditor.utils.color_utils.html#veditor.utils.color_utils.generate_color_series">[docs]</a><span class="k">def</span> <span class="nf">generate_color_series</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">variation</span><span class="p">,</span> <span class="n">diff</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate light and dark color series.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        color (tuple)   : Color [0,255]</span>
+<span class="sd">        variation (int) : How many colors to create.</span>
+<span class="sd">        diff (int)      : How much to change</span>
+<span class="sd">        reverse (bool)  : If ``True``, sort in descending order.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        colors (list) : colors.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from pycharmers.utils import generateLightDarks</span>
+<span class="sd">        &gt;&gt;&gt; generateLightDarks(color=(245,20,25), variation=3, diff=10)</span>
+<span class="sd">        [(235, 10, 15), (245, 20, 25), (255, 30, 35)]</span>
+<span class="sd">        &gt;&gt;&gt; generateLightDarks(color=(245, 20, 25), variation=3, diff=-10)</span>
+<span class="sd">        [(225, 0, 5), (235, 10, 15), (245, 20, 25)]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">color</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span> <span class="k">if</span> <span class="n">diff</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">min</span><span class="p">(</span><span class="n">color</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">variation</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">+=</span> <span class="n">diff</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">255</span> <span class="o">&gt;=</span> <span class="n">val</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">u</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="nb">tuple</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">e</span> <span class="o">+</span> <span class="n">diff</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span> <span class="o">-</span> <span class="n">v</span><span class="p">),</span> <span class="mi">255</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="n">e</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">variation</span><span class="p">)</span>
+        <span class="p">],</span>
+        <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">,</span>
+    <span class="p">)</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  
+  <h4>Other contents</h4>
+  <ul class="social">
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/Blog/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/University/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/Front-End/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/Kerasy/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/Translation-Gummy/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/Python-Charmers/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/Form-Auto-Fill-In/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/Form-Auto-Fill-In.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/TeiLab-BasicLaboratoryWork-in-LifeScienceExperiments/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/TeiLab-BasicLaboratoryWork-in-LifeScienceExperiments.png">
+      </a>
+    </li>
+    
+    <li>
+      <a href="https://iwasakishuto.github.io/Wed-Downtown-OP/index.html">
+        <img src="https://iwasakishuto.github.io/images/apple-touch-icon/Wed-Downtown-OP.png">
+      </a>
+    </li>
+    
+  </ul>
+  <h4>Social link</h4>
+  <ul class="social">
+    
+    <li><a class="sc-twitter" href="https://twitter.com/cabernet_rock">
+      <i class="fab fa-twitter" aria-hidden="true"></i>
+    </a></li>
+    
+    <li><a class="sc-github" href="https://github.com/iwasakishuto">
+      <i class="fab fa-github" aria-hidden="true"></i>
+    </a></li>
+    
+  </ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+    <li><i class="fas fa-home"></i><a href="https://iwasakishuto.github.io">Portfolio Top</a> &raquo;</li>
+    
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PyVideoEditor  documentation</a> &#187;</li>
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">veditor.utils.color_utils</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, iwasakishuto.
+    </div>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '');
+</script>
+
+  </body>
+</html>

@@ -236,6 +236,15 @@ class FixedElement(BaseElement):
     def calc_element_size(
         self, width: Optional[int] = None, height: Optional[int] = None, **kwargs
     ) -> Tuple[int, int]:
+        """Basic method for calculating the element size.
+
+        Args:
+            width (Optional[int], optional)  : Element width. Defaults to ``None``.
+            height (Optional[int], optional) : Element height. Defaults to ``None``.
+
+        Returns:
+            Tuple[int, int]: Tu
+        """
         return (width, height)
 
     def set_size(
@@ -399,6 +408,13 @@ class FixedElement(BaseElement):
         width: Optional[int] = None,
         height: Optional[int] = None,
     ):
+        """Resize the element size.
+
+        Args:
+            dsize (Optional[Tuple[int, int]], optional) : Desired size. Defaults to ``None``.
+            width (Optional[int], optional)             : Desired width. Defaults to ``None``.
+            height (Optional[int], optional)            : Desired height. Defaults to ``None``.
+        """
         width, height = self.calc_dsize(dsize=dsize, width=width, height=height)
         self.set_size(width=width, height=height)
 

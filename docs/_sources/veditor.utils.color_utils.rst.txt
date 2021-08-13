@@ -1,0 +1,7 @@
+veditor.utils.color\_utils module
+=================================
+
+.. automodule:: veditor.utils.color_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

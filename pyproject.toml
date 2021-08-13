@@ -51,7 +51,7 @@ sphinx_fontawesome = "^0.0.6"
 sphinx-notfound-page = "^0.7.1"
 
 [tool.poetry.scripts]
-command-name = "veditor.cli.main:func"
+check-clip-locations = "veditor.cli.check_clip_locations:check_clip_locations"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

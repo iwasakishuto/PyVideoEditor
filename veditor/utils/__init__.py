@@ -3,6 +3,7 @@ from . import (
     _datasets,
     argparse_utils,
     audio_utils,
+    color_utils,
     download_utils,
     generic_utils,
     image_utils,
@@ -20,6 +21,20 @@ from .argparse_utils import (
     ListParamProcessorCreate,
 )
 from .audio_utils import overlay_audio, synthesize_audio
+from .color_utils import (
+    choose_text_color,
+    detect_color_code_type,
+    generate_color_series,
+    hex2rgb,
+    hex2rgba,
+    rgb2hex,
+    rgb2rgba,
+    rgba2hex,
+    rgba2rgb,
+    toHEX,
+    toRGB,
+    toRGBA,
+)
 from .download_utils import download_file, progress_reporthook_create
 from .generic_utils import (
     assign_trbl,

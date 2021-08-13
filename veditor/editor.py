@@ -1,6 +1,6 @@
 # coding: utf-8
 import os
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
 
 import cv2
 import numpy as np
@@ -9,45 +9,69 @@ from PIL import Image
 from tqdm import tqdm
 
 from .elements import BaseElement
+from .utils._colorings import toBLUE, toGREEN
 from .utils._loggers import get_logger
 from .utils.audio_utils import synthesize_audio
+from .utils.image_utils import arr2pil, pil2arr
 from .utils.video_utils import capture2writor
 
 
 class VEditor(BaseElement):
-    def __init__(self, video_path: str):
-        cap = cv2.VideoCapture(video_path)
-        super().__init__(pos_frames=(0, int(cap.get(cv2.CAP_PROP_FRAME_COUNT))))
-        self.set_video_attributes(video_path)
-        self.elements: List[BaseElement] = []
+    def __init__(
+        self,
+        elements: List[BaseElement] = [],
+        width: Optional[int] = None,
+        height: Optional[int] = None,
+        bgRGB: Optional[Tuple[int, int, int]] = (0, 0, 0),
+    ):
+        self.elements = elements
+        super().__init__(pos_frames=(None, None))
+        self.set_element_attributes(bgRGB=bgRGB)
 
-    def set_video_attributes(self, video_path: str) -> None:
-        cap = cv2.VideoCapture(video_path)
-        self.set_attribute(
-            name="frame_count", value=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)), msg=""
-        )
-        self.set_attribute(
-            name="width", value=int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), msg=""
-        )
-        self.set_attribute(
-            name="height", value=int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)), msg=""
-        )
-        self.set_attribute(name="fps", value=cap.get(cv2.CAP_PROP_FPS), msg="")
+    def set_element_attributes(
+        self,
+        width: Optional[int] = None,
+        height: Optional[int] = None,
+        bgRGB: Optional[Tuple[int, int, int]] = (0, 0, 0),
+    ) -> None:
+        self.set_attribute(name="_width", value=width)
+        self.set_attribute(name="_height", value=height)
+        self.set_attribute(name="bgRGB", value=bgRGB)
+        self.set_pos_frames()
+        self.set_trbl()
 
-    def set_fps(self, fps: float) -> None:
-        self.set_attribute(name="fps", value=fps, msg=f"Changed fps to {fps}")
+    def set_trbl(self):
+        w = self._width
+        h = self._height
+        top, right, bottom, left = (1e5, -1, -1, 1e5)
+        for element in self.elements:
+            t, r, b, l = element.locations
+            if t < top:
+                top = t
+            if r > right:
+                right = r
+            if b > bottom:
+                bottom = b
+            if l < left:
+                left = l
+        if w is None:
+            w = r - l
+        if h is None:
+            h = b - t
+        self.set_size(width=w, height=h)
+        self.set_locations(top=top, right=right, left=left, bottom=bottom)
 
-    @property
-    def top(self) -> int:
-        return 0
-
-    def left(self) -> int:
-        return 0
-
-    @property
-    def video_filename(self) -> str:
-        """Final component of a pathname of ``video_path``."""
-        return os.path.basename(self.video_path)
+    def set_pos_frames(self) -> None:
+        start_pos, end_pos = (None, None)
+        for element in self.elements:
+            s = element.start_pos
+            e = element.end_pos
+            if (start_pos is None) or ((s is not None) and (s < start_pos)):
+                start_pos = s
+            if (end_pos is None) or ((e is not None) and (e > end_pos)):
+                end_pos = e
+        self.set_attribute(name="start_pos", value=start_pos)
+        self.set_attribute(name="end_pos", value=end_pos)
 
     def append(self, element: BaseElement) -> None:
         """Append a new :class:`element <veditor.elements.base.BaseElement>`
@@ -56,6 +80,8 @@ class VEditor(BaseElement):
             element (BaseElement) : An instance of  :class:`BaseElement <veditor.elements.base.BaseElement>`.
         """
         self.elements.append(element)
+        self.set_pos_frames()
+        self.set_trbl()
 
     def edit(self, frame: npt.NDArray[np.uint8], pos: int) -> npt.NDArray[np.uint8]:
         """Edit a ``pos``-th frame in the video ``vide_path``.
@@ -67,31 +93,56 @@ class VEditor(BaseElement):
         Returns:
             npt.NDArray[np.uint8]: An editied frame.
         """
+        if self.bgRGB is not None:
+            frame[self.top : self.bottom, self.left : self.right, :] = np.full(
+                shape=(self.height, self.width, 3),
+                fill_value=self.bgRGB,
+                dtype=np.uint8,
+            )
         for element in self.elements:
             frame = element.edit(frame=frame, pos=pos)
         return frame
 
     def check_work(
-        self, pos: int, as_pil: bool = True
+        self,
+        pos: int,
+        frame: Optional[npt.NDArray[np.uint8]] = None,
+        as_pil: bool = True,
     ) -> Union[npt.NDArray[np.uint8], Image.Image]:
         """Check the editing result for ``pos`` frame in video at ``video_path`` of this editor.
 
         Args:
-            pos (int)                  : The position in the video.
-            as_pil (bool, optional)    : Whether to return object as ``Image.Image`` or ``npt.NDArray[npt.uint8]``. Defaults to ``True``.
+            pos (int)                                         : The position in the video.
+            frame (Optional[npt.NDArray[np.uint8]], optional) : [description]. Defaults to ``None``
+            as_pil (bool, optional)                           : Whether to return object as ``Image.Image`` or ``npt.NDArray[npt.uint8]``. Defaults to ``True``.
+
+        Raises:
+            ValueError: When ``bgRGB`` is not set, and ``frame`` is ``None``.
 
         Returns:
             Union[npt.NDArray[np.uint8], Image.Image]: An editing result for the ``pos``-th frame.
         """
-        return super().check_work(video_path=self.video_path, pos=pos, as_pil=as_pil)
+        if frame is None:
+            if self.bgRGB is None:
+                raise ValueError(
+                    f"If background color {toGREEN('bgRGB')} is not set, please specify an argument {toBLUE('frame')}."
+                )
+            else:
+                frame = np.full(
+                    shape=(self.height, self.width, 3),
+                    fill_value=self.bgRGB,
+                    dtype=np.uint8,
+                )
+        frame = self.edit(frame=frame, pos=pos)
+        if as_pil:
+            return arr2pil(frame)
+        else:
+            return frame
 
     def check_works(
         self,
-        audio_path: Optional[str] = None,
         out_path: Optional[str] = None,
         codec: str = "H264",
-        H: Optional[int] = None,
-        W: Optional[int] = None,
         fps: Optional[float] = None,
         open: bool = True,
         **kwargs,
@@ -99,34 +150,20 @@ class VEditor(BaseElement):
         """Check the editing results of this editor.
 
         Args:
-            audio_path (str, optional)         : Path to the audio file. Defaults to ``None``. (Same as ``video_path``.)
             out_path (Optional[str], optional) : Path to the created video. Defaults to ``None``.
             codec (str, optional)              : Video codec for the created video. Defaults to ``"H264"``.
-            H (Optional[int], optional)        : Height of the output video. Defaults to ``None``.
-            W (Optional[int], optional)        : Width of the output video. Defaults to ``None``.
             fps (Optional[float], optional)    : Frame rate of the output video. Defaults to ``None``.
             open (bool, optional)              : Whether to open output file or not. Defaults to ``True``.
 
         Returns:
             str: The path to the created video.
         """
-        return super().check_works(
-            video_path=self.video_path,
-            audio_path=audio_path,
-            out_path=out_path,
-            codec=codec,
-            H=H,
-            W=W,
-            open=open,
-            **kwargs,
-        )
+        return self.export(out_path=out_path, codec=codec, fps=fps, open=open, **kwargs)
 
     def export(
         self,
         out_path: Optional[str] = None,
         codec: str = "H264",
-        H: Optional[int] = None,
-        W: Optional[int] = None,
         fps: Optional[float] = None,
         open: bool = True,
         **kwargs,
@@ -136,8 +173,6 @@ class VEditor(BaseElement):
         Args:
             out_path (Optional[str], optional) : Path to the output video. Defaults to ``None``.
             codec (str, optional)              : Video codec for the output video. Defaults to ``"H264"``.
-            H (Optional[int], optional)        : Height of the output video. Defaults to ``None``.
-            W (Optional[int], optional)        : Width of the output video. Defaults to ``None``.
             fps (Optional[float], optional)    : Frame rate of the output video. Defaults to ``None``.
             open (bool, optional)              : Whether to open the created video file. Defaults to ``True``.
 
@@ -147,7 +182,12 @@ class VEditor(BaseElement):
         cap = cv2.VideoCapture(self.video_path)
         cap.set(cv2.CAP_PROP_FPS, self.fps)
         out, out_path = capture2writor(
-            cap=cap, out_path=out_path, codec=codec, H=H, W=W, fps=fps
+            cap=cap,
+            out_path=out_path,
+            codec=codec,
+            H=self.height,
+            W=self.width,
+            fps=fps,
         )
         for i in tqdm(
             range(int(cap.get(cv2.CAP_PROP_FRAME_COUNT))), desc=self.video_filename

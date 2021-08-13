@@ -17,3 +17,5 @@ You can convert from `data/sample-instructor.mp4` to `data/sample-instructor_med
     $ poetry run command-name -P username=USERNAME \\
                               -P password=PASSWORD
 """
+
+from . import cvui

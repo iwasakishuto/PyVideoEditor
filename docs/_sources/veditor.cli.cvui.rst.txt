@@ -1,7 +1,7 @@
-veditor.cli.main module
+veditor.cli.cvui module
 =======================
 
-.. automodule:: veditor.cli.main
+.. automodule:: veditor.cli.cvui
    :members:
    :undoc-members:
    :show-inheritance:
