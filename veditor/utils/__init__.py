@@ -44,4 +44,4 @@ from .image_utils import (
     nega_conversion,
     pil2arr,
 )
-from .video_utils import capture2writor, show_frames
+from .video_utils import capture2writor, save_frames, show_frames

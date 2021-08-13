@@ -1,7 +1,7 @@
 # coding: utf-8
 import math
 import os
-from typing import Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 import cv2
 import matplotlib.pyplot as plt
@@ -61,7 +61,7 @@ def show_frames(
     figsize: Optional[Tuple[int, int]] = None,
     fig: Optional[Figure] = None,
 ) -> Figure:
-    """Cut out frames from the video and plot them.
+    """Cut out frames from the ``video`` and plot them.
 
     Args:
         video (Union[str, cv2.VideoCapture])          : Path to video or an instance of ``cv2.VideoCaputure``.
@@ -73,6 +73,9 @@ def show_frames(
 
     Returns:
         Figure: Figure where frames from ``start`` to ``end`` are drawn.
+
+    Raises:
+        ValueError: When ``video`` is ``cv2.VideoCapture`` and is not Opened.
 
     .. plot::
       :class: popup-img
@@ -121,3 +124,44 @@ def show_frames(
             break
     cap.release()
     return fig
+
+
+def save_frames(
+    video: Union[str, cv2.VideoCapture],
+    positions: Union[int, List[int]],
+    fmt: str = "{pos}.png",
+) -> None:
+    """Cut out frames from the ``video`` and save them.
+
+    Args:
+        video (Union[str, cv2.VideoCapture]) : Path to video or an instance of ``cv2.VideoCaputure``.
+        positions (Union[int, List[int]])    : Which position(s) to save the frame.
+        fmt (str, optional)                  : File name format. Must include ``"{pos}"``. Defaults to ``"{pos}.png"``.
+
+    Raises:
+        ValueError: When ``video`` is ``cv2.VideoCapture`` and is not Opened, or ``fmt`` DO NOT include ``"{pos}"``.
+    """
+    if isinstance(video, cv2.VideoCapture):
+        if not video.isOpened():
+            raise ValueError(
+                f"{toGREEN('video')} is not opened. Please reinitialize the {toGREEN('cv2.VideoCapture')} instance."
+            )
+        cap = video
+    else:
+        cap = cv2.VideoCapture(video)
+    if isinstance(positions, int):
+        positions = [positions]
+    if "{pos}" not in fmt:
+        raise ValueError(f"{toGREEN('fmt')} must include " + '"{pos}"')
+    max_pos = max(positions)
+    counter = 0
+    with tqdm(range(max_pos + 1)) as pbar:
+        for i in pbar:
+            pbar.set_description(f"saved {counter} frames")
+            ret, frame = cap.read()
+            if (not ret) or (frame is None):
+                break
+            if i in positions:
+                cv2.imwrite(fmt.format(pos=i), frame)
+                counter += 1
+    cap.release()
