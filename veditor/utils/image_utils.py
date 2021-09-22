@@ -73,7 +73,6 @@ def draw_text_in_pil(
     bgRGB: Union[str, Tuple] = "white",
     textRGB: Union[str, Tuple] = "black",
     fontsize: int = 16,
-    fontwidth: Optional[int] = None,
     fontheight: Optional[int] = None,
     line_height: Optional[int] = None,
     anchor: Optional[str] = None,
@@ -85,8 +84,9 @@ def draw_text_in_pil(
     stroke_width: int = 0,
     stroke_fill: Optional[Union[str, Tuple]] = None,
     embedded_color: bool = False,
-    text_width: Optional[int] = None,
     wrap_text: bool = False,
+    text_width: Optional[int] = None,
+    margin_right: int = 0,
     drop_whitespace: bool = False,
     ret_position: str = "word",
 ) -> Image.Image:
@@ -102,7 +102,6 @@ def draw_text_in_pil(
         bgRGB (Union[str, Tuple], optional)                 : The color of background image. Defaults to ``"white"``.
         textRGB (Union[str, Tuple], optional)               : The color of text. Defaults to ``"black"``.
         fontsize (int, optional)                            : The font size. Defaults to ``16``.
-        fontwidth (Optional[int], optional)                 : The font width. (If not given, automatically calculated.) Defaults to ``None``.
         fontheight (Optional[int], optional)                : The font height. (If not given, automatically calculated.) Defaults to ``None``.
         line_height (Optional[int], optional)               : The line height. (If not given, automatically calculated.) Defaults to ``None``.
         anchor (Optional[str], optional)                    : The text anchor alignment. Defaults to ``None``.
@@ -114,8 +113,9 @@ def draw_text_in_pil(
         stroke_width (int, optional)                        : The width of the text stroke. Defaults to ``0``.
         stroke_fill (Optional[Union[str, Tuple]], optional) : Color to use for the text stroke. If not given, will default to the ``textRGB`` parameter. Defaults to ``None``.
         embedded_color (bool, optional)                     : Whether to use font embedded color glyphs (COLR, CBDT, SBIX). Defaults to ``False``.
-        text_width (Optional[int], optional)                : The length of characters in one line. Defaults to ``None``.
         wrap_text (bool, optional)                          : Whether to wrap ``text`` for multilines or not. Defaults to ``False``.
+        text_width (Optional[int], optional)                : The length of characters in one line. Use it if you specify ``wrap_text==True``. Defaults to ``None``.
+        margin_right (int, optional)                        : Right margin of text in image. Use it if you specify ``wrap_text==True``. Defaults to ``0``.
         drop_whitespace (bool, optional)                    : If ``True``, whitespace at the beginning and ending of every line. Defaults to ``False``.
         ret_position (str, optional)                        : Type of the position of next text to be returned. Please choose from ``["line", "word"]``. Defaults to ``"word"``.
 
@@ -128,16 +128,15 @@ def draw_text_in_pil(
     else:
         img_mode = img.mode
     iw, ih = img.size
-    font = ImageFont.truetype(font=ttfontname, size=int(fontsize))
 
-    letters: str = string.ascii_letters + string.digits
-    fw, fh = font.getsize(letters)
-    fw = fontwidth or fw // len(letters)
+    font = ImageFont.truetype(font=ttfontname, size=int(fontsize))
+    fw, fh = font.getsize(text)
+    fw //= len(text)
     fh = fontheight or line_height or fh
 
     x, mt = xy
     if wrap_text:
-        text_width = text_width or iw // fw
+        text_width = text_width or (iw-margin_right-x) // fw
         wrapped_lines = flatten_dual(
             [
                 textwrap.wrap(text=t, width=text_width, drop_whitespace=drop_whitespace)
@@ -177,11 +176,27 @@ def draw_text_in_pil(
     if ret_position == "line":
         xy = (x, y + fh)
     elif ret_position == "word":
-        xy = (x + fw * len(line), y)
+        xy = (x + font.getsize(line)[0], y)
 
     if alpha_composition:
         img = alpha_composite(bg=img, paste=text_canvas, box=(0, 0))
     return (img, xy)
+
+
+def check_font_size(text: str, ttfontname: str, img: Optional[Image.Image] = None, xy: Tuple = (0, 0), **kwargs) -> Tuple[int, int]:
+    """Find out the text when writing letters using :func:`draw_text_in_pil <veditor.utils.image_utils.draw_text_in_pil>`.
+
+    Args:
+        text (str)                            : Text to be drawn to ``img``.
+        ttfontname (str)                      : A filename or file-like object containing a TrueType font.
+        img (Optional[Image.Image], optional) : The image to draw in. If this argment is ``None``, img will be created using ``img_size`` and ``bgRGB`` arguments. Defaults to ``None``.
+        xy (Tuple, optional)                  : Where to write the ``text``. This value means the coordinates of (``x``, ``y``). Defaults to ``(0, 0)``.
+
+    Returns:
+        Tuple[int, int] : Calculated text size (width, height)
+    """
+    _, xy_ = draw_text_in_pil(text=text, ttfontname=ttfontname, img=img, xy=xy, **kwargs)
+    return (xy_[0]-xy[0], xy_[1]-xy[1])
 
 
 def draw_cross(

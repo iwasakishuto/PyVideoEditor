@@ -54,6 +54,7 @@ from .image_utils import (
     cv2plot,
     draw_cross,
     draw_text_in_pil,
+    check_font_size,
     image_conversion,
     min_max_normalization,
     nega_conversion,
