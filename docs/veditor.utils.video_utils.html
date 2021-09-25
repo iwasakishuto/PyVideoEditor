@@ -72,15 +72,38 @@
   <div class="section" id="module-veditor.utils.video_utils">
 <span id="veditor-utils-video-utils-module"></span><h1>veditor.utils.video_utils module<a class="headerlink" href="#module-veditor.utils.video_utils" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
+<dt class="sig sig-object py" id="veditor.utils.video_utils.createVideoWritor">
+<span class="sig-prename descclassname"><span class="pre">veditor.utils.video_utils.</span></span><span class="sig-name descname"><span class="pre">createVideoWritor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'avc1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">cv2.VideoWriter</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/veditor/utils/video_utils.html#createVideoWritor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.utils.video_utils.createVideoWritor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an instance of <code class="docutils literal notranslate"><span class="pre">cv2.VideoWritor</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>H</strong> (<em>int</em>) – Height of the output video.</p></li>
+<li><p><strong>W</strong> (<em>int</em>) – Width of the output video.</p></li>
+<li><p><strong>fps</strong> (<em>float</em>) – Frame rate of the output video.</p></li>
+<li><p><strong>codec</strong> (<em>str</em><em>, </em><em>optional</em>) – Video codec for the output video. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;avc1&quot;</span></code>.</p></li>
+<li><p><strong>out_path</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – [description]. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple of <code class="docutils literal notranslate"><span class="pre">cv2.VideoWriter</span></code> and path to output video.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[cv2.VideoWriter, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="veditor.utils.video_utils.capture2writor">
-<span class="sig-prename descclassname"><span class="pre">veditor.utils.video_utils.</span></span><span class="sig-name descname"><span class="pre">capture2writor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cap</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cv2.VideoCapture</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'H264'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">cv2.VideoWriter</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/veditor/utils/video_utils.html#capture2writor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.utils.video_utils.capture2writor" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">veditor.utils.video_utils.</span></span><span class="sig-name descname"><span class="pre">capture2writor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cap</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">cv2.VideoCapture</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'avc1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">cv2.VideoWriter</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/veditor/utils/video_utils.html#capture2writor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.utils.video_utils.capture2writor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a suitable <code class="docutils literal notranslate"><span class="pre">cv2.VideoWriter</span></code> for input <code class="docutils literal notranslate"><span class="pre">cv2.VideoCapture</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>cap</strong> (<em>cv2.VideoCapture</em>) – An instance of <code class="docutils literal notranslate"><span class="pre">cv2.VideoCaputure</span></code>.</p></li>
 <li><p><strong>out_path</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Path to the output video. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
-<li><p><strong>codec</strong> (<em>str</em><em>, </em><em>optional</em>) – Video codec for the output video. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;H264&quot;</span></code>.</p></li>
+<li><p><strong>codec</strong> (<em>str</em><em>, </em><em>optional</em>) – Video codec for the output video. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;avc1&quot;</span></code>.</p></li>
 <li><p><strong>H</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Height of the output video. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><strong>W</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Width of the output video. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><strong>fps</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em><em>, </em><em>optional</em>) – Frame rate of the output video. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
@@ -98,7 +121,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">veditor.utils</span> <span class="kn">import</span> <span class="n">capture2writor</span><span class="p">,</span> <span class="n">SampleData</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">SampleData</span><span class="p">()</span><span class="o">.</span><span class="n">VIDEO_PATH</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">out</span><span class="p">,</span> <span class="n">out_path</span> <span class="o">=</span> <span class="n">capture2writor</span><span class="p">(</span><span class="n">cap</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -153,6 +176,42 @@
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><strong>ValueError</strong> – When <code class="docutils literal notranslate"><span class="pre">video</span></code> is <code class="docutils literal notranslate"><span class="pre">cv2.VideoCapture</span></code> and is not Opened, or <code class="docutils literal notranslate"><span class="pre">fmt</span></code> DO NOT include <code class="docutils literal notranslate"><span class="pre">&quot;{pos}&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="veditor.utils.video_utils.vcodec2ext">
+<span class="sig-prename descclassname"><span class="pre">veditor.utils.video_utils.</span></span><span class="sig-name descname"><span class="pre">vcodec2ext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">codec</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="_modules/veditor/utils/video_utils.html#vcodec2ext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#veditor.utils.video_utils.vcodec2ext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert video codec to video extension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>codec</strong> (<em>Union</em><em>[</em><em>tuple</em><em>, </em><em>str</em><em>]</em>) – Video Codec.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Ideal file extension.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycharmers.opencv</span> <span class="kn">import</span> <span class="n">vcodec2ext</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vcodec2ext</span><span class="p">(</span><span class="s2">&quot;MP4V&quot;</span><span class="p">)</span>
+<span class="go">&#39;.mp4&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vcodec2ext</span><span class="p">(</span><span class="s2">&quot;mp4v&quot;</span><span class="p">)</span>
+<span class="go">&#39;.mov&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vcodec2ext</span><span class="p">(</span><span class="s2">&quot;VP80&quot;</span><span class="p">)</span>
+<span class="go">&#39;.webm&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vcodec2ext</span><span class="p">(</span><span class="s2">&quot;XVID&quot;</span><span class="p">)</span>
+<span class="go">&#39;.avi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vcodec2ext</span><span class="p">(</span><span class="s2">&quot;☺️&quot;</span><span class="p">)</span>
+<span class="go">&#39;.mp4&#39;</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>KeyError</strong> – When the file extension cannot be inferred from the video <code class="docutils literal notranslate"><span class="pre">codec</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>

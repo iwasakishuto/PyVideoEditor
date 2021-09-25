@@ -66,20 +66,41 @@
 <span class="kn">from</span> <span class="nn">.generic_utils</span> <span class="kn">import</span> <span class="n">now_str</span>
 
 
+<div class="viewcode-block" id="createVideoWritor"><a class="viewcode-back" href="../../../veditor.utils.video_utils.html#veditor.utils.video_utils.createVideoWritor">[docs]</a><span class="k">def</span> <span class="nf">createVideoWritor</span><span class="p">(</span>
+    <span class="n">H</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">W</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">fps</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">codec</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;avc1&quot;</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Create an instance of ``cv2.VideoWritor``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        H (int)                            : Height of the output video.</span>
+<span class="sd">        W (int)                            : Width of the output video.</span>
+<span class="sd">        fps (float)                        : Frame rate of the output video.</span>
+<span class="sd">        codec (str, optional)              : Video codec for the output video. Defaults to ``&quot;avc1&quot;``.</span>
+<span class="sd">        out_path (Optional[str], optional) : [description]. Defaults to ``None``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[cv2.VideoWriter, str]: Tuple of ``cv2.VideoWriter`` and path to output video.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">out_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">out_path</span> <span class="o">=</span> <span class="n">now_str</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;.mp4&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="n">fourcc</span><span class="p">,</span> <span class="n">fps</span><span class="p">,</span> <span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">out_path</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="capture2writor"><a class="viewcode-back" href="../../../veditor.utils.video_utils.html#veditor.utils.video_utils.capture2writor">[docs]</a><span class="k">def</span> <span class="nf">capture2writor</span><span class="p">(</span>
     <span class="n">cap</span><span class="p">:</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">,</span>
     <span class="n">out_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">codec</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;H264&quot;</span><span class="p">,</span>
+    <span class="n">codec</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;avc1&quot;</span><span class="p">,</span>
     <span class="n">H</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">W</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">fps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Create a suitable ``cv2.VideoWriter`` for input ``cv2.VideoCapture``.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        cap (cv2.VideoCapture)             : An instance of ``cv2.VideoCaputure``.</span>
 <span class="sd">        out_path (Optional[str], optional) : Path to the output video. Defaults to ``None``.</span>
-<span class="sd">        codec (str, optional)              : Video codec for the output video. Defaults to ``&quot;H264&quot;``.</span>
+<span class="sd">        codec (str, optional)              : Video codec for the output video. Defaults to ``&quot;avc1&quot;``.</span>
 <span class="sd">        H (Optional[int], optional)        : Height of the output video. Defaults to ``None``.</span>
 <span class="sd">        W (Optional[int], optional)        : Width of the output video. Defaults to ``None``.</span>
 <span class="sd">        fps (Optional[float], optional)    : Frame rate of the output video. Defaults to ``None``.</span>
@@ -92,17 +113,16 @@
 <span class="sd">        &gt;&gt;&gt; from veditor.utils import capture2writor, SampleData</span>
 <span class="sd">        &gt;&gt;&gt; cap = cv2.VideoCapture(SampleData().VIDEO_PATH)</span>
 <span class="sd">        &gt;&gt;&gt; out, out_path = capture2writor(cap)</span>
-<span class="sd">        &gt;&gt;&gt; isinstance(out, cv2.VideoWriter)</span>
+<span class="sd">        &gt;&gt;&gt; isinstance(out, cv2.VideoWriter) and isinstance(out_path, str)</span>
 <span class="sd">        True</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">W</span> <span class="o">=</span> <span class="n">W</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_WIDTH</span><span class="p">))</span>
-    <span class="n">H</span> <span class="o">=</span> <span class="n">H</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_HEIGHT</span><span class="p">))</span>
-    <span class="n">fps</span> <span class="o">=</span> <span class="n">fps</span> <span class="ow">or</span> <span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FPS</span><span class="p">)</span>
-    <span class="n">fourcc</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter_fourcc</span><span class="p">(</span><span class="o">*</span><span class="n">codec</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">out_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">out_path</span> <span class="o">=</span> <span class="n">now_str</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;.mp4&quot;</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="n">fourcc</span><span class="p">,</span> <span class="n">fps</span><span class="p">,</span> <span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">))</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">out_path</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">createVideoWritor</span><span class="p">(</span>
+        <span class="n">H</span><span class="o">=</span><span class="n">H</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_HEIGHT</span><span class="p">)),</span>
+        <span class="n">W</span><span class="o">=</span><span class="n">W</span> <span class="ow">or</span> <span class="nb">int</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_WIDTH</span><span class="p">)),</span>
+        <span class="n">fps</span><span class="o">=</span><span class="n">fps</span> <span class="ow">or</span> <span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FPS</span><span class="p">),</span>
+        <span class="n">fourcc</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter_fourcc</span><span class="p">(</span><span class="o">*</span><span class="n">codec</span><span class="p">),</span>
+        <span class="n">out_path</span><span class="o">=</span><span class="n">out_path</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="show_frames"><a class="viewcode-back" href="../../../veditor.utils.video_utils.html#veditor.utils.video_utils.show_frames">[docs]</a><span class="k">def</span> <span class="nf">show_frames</span><span class="p">(</span>
@@ -219,6 +239,55 @@
                 <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">i</span><span class="p">),</span> <span class="n">frame</span><span class="p">)</span>
                 <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="n">cap</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="vcodec2ext"><a class="viewcode-back" href="../../../veditor.utils.video_utils.html#veditor.utils.video_utils.vcodec2ext">[docs]</a><span class="k">def</span> <span class="nf">vcodec2ext</span><span class="p">(</span><span class="o">*</span><span class="n">codec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Convert video codec to video extension.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        codec (Union[tuple, str]) : Video Codec.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Ideal file extension.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from pycharmers.opencv import vcodec2ext</span>
+<span class="sd">        &gt;&gt;&gt; vcodec2ext(&quot;MP4V&quot;)</span>
+<span class="sd">        &#39;.mp4&#39;</span>
+<span class="sd">        &gt;&gt;&gt; vcodec2ext(&quot;mp4v&quot;)</span>
+<span class="sd">        &#39;.mov&#39;</span>
+<span class="sd">        &gt;&gt;&gt; vcodec2ext(&quot;VP80&quot;)</span>
+<span class="sd">        &#39;.webm&#39;</span>
+<span class="sd">        &gt;&gt;&gt; vcodec2ext(&quot;XVID&quot;)</span>
+<span class="sd">        &#39;.avi</span>
+<span class="sd">        &gt;&gt;&gt; vcodec2ext(&quot;☺️&quot;)</span>
+<span class="sd">        &#39;.mp4&#39;</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        KeyError: When the file extension cannot be inferred from the video ``codec``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">codec</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">codec</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">codec</span> <span class="o">=</span> <span class="n">codec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">codec</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">codec</span><span class="p">)</span>
+    <span class="n">codec2ext</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;VP80&quot;</span><span class="p">:</span> <span class="s2">&quot;.webm&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MP4S&quot;</span><span class="p">:</span> <span class="s2">&quot;.mp4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MP4V&quot;</span><span class="p">:</span> <span class="s2">&quot;.mp4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mp4v&quot;</span><span class="p">:</span> <span class="s2">&quot;.mov&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;H264&quot;</span><span class="p">:</span> <span class="s2">&quot;.mp4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;X264&quot;</span><span class="p">:</span> <span class="s2">&quot;.mp4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;DIV3&quot;</span><span class="p">:</span> <span class="s2">&quot;.avi&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;DIVX&quot;</span><span class="p">:</span> <span class="s2">&quot;.avi&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;IYUV&quot;</span><span class="p">:</span> <span class="s2">&quot;.avi&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MJPG&quot;</span><span class="p">:</span> <span class="s2">&quot;.avi&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;XVID&quot;</span><span class="p">:</span> <span class="s2">&quot;.avi&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;THEO&quot;</span><span class="p">:</span> <span class="s2">&quot;.ogg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;H263&quot;</span><span class="p">:</span> <span class="s2">&quot;.wmv&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;avc1&quot;</span><span class="p">:</span> <span class="s2">&quot;.mp4&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">handleKeyError</span><span class="p">(</span><span class="n">lst</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">codec2ext</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">codec</span><span class="o">=</span><span class="n">codec</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">codec2ext</span><span class="p">[</span><span class="n">codec</span><span class="p">]</span></div>
 </pre></div>
 
             <div class="clearer"></div>

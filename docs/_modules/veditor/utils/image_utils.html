@@ -127,7 +127,6 @@
     <span class="n">bgRGB</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span>
     <span class="n">textRGB</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
     <span class="n">fontsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
-    <span class="n">fontwidth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">fontheight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">line_height</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">anchor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -139,8 +138,9 @@
     <span class="n">stroke_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">stroke_fill</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">embedded_color</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">text_width</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">wrap_text</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">text_width</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">margin_right</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">drop_whitespace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">ret_position</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;word&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">:</span>
@@ -156,7 +156,6 @@
 <span class="sd">        bgRGB (Union[str, Tuple], optional)                 : The color of background image. Defaults to ``&quot;white&quot;``.</span>
 <span class="sd">        textRGB (Union[str, Tuple], optional)               : The color of text. Defaults to ``&quot;black&quot;``.</span>
 <span class="sd">        fontsize (int, optional)                            : The font size. Defaults to ``16``.</span>
-<span class="sd">        fontwidth (Optional[int], optional)                 : The font width. (If not given, automatically calculated.) Defaults to ``None``.</span>
 <span class="sd">        fontheight (Optional[int], optional)                : The font height. (If not given, automatically calculated.) Defaults to ``None``.</span>
 <span class="sd">        line_height (Optional[int], optional)               : The line height. (If not given, automatically calculated.) Defaults to ``None``.</span>
 <span class="sd">        anchor (Optional[str], optional)                    : The text anchor alignment. Defaults to ``None``.</span>
@@ -168,8 +167,9 @@
 <span class="sd">        stroke_width (int, optional)                        : The width of the text stroke. Defaults to ``0``.</span>
 <span class="sd">        stroke_fill (Optional[Union[str, Tuple]], optional) : Color to use for the text stroke. If not given, will default to the ``textRGB`` parameter. Defaults to ``None``.</span>
 <span class="sd">        embedded_color (bool, optional)                     : Whether to use font embedded color glyphs (COLR, CBDT, SBIX). Defaults to ``False``.</span>
-<span class="sd">        text_width (Optional[int], optional)                : The length of characters in one line. Defaults to ``None``.</span>
 <span class="sd">        wrap_text (bool, optional)                          : Whether to wrap ``text`` for multilines or not. Defaults to ``False``.</span>
+<span class="sd">        text_width (Optional[int], optional)                : The length of characters in one line. Use it if you specify ``wrap_text==True``. Defaults to ``None``.</span>
+<span class="sd">        margin_right (int, optional)                        : Right margin of text in image. Use it if you specify ``wrap_text==True``. Defaults to ``0``.</span>
 <span class="sd">        drop_whitespace (bool, optional)                    : If ``True``, whitespace at the beginning and ending of every line. Defaults to ``False``.</span>
 <span class="sd">        ret_position (str, optional)                        : Type of the position of next text to be returned. Please choose from ``[&quot;line&quot;, &quot;word&quot;]``. Defaults to ``&quot;word&quot;``.</span>
 
@@ -182,16 +182,15 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">img_mode</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">mode</span>
     <span class="n">iw</span><span class="p">,</span> <span class="n">ih</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span>
-    <span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="n">ttfontname</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">fontsize</span><span class="p">))</span>
 
-    <span class="n">letters</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">ascii_letters</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span>
-    <span class="n">fw</span><span class="p">,</span> <span class="n">fh</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">letters</span><span class="p">)</span>
-    <span class="n">fw</span> <span class="o">=</span> <span class="n">fontwidth</span> <span class="ow">or</span> <span class="n">fw</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="n">letters</span><span class="p">)</span>
+    <span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="n">ttfontname</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">fontsize</span><span class="p">))</span>
+    <span class="n">fw</span><span class="p">,</span> <span class="n">fh</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">fw</span> <span class="o">//=</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="n">fh</span> <span class="o">=</span> <span class="n">fontheight</span> <span class="ow">or</span> <span class="n">line_height</span> <span class="ow">or</span> <span class="n">fh</span>
 
     <span class="n">x</span><span class="p">,</span> <span class="n">mt</span> <span class="o">=</span> <span class="n">xy</span>
     <span class="k">if</span> <span class="n">wrap_text</span><span class="p">:</span>
-        <span class="n">text_width</span> <span class="o">=</span> <span class="n">text_width</span> <span class="ow">or</span> <span class="n">iw</span> <span class="o">//</span> <span class="n">fw</span>
+        <span class="n">text_width</span> <span class="o">=</span> <span class="n">text_width</span> <span class="ow">or</span> <span class="p">(</span><span class="n">iw</span><span class="o">-</span><span class="n">margin_right</span><span class="o">-</span><span class="n">x</span><span class="p">)</span> <span class="o">//</span> <span class="n">fw</span>
         <span class="n">wrapped_lines</span> <span class="o">=</span> <span class="n">flatten_dual</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="n">textwrap</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">text_width</span><span class="p">,</span> <span class="n">drop_whitespace</span><span class="o">=</span><span class="n">drop_whitespace</span><span class="p">)</span>
@@ -231,11 +230,27 @@
     <span class="k">if</span> <span class="n">ret_position</span> <span class="o">==</span> <span class="s2">&quot;line&quot;</span><span class="p">:</span>
         <span class="n">xy</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">fh</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">ret_position</span> <span class="o">==</span> <span class="s2">&quot;word&quot;</span><span class="p">:</span>
-        <span class="n">xy</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">fw</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">),</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">font</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">line</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">alpha_composition</span><span class="p">:</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">alpha_composite</span><span class="p">(</span><span class="n">bg</span><span class="o">=</span><span class="n">img</span><span class="p">,</span> <span class="n">paste</span><span class="o">=</span><span class="n">text_canvas</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">xy</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_font_size"><a class="viewcode-back" href="../../../veditor.utils.image_utils.html#veditor.utils.image_utils.check_font_size">[docs]</a><span class="k">def</span> <span class="nf">check_font_size</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ttfontname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">img</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">xy</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Find out the text when writing letters using :func:`draw_text_in_pil &lt;veditor.utils.image_utils.draw_text_in_pil&gt;`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        text (str)                            : Text to be drawn to ``img``.</span>
+<span class="sd">        ttfontname (str)                      : A filename or file-like object containing a TrueType font.</span>
+<span class="sd">        img (Optional[Image.Image], optional) : The image to draw in. If this argment is ``None``, img will be created using ``img_size`` and ``bgRGB`` arguments. Defaults to ``None``.</span>
+<span class="sd">        xy (Tuple, optional)                  : Where to write the ``text``. This value means the coordinates of (``x``, ``y``). Defaults to ``(0, 0)``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[int, int] : Calculated text size (width, height)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">xy_</span> <span class="o">=</span> <span class="n">draw_text_in_pil</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">ttfontname</span><span class="o">=</span><span class="n">ttfontname</span><span class="p">,</span> <span class="n">img</span><span class="o">=</span><span class="n">img</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">xy</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">xy_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xy_</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="draw_cross"><a class="viewcode-back" href="../../../veditor.utils.image_utils.html#veditor.utils.image_utils.draw_cross">[docs]</a><span class="k">def</span> <span class="nf">draw_cross</span><span class="p">(</span>

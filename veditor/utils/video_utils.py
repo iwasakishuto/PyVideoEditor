@@ -12,20 +12,41 @@ from ._colorings import toGREEN
 from .generic_utils import now_str
 
 
+def createVideoWritor(
+    H: int, W: int, fps: float, codec: str = "avc1", out_path: Optional[str] = None
+) -> Tuple[cv2.VideoWriter, str]:
+    """Create an instance of ``cv2.VideoWritor``.
+
+    Args:
+        H (int)                            : Height of the output video.
+        W (int)                            : Width of the output video.
+        fps (float)                        : Frame rate of the output video.
+        codec (str, optional)              : Video codec for the output video. Defaults to ``"avc1"``.
+        out_path (Optional[str], optional) : [description]. Defaults to ``None``.
+
+    Returns:
+        Tuple[cv2.VideoWriter, str]: Tuple of ``cv2.VideoWriter`` and path to output video.
+    """
+    if out_path is None:
+        out_path = now_str() + ".mp4"
+    out = cv2.VideoWriter(out_path, fourcc, fps, (W, H))
+    return (out, out_path)
+
+
 def capture2writor(
     cap: cv2.VideoCapture,
     out_path: Optional[str] = None,
-    codec: str = "H264",
+    codec: str = "avc1",
     H: Optional[int] = None,
     W: Optional[int] = None,
     fps: Optional[float] = None,
-) -> Tuple[str, cv2.VideoWriter]:
+) -> Tuple[cv2.VideoWriter, str]:
     """Create a suitable ``cv2.VideoWriter`` for input ``cv2.VideoCapture``.
 
     Args:
         cap (cv2.VideoCapture)             : An instance of ``cv2.VideoCaputure``.
         out_path (Optional[str], optional) : Path to the output video. Defaults to ``None``.
-        codec (str, optional)              : Video codec for the output video. Defaults to ``"H264"``.
+        codec (str, optional)              : Video codec for the output video. Defaults to ``"avc1"``.
         H (Optional[int], optional)        : Height of the output video. Defaults to ``None``.
         W (Optional[int], optional)        : Width of the output video. Defaults to ``None``.
         fps (Optional[float], optional)    : Frame rate of the output video. Defaults to ``None``.
@@ -38,17 +59,16 @@ def capture2writor(
         >>> from veditor.utils import capture2writor, SampleData
         >>> cap = cv2.VideoCapture(SampleData().VIDEO_PATH)
         >>> out, out_path = capture2writor(cap)
-        >>> isinstance(out, cv2.VideoWriter)
+        >>> isinstance(out, cv2.VideoWriter) and isinstance(out_path, str)
         True
     """
-    W = W or int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    H = H or int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = fps or cap.get(cv2.CAP_PROP_FPS)
-    fourcc = cv2.VideoWriter_fourcc(*codec)
-    if out_path is None:
-        out_path = now_str() + ".mp4"
-    out = cv2.VideoWriter(out_path, fourcc, fps, (W, H))
-    return (out, out_path)
+    return createVideoWritor(
+        H=H or int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
+        W=W or int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
+        fps=fps or cap.get(cv2.CAP_PROP_FPS),
+        fourcc=cv2.VideoWriter_fourcc(*codec),
+        out_path=out_path,
+    )
 
 
 def show_frames(
@@ -165,3 +185,52 @@ def save_frames(
                 cv2.imwrite(fmt.format(pos=i), frame)
                 counter += 1
     cap.release()
+
+
+def vcodec2ext(*codec) -> str:
+    """Convert video codec to video extension.
+
+    Args:
+        codec (Union[tuple, str]) : Video Codec.
+
+    Returns:
+        str: Ideal file extension.
+
+    Examples:
+        >>> from pycharmers.opencv import vcodec2ext
+        >>> vcodec2ext("MP4V")
+        '.mp4'
+        >>> vcodec2ext("mp4v")
+        '.mov'
+        >>> vcodec2ext("VP80")
+        '.webm'
+        >>> vcodec2ext("XVID")
+        '.avi
+        >>> vcodec2ext("☺️")
+        '.mp4'
+
+    Raises:
+        KeyError: When the file extension cannot be inferred from the video ``codec``.
+    """
+    if len(codec) == 1 and isinstance(codec[0], str):
+        codec = codec[0]
+    else:
+        codec = "".join(codec)
+    codec2ext = {
+        "VP80": ".webm",
+        "MP4S": ".mp4",
+        "MP4V": ".mp4",
+        "mp4v": ".mov",
+        "H264": ".mp4",
+        "X264": ".mp4",
+        "DIV3": ".avi",
+        "DIVX": ".avi",
+        "IYUV": ".avi",
+        "MJPG": ".avi",
+        "XVID": ".avi",
+        "THEO": ".ogg",
+        "H263": ".wmv",
+        "avc1": ".mp4",
+    }
+    handleKeyError(lst=list(codec2ext.keys()), codec=codec)
+    return codec2ext[codec]
