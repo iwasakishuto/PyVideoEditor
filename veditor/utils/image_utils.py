@@ -36,14 +36,10 @@ def pil2arr(image: Image.Image) -> npt.NDArray[np.uint8]:
     Returns:
         npt.NDArray[np.uint8] : A BGR ``npt.NDArray``.
     """
-    return cv2.cvtColor(
-        np.asarray(image.convert("RGB"), dtype=np.uint8), cv2.COLOR_RGB2BGR
-    )
+    return cv2.cvtColor(np.asarray(image.convert("RGB"), dtype=np.uint8), cv2.COLOR_RGB2BGR)
 
 
-def cv2plot(
-    frame: npt.NDArray[np.uint8], ax: Optional[Axes] = None, isBGR: bool = True
-) -> Axes:
+def cv2plot(frame: npt.NDArray[np.uint8], ax: Optional[Axes] = None, isBGR: bool = True) -> Axes:
     """Plot a ``frame``.
 
     Args:
@@ -67,7 +63,8 @@ def draw_text_in_pil(
     text: str,
     ttfontname: str,
     img: Optional[Image.Image] = None,
-    xy: Tuple = (0, 0),
+    xy: Tuple[int, int] = (0, 0),
+    center: Optional[Tuple[int, int]] = None,
     img_size: Tuple = (640, 360),
     img_mode: str = "RGB",
     bgRGB: Union[str, Tuple] = "white",
@@ -123,6 +120,15 @@ def draw_text_in_pil(
         Image.Image: ``img`` with ``text`` drawn.
     """
     handleKeyError(lst=["word", "line"], ret_position=ret_position)
+
+    kwargs = locals()
+    if kwargs.pop("center") is not None:
+        w, h = check_font_size(**kwargs)
+        cx, cy = center
+        font = ImageFont.truetype(font=ttfontname, size=int(fontsize))
+        _, fh = font.getsize(text)
+        xy = (cx - w // 2, cy - (h + fh) // 2)
+
     if img is None:
         img = Image.new(mode=img_mode, size=img_size, color=bgRGB)
     else:
@@ -136,7 +142,7 @@ def draw_text_in_pil(
 
     x, mt = xy
     if wrap_text:
-        text_width = text_width or (iw-margin_right-x) // fw
+        text_width = text_width or (iw - margin_right - x) // fw
         wrapped_lines = flatten_dual(
             [
                 textwrap.wrap(text=t, width=text_width, drop_whitespace=drop_whitespace)
@@ -183,7 +189,9 @@ def draw_text_in_pil(
     return (img, xy)
 
 
-def check_font_size(text: str, ttfontname: str, img: Optional[Image.Image] = None, xy: Tuple = (0, 0), **kwargs) -> Tuple[int, int]:
+def check_font_size(
+    text: str, ttfontname: str, img: Optional[Image.Image] = None, xy: Tuple = (0, 0), **kwargs
+) -> Tuple[int, int]:
     """Find out the text when writing letters using :func:`draw_text_in_pil <veditor.utils.image_utils.draw_text_in_pil>`.
 
     Args:
@@ -196,7 +204,7 @@ def check_font_size(text: str, ttfontname: str, img: Optional[Image.Image] = Non
         Tuple[int, int] : Calculated text size (width, height)
     """
     _, xy_ = draw_text_in_pil(text=text, ttfontname=ttfontname, img=img, xy=xy, **kwargs)
-    return (xy_[0]-xy[0], xy_[1]-xy[1])
+    return (xy_[0] - xy[0], xy_[1] - xy[1])
 
 
 def draw_cross(
@@ -406,9 +414,7 @@ def apply_heatmap(
     if normalize:
         gray = min_max_normalization(gray)
     gray = gray.astype(float) / 255.0
-    frame = cv2.cvtColor(
-        (255 * cmap(gray)).astype(np.uint8)[:, :, :3], cv2.COLOR_RGB2BGR
-    )
+    frame = cv2.cvtColor((255 * cmap(gray)).astype(np.uint8)[:, :, :3], cv2.COLOR_RGB2BGR)
     return frame
 
 
